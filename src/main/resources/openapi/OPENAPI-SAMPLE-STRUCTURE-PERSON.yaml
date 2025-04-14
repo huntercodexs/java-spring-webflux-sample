@@ -1,0 +1,167 @@
+openapi: 3.0.2
+info:
+  title: OPENAPI-SAMPLE-STRUCTURE-PERSON
+  description: Example OpenAPI document for Person
+  contact:
+    name: WebFlux Sample
+    email: webflux.sample@email.com
+  version: 1.0.0
+servers:
+  - url: https://api-dev.webflux.sample/enroll/v1
+    description: DEVELOPMENT
+  - url: https://api-qa.webflux.sample/enroll/v1
+    description: QA
+  - url: https://api-homolog.webflux.sample/enroll/v1
+    description: HOMOLOG
+  - url: https://api.webflux.sample/enroll/v1
+    description: PRODUCTION
+
+tags:
+  - name: Person
+
+paths:
+  /person:
+    post:
+      tags:
+        - Person
+      summary: Create person
+      description: |
+        
+        ## Responsibilities
+        Create person
+
+        ---
+        ## Requirements
+        To access this endpoint, you must have one of the following sets of roles:
+        - `AUTH-BASIC` level
+
+      operationId: createPerson
+      requestBody:
+        description: Person to be created
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PersonRequest'
+        required: true
+      responses:
+        201:
+          $ref: '#/components/responses/PersonCreated'
+      security:
+        - BearerAuth: []
+        - OauthSecurityUser:
+            - write
+            - read
+      x-codegen-request-body-name: createPersonRequest
+    get:
+      tags:
+        - Person
+      summary: Person list
+      description: |
+        
+        ## Responsibilities
+        Retrieves a list of Persons
+
+        ---
+        ## Requirements
+        To access this endpoint, you must have one of the following sets of roles:
+           * `AUTH-BASIC` level
+
+      operationId: getPersons
+      parameters:
+        - $ref: '#/components/parameters/QueryLimit'
+        - $ref: '#/components/parameters/QueryOffset'
+        - $ref: '#/components/parameters/QuerySort'
+      responses:
+        200:
+          $ref: '#/components/responses/PersonList'
+      security:
+        - BearerAuth: []
+        - OauthSecurityUser:
+            - write
+            - read
+
+components:
+  securitySchemes:
+    OauthSecurityUser:
+      type: oauth2
+      flows:
+        password:
+          tokenUrl: https://api-dev.webflux.sample/security/v1/oauth2/login
+          scopes:
+            read: User read scope
+            write: User write scope
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  parameters:
+    QueryLimit:
+      name: limit
+      in: query
+      schema:
+        type: integer
+        default: 20
+      description: Total count of registries to fetch.
+    QueryOffset:
+      name: offset
+      in: query
+      schema:
+        type: integer
+        default: 0
+      description: From which index to seek for registries.
+    QuerySort:
+      name: sort
+      in: query
+      schema:
+        type: string
+        example: name
+        default: id
+      description: Named field to sort results by
+  schemas:
+    PersonRequest:
+      required:
+        - name
+        - email
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 1
+          maxLength: 200
+          example: John Smith Viz
+        email:
+          type: string
+          minLength: 1
+          maxLength: 200
+          example: john-smith@email.com
+    PersonCreatedResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 620eb80e0f9f7c26ba190dfc
+    PersonListResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 620eb80e0f9f7c26ba190dfc
+        name:
+          type: string
+          example: John Smith Viz
+        email:
+          type: string
+          example: john@email.com
+  responses:
+    PersonCreated:
+      description: Person Created
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/PersonCreatedResponse'
+    PersonList:
+      description: Person List
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/PersonListResponse'

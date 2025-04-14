@@ -1,0 +1,289 @@
+openapi: 3.0.2
+info:
+  title: OPENAPI-SAMPLE-STRUCTURE-PERSON-DETAILS
+  description: Example OpenAPI document for Person Details
+  contact:
+    name: WebFlux Sample
+    email: webflux.sample@email.com
+  version: 1.0.0
+servers:
+  - url: https://api-dev.webflux.sample/enroll/v1
+    description: DEVELOPMENT
+  - url: https://api-qa.webflux.sample/enroll/v1
+    description: QA
+  - url: https://api-homolog.webflux.sample/enroll/v1
+    description: HOMOLOG
+  - url: https://api.webflux.sample/enroll/v1
+    description: PRODUCTION
+
+tags:
+  - name: Address
+  - name: Phone
+
+paths:
+  /address:
+    post:
+      tags:
+        - Address
+      summary: Create a new address for one person
+      description: |
+        
+        ## Responsibilities
+        This endpoint has the function of registering a new **address** for the user.
+        Create address.
+
+        ---
+        ## Requirements
+        To access this endpoint, you must have one of the following sets of roles:
+        * `AUTH-BASIC` roles
+
+      operationId: createAddress
+      security:
+        - BearerAuth: []
+        - OauthSecurityUser:
+            - write
+            - read
+      requestBody:
+        required: true
+        description: "Address information"
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AddressRequest"
+      responses:
+        201:
+          $ref: "#/components/responses/AddressCreated"
+    get:
+      tags:
+        - Address
+      summary: Find address
+      description: |
+        
+        ## Responsibilities
+        This endpoint has the function of finding address.
+
+        ---
+        ## Requirements
+        To access this endpoint, you must have one of the following sets of roles:
+        * `AUTH-BASIC` role
+
+      operationId: findAddress
+      parameters:
+        - in: query
+          name: street
+          example: "Street name"
+          schema:
+            type: string
+        - in: query
+          name: postalcode
+          example: "12090001"
+          schema:
+            type: string
+      security:
+        - BearerAuth: []
+        - OauthSecurityUser:
+            - write
+            - read
+      responses:
+        200:
+          $ref: '#/components/responses/AddressList'
+  /phone:
+    post:
+      tags:
+        - Phone
+      summary: Create a new phone to the person
+      description: |
+        
+        ## Responsibilities
+        Create phone
+
+        ---
+        ## Requirements
+        To access this endpoint, you must have one of the following sets of roles:
+        * `AUTH-BASIC` role
+
+      operationId: createPhone
+      security:
+        - BearerAuth: []
+        - OauthSecurityUser:
+            - write
+            - read
+      responses:
+        201:
+          $ref: "#/components/responses/PhoneCreated"
+    get:
+      tags:
+        - Phone
+      summary: Find Phone
+      description: |
+        
+        ## Responsibilities
+        This endpoint has the function of finding phones.
+
+        ---
+        ## Requirements
+        To access this endpoint, you must have one of the following sets of roles:
+        * `AUTH-BASIC` role
+
+      operationId: findPhone
+      parameters:
+        - in: query
+          name: phone
+          example: "+551290903909000"
+          schema:
+            type: string
+      security:
+        - BearerAuth: []
+        - OauthSecurityUser:
+            - write
+            - read
+      responses:
+        200:
+          $ref: '#/components/responses/PhoneList'
+
+components:
+  securitySchemes:
+    OauthSecurityUser:
+      type: oauth2
+      flows:
+        password:
+          tokenUrl: https://api-dev.webflux.sample/security/v1/oauth2/login
+          scopes:
+            read: User read scope
+            write: User write scope
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  parameters:
+    QueryLimit:
+      name: limit
+      in: query
+      schema:
+        type: integer
+        default: 20
+      description: Total count of registries to fetch.
+    QueryOffset:
+      name: offset
+      in: query
+      schema:
+        type: integer
+        default: 0
+      description: From which index to seek for registries.
+    QuerySort:
+      name: sort
+      in: query
+      schema:
+        type: string
+        example: name
+        default: id
+      description: Named field to sort results by
+  schemas:
+    AddressRequest:
+      required:
+        - street
+        - number
+        - postalcode
+        - city
+      type: object
+      properties:
+        street:
+          type: string
+          minLength: 1
+          maxLength: 200
+          example: Street name test
+        number:
+          type: integer
+          example: 1234
+        postalcode:
+          type: string
+          minLength: 1
+          maxLength: 15
+          example: 12090000
+        city:
+          type: string
+          minLength: 1
+          example: New York
+    AddressCreatedResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 620eb80e0f9f7c26ba190dfc
+    AddressListResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 620eb80e0f9f7c26ba190dfc
+        street:
+          type: string
+          example: Street name sample
+        number:
+          type: integer
+          example: 1234
+        postalcode:
+          type: string
+          example: 12090000
+        city:
+          type: string
+          example: New York
+    PhoneRequest:
+      required:
+        - name
+        - number
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 1
+          maxLength: 200
+          example: John Smith Viz
+        number:
+          type: string
+          minLength: 1
+          maxLength: 15
+          example: +551290903909000
+    PhoneCreatedResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 620eb80e0f9f7c26ba190dfc
+    PhoneListResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 620eb80e0f9f7c26ba190dfc
+        name:
+          type: string
+          example: John Smith Viz
+        number:
+          type: string
+          example: +5512990990900
+  responses:
+    AddressCreated:
+      description: Address Created
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/AddressCreatedResponse'
+    AddressList:
+      description: Address List
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/AddressListResponse'
+    PhoneCreated:
+      description: Phone Created
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/PhoneCreatedResponse'
+    PhoneList:
+      description: Phone List
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/PhoneListResponse'
