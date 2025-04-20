@@ -25,6 +25,11 @@ paths:
       tags:
         - Person
       summary: Create person
+      security:
+        - BearerAuth: []
+        - OauthSecurityUser:
+            - write
+            - read
       description: |
         
         ## Responsibilities
@@ -41,21 +46,21 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/PersonRequest'
+              $ref: '#/components/schemas/PersonRequestBody'
         required: true
       responses:
         201:
-          $ref: '#/components/responses/PersonCreated'
+          $ref: '#/components/responses/PersonCreatedResponse'
+      x-codegen-request-body-name: createPersonRequestBody
+    get:
+      tags:
+        - Person
+      summary: Read persons
       security:
         - BearerAuth: []
         - OauthSecurityUser:
             - write
             - read
-      x-codegen-request-body-name: createPersonRequest
-    get:
-      tags:
-        - Person
-      summary: Person list
       description: |
         
         ## Responsibilities
@@ -66,19 +71,45 @@ paths:
         To access this endpoint, you must have one of the following sets of roles:
            * `AUTH-BASIC` level
 
-      operationId: getPersons
+      operationId: findPersons
       parameters:
         - $ref: '#/components/parameters/QueryLimit'
         - $ref: '#/components/parameters/QueryOffset'
         - $ref: '#/components/parameters/QuerySort'
       responses:
         200:
-          $ref: '#/components/responses/PersonList'
+          $ref: '#/components/responses/PersonsReadResponse'
+  /person/{personId}:
+    get:
+      tags:
+        - Person
+      summary: Read person
       security:
         - BearerAuth: []
         - OauthSecurityUser:
             - write
             - read
+      description: |
+        
+        ## Responsibilities
+        Retrieves a list of Persons
+
+        ---
+        ## Requirements
+        To access this endpoint, you must have one of the following sets of roles:
+           * `AUTH-BASIC` level
+
+      operationId: findPersonById
+      parameters:
+        - in: path
+          name: personId
+          required: true
+          example: "67fe6bac382b9445e80b404e"
+          schema:
+            type: string
+      responses:
+        200:
+          $ref: '#/components/responses/PersonReadResponse'
 
 components:
   securitySchemes:
@@ -118,7 +149,7 @@ components:
         default: id
       description: Named field to sort results by
   schemas:
-    PersonRequest:
+    PersonRequestBody:
       required:
         - name
         - email
@@ -134,13 +165,13 @@ components:
           minLength: 1
           maxLength: 200
           example: john-smith@email.com
-    PersonCreatedResponse:
+    PersonCreatedResponseBody:
       type: object
       properties:
         id:
           type: string
           example: 620eb80e0f9f7c26ba190dfc
-    PersonListResponse:
+    PersonReadResponseBody:
       type: object
       properties:
         id:
@@ -152,16 +183,85 @@ components:
         email:
           type: string
           example: john@email.com
+        address:
+          type: object
+          example: Street name test 123
+        phones:
+          type: object
+          example: +5512909022020
+    PersonsReadResponseBody:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 620eb80e0f9f7c26ba190dfc
+        name:
+          type: string
+          example: John Smith Viz
+        email:
+          type: string
+          example: john@email.com
+        address:
+          $ref: '#/components/schemas/AddressResponseBody'
+        phones:
+          $ref: '#/components/schemas/PhoneResponseBody'
+    AddressResponseBody:
+      type: object
+      required:
+        - street
+        - number
+        - zipcode
+        - city
+      properties:
+        street:
+          type: string
+          minLength: 1
+          maxLength: 200
+          example: "Street name test"
+        number:
+          type: integer
+          example: 1234
+        zipcode:
+          type: string
+          minLength: 1
+          maxLength: 15
+          example: "12090000"
+        city:
+          type: string
+          minLength: 1
+          example: "New York"
+    PhoneResponseBody:
+      type: object
+      required:
+        - phoneNumber
+        - phoneType
+      properties:
+        phoneNumber:
+          type: string
+          minLength: 1
+          maxLength: 15
+          example: "+55121234567890"
+        phoneType:
+          type: string
+          minLength: 1
+          example: "mobile"
+          enum: ["mobile", "home", "office"]
   responses:
-    PersonCreated:
+    PersonCreatedResponse:
       description: Person Created
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/PersonCreatedResponse'
-    PersonList:
-      description: Person List
+            $ref: '#/components/schemas/PersonCreatedResponseBody'
+    PersonReadResponse:
+      description: Person Read
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/PersonListResponse'
+            $ref: '#/components/schemas/PersonReadResponseBody'
+    PersonsReadResponse:
+      description: Persons Read
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/PersonsReadResponseBody'

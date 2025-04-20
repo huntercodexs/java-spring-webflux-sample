@@ -5,8 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.DocumentReference;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -30,8 +30,9 @@ public class PersonsDocument implements Serializable {
     private LocalDateTime updatedAt;
     private LocalDateTime deletedAt;
 
-    @DBRef
-    private Set<AddressDocument> address;
-    private Set<PhonesDocument> phone;
+    @DocumentReference
+    private Set<PhonesDocument> phones;
+    @DocumentReference
+    private Set<AddressDocument> addresses;
 
 }

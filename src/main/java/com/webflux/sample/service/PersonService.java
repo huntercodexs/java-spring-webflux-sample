@@ -1,9 +1,13 @@
 package com.webflux.sample.service;
 
-import com.webflux.sample.model.PersonCreatedResponse;
-import com.webflux.sample.model.PersonRequest;
+import com.webflux.sample.model.PersonCreatedResponseBody;
+import com.webflux.sample.model.PersonReadResponseBody;
+import com.webflux.sample.model.PersonRequestBody;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 public interface PersonService {
-    Mono<PersonCreatedResponse> create(Mono<PersonRequest> createPersonRequest);
+    Mono<PersonCreatedResponseBody> create(Mono<PersonRequestBody> createPersonRequest);
+    Mono<PersonReadResponseBody> find(String id);
+    Flux<PersonReadResponseBody> findAll();
 }

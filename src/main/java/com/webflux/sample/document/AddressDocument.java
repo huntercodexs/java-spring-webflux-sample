@@ -19,8 +19,8 @@ public class AddressDocument {
     @Id
     private String id;
     private String street;
-    private String number;
-    private String postalcode;
+    private int number;
+    private String zipcode;
     private String city;
     @Builder.Default
     private boolean active = true;

@@ -18,11 +18,13 @@ public class PhonesDocument {
 
     @Id
     private String id;
-    private String number;
+    private String phoneNumber;
+    private String phoneType;
     @Builder.Default
     private boolean active = true;
     @Builder.Default
     private LocalDateTime createdAt = LocalDateTime.now();
     private LocalDateTime updatedAt;
     private LocalDateTime deletedAt;
+
 }

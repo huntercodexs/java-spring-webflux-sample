@@ -1,8 +1,9 @@
 package com.webflux.sample.controller;
 
-import com.webflux.sample.model.PersonCreatedResponse;
-import com.webflux.sample.model.PersonListResponse;
-import com.webflux.sample.model.PersonRequest;
+import com.webflux.sample.model.PersonCreatedResponseBody;
+import com.webflux.sample.model.PersonReadResponseBody;
+import com.webflux.sample.model.PersonRequestBody;
+import com.webflux.sample.model.PersonsReadResponseBody;
 import com.webflux.sample.person.api.PersonApi;
 import com.webflux.sample.service.PersonService;
 import lombok.AllArgsConstructor;
@@ -20,18 +21,19 @@ public class PersonController implements BaseController, PersonApi {
     private PersonService personService;
 
     @Override
-    public Mono<ResponseEntity<PersonCreatedResponse>> createPerson(
-            Mono<PersonRequest> createPersonRequest,
+    public Mono<ResponseEntity<PersonCreatedResponseBody>> createPerson(
+            Mono<PersonRequestBody> createPersonRequestBody,
             ServerWebExchange exchange
     ) {
         log.info("[MARKER:createPerson] - START");
 
-        Mono<ResponseEntity<PersonCreatedResponse>> response = personService.create(createPersonRequest)
+        Mono<ResponseEntity<PersonCreatedResponseBody>> response = personService
+                .create(createPersonRequestBody)
                 .doFirst(() -> log.info(">>> Create person started"))
                 .doOnTerminate(() -> log.info(">>> Create person finished"))
                 .map(ResponseEntity::ok)
-                .doOnSuccess(result -> log.info(">>> The result is {}", result))
-                .doOnError(error -> log.error(">>> The error is {}", String.valueOf(error)));
+                .doOnSuccess(result -> log.info(">>> The createPerson result is {}", result))
+                .doOnError(error -> log.error(">>> The createPerson error is {}", String.valueOf(error)));
 
         log.info("[MARKER:createPerson] - STOP");
 
@@ -39,7 +41,27 @@ public class PersonController implements BaseController, PersonApi {
     }
 
     @Override
-    public Mono<ResponseEntity<PersonListResponse>> getPersons(
+    public Mono<ResponseEntity<PersonReadResponseBody>> findPersonById(
+            String personId,
+            ServerWebExchange exchange
+    ) {
+        log.info("[MARKER:findPersonById] - START");
+
+        Mono<ResponseEntity<PersonReadResponseBody>> response = personService
+                .find(personId)
+                .doFirst(() -> log.info(">>> findPersonById person started"))
+                .doOnTerminate(() -> log.info(">>> findPersonById person finished"))
+                .map(ResponseEntity::ok)
+                .doOnSuccess(result -> log.info(">>> The findPersonById result is {}", result))
+                .doOnError(error -> log.error(">>> The findPersonById error is {}", String.valueOf(error)));
+
+        log.info("[MARKER:findPersonById] - STOP");
+
+        return response;
+    }
+
+    @Override
+    public Mono<ResponseEntity<PersonsReadResponseBody>> findPersons(
             Integer limit,
             Integer offset,
             String sort,
@@ -47,4 +69,5 @@ public class PersonController implements BaseController, PersonApi {
     ) {
         return null;
     }
+
 }

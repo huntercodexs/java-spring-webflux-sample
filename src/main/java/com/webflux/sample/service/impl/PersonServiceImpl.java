@@ -1,81 +1,98 @@
 package com.webflux.sample.service.impl;
 
-import com.webflux.sample.document.AddressDocument;
-import com.webflux.sample.document.PhonesDocument;
-import com.webflux.sample.dto.PersonDto;
-import com.webflux.sample.model.PersonCreatedResponse;
-import com.webflux.sample.model.PersonRequest;
+import com.webflux.sample.document.PersonsDocument;
+import com.webflux.sample.model.PersonCreatedResponseBody;
+import com.webflux.sample.model.PersonReadResponseBody;
+import com.webflux.sample.model.PersonRequestBody;
 import com.webflux.sample.repository.AddressRepository;
 import com.webflux.sample.repository.PersonsRepository;
 import com.webflux.sample.repository.PhonesRepository;
 import com.webflux.sample.service.PersonService;
-import com.webflux.sample.service.SecurityService;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-import reactor.core.scheduler.Schedulers;
 
-import java.time.Duration;
-import java.util.List;
+import java.util.Collections;
 
 @Log4j2
 @Service
 @AllArgsConstructor
 public class PersonServiceImpl implements PersonService {
 
-    private SecurityService securityService;
     private PersonsRepository personsRepository;
     private AddressRepository addressRepository;
     private PhonesRepository phonesRepository;
 
     @Override
-    public Mono<PersonCreatedResponse> create(Mono<PersonRequest> createPersonRequest) {
-        return Mono.defer(() -> securityService.fakeAuthentication())
-                .doFirst(() -> log.info(">>> Person service create started"))
-                .doOnTerminate(() -> log.info(">>> Person service create finished"))
-                .map(PersonDto::new)
-                .flatMap(this::zipPerson)
+    public Mono<PersonCreatedResponseBody> create(Mono<PersonRequestBody> createPersonRequest) {
+        return createPersonRequest.flatMap(personRequest -> {
+            PersonsDocument person = new PersonsDocument();
+            person.setName(personRequest.getName());
+            person.setEmail(personRequest.getEmail());
+
+            return personsRepository.save(person)
+                    .doFirst(() -> log.info(">>> Save started..."))
+                    .doOnTerminate(() -> log.info(">>> Save finished..."))
+                    .doOnSuccess(success -> log.info("The Save result is {}", success))
+                    .doOnError(error -> log.error("The Save error is {}", String.valueOf(error)))
+                    .map(savedPerson -> {
+                        PersonCreatedResponseBody response = new PersonCreatedResponseBody();
+                        response.setId(savedPerson.getId());
+                        return response;
+                    });
+        });
+    }
+
+    @Override
+    public Mono<PersonReadResponseBody> find(String id) {
+        return personsRepository.findById(id)
+                .doFirst(() -> log.info(">>> Find started..."))
+                .doOnTerminate(() -> log.info(">>> Find finished..."))
+                .doOnSuccess(success -> log.info("The Find result is {}", success))
+                .doOnError(error -> log.error( "The Find error is {}", String.valueOf(error)))
+                .flatMap(this::findAddress)
+                .flatMap(this::findPhones)
                 .flatMap(this::buildResponse)
-                .doOnSuccess(result -> log.info(">>> Everything was fine {}", result))
-                .doOnError(error -> log.error(">>> Something went wrong in create {}", String.valueOf(error)))
-                .delaySubscription(Duration.ofSeconds(1));
+                .map(person -> person);
     }
 
-    private Mono<PersonDto> zipPerson(PersonDto personDto) {
-        return Mono.zip(
-                        /*T1*/
-                        findPersonAddress(personDto).subscribeOn(Schedulers.parallel()),
-                        /*T2*/
-                        findPersonPhone(personDto).subscribeOn(Schedulers.parallel())
-                )
-                .doFirst(() -> log.info(">>> Zip Person started"))
-                .doOnTerminate(() -> log.info(">>> Zip Person finished"))
-                .flatMap(tuple -> personDto.withDetails(tuple.getT1(), tuple.getT2()))
-                .doOnSuccess(result -> log.info(">>> Everything is fine {}", result))
-                .doOnError(error -> log.error(">>> Something went wrong in zipPerson {}", String.valueOf(error)));
+    @Override
+    public Flux<PersonReadResponseBody> findAll() {
+        return null;
     }
 
-    private Mono<List<AddressDocument>> findPersonAddress(PersonDto personDto) {
-        return addressRepository.findAllById(personDto.getId())
-                .doFirst(() -> log.info(">>> findPersonAddress started"))
-                .doOnTerminate(() -> log.info(">>> findPersonAddress finished"))
-                .collectList()
-                .doOnSuccess(response -> log.info(">>> Finish method findPersonAddress with response {}", response));
+    private Mono<PersonsDocument> findAddress(PersonsDocument personsDocument) {
+        return addressRepository.findById(personsDocument.getId())
+                .doOnSuccess(success -> log.info("The findAddress result is {}", success))
+                .doOnError(error -> log.error( "The Find findAddress is {}", String.valueOf(error)))
+                .map(addressDocument -> {
+                    personsDocument.setAddresses(Collections.singleton(addressDocument));
+                    return personsDocument;
+                });
     }
 
-    private Mono<List<PhonesDocument>> findPersonPhone(PersonDto personDto) {
-        return phonesRepository.findAllById(personDto.getId())
-                .doFirst(() -> log.info(">>> findPersonPhone started"))
-                .doOnTerminate(() -> log.info(">>> findPersonPhone finished"))
-                .collectList()
-                .doOnSuccess(response -> log.info(">>> Finish method findPersonPhone with response {}", response));
+    private Mono<PersonsDocument> findPhones(PersonsDocument personsDocument) {
+        return phonesRepository.findById(personsDocument.getId())
+                .doOnSuccess(success -> log.info("The findPhones result is {}", success))
+                .doOnError(error -> log.error( "The findPhones error is {}", String.valueOf(error)))
+                .map(phonesDocument -> {
+                    personsDocument.setPhones(Collections.singleton(phonesDocument));
+                    return personsDocument;
+                });
     }
 
-    private Mono<PersonCreatedResponse> buildResponse(PersonDto personDto) {
-        return Mono.just(new PersonCreatedResponse())
-                .doFirst(() -> log.info(">>> buildResponse started"))
-                .doOnTerminate(() -> log.info(">>> buildResponse finished"));
+    private Mono<PersonReadResponseBody> buildResponse(PersonsDocument personsDocument) {
+        return Mono.just(personsDocument).map(document -> {
+            PersonReadResponseBody response = new PersonReadResponseBody();
+            response.setId(document.getId());
+            response.setName(document.getName());
+            response.setEmail(document.getEmail());
+            response.setAddress(document.getAddresses());
+            response.setPhones(document.getPhones());
+            return response;
+        });
     }
 
 }

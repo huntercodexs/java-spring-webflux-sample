@@ -1,8 +1,8 @@
 package com.webflux.sample.service;
 
-import com.webflux.sample.model.PersonRequest;
+import com.webflux.sample.model.PersonRequestBody;
 import reactor.core.publisher.Mono;
 
 public interface SecurityService {
-    Mono<PersonRequest> fakeAuthentication();
+    Mono<PersonRequestBody> fakeAuthentication();
 }

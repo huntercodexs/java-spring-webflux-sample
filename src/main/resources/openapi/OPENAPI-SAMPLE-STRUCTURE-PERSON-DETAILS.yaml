@@ -26,6 +26,11 @@ paths:
       tags:
         - Address
       summary: Create a new address for one person
+      security:
+        - BearerAuth: []
+        - OauthSecurityUser:
+            - write
+            - read
       description: |
         
         ## Responsibilities
@@ -38,25 +43,25 @@ paths:
         * `AUTH-BASIC` roles
 
       operationId: createAddress
-      security:
-        - BearerAuth: []
-        - OauthSecurityUser:
-            - write
-            - read
       requestBody:
         required: true
         description: "Address information"
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/AddressRequest"
+              $ref: "#/components/schemas/AddressRequestBody"
       responses:
         201:
-          $ref: "#/components/responses/AddressCreated"
+          $ref: "#/components/responses/AddressCreatedResponse"
     get:
       tags:
         - Address
       summary: Find address
+      security:
+        - BearerAuth: []
+        - OauthSecurityUser:
+            - write
+            - read
       description: |
         
         ## Responsibilities
@@ -75,23 +80,23 @@ paths:
           schema:
             type: string
         - in: query
-          name: postalcode
+          name: zipcode
           example: "12090001"
           schema:
             type: string
-      security:
-        - BearerAuth: []
-        - OauthSecurityUser:
-            - write
-            - read
       responses:
         200:
-          $ref: '#/components/responses/AddressList'
+          $ref: '#/components/responses/AddressReadResponse'
   /phone:
     post:
       tags:
         - Phone
       summary: Create a new phone to the person
+      security:
+        - BearerAuth: []
+        - OauthSecurityUser:
+            - write
+            - read
       description: |
         
         ## Responsibilities
@@ -103,18 +108,25 @@ paths:
         * `AUTH-BASIC` role
 
       operationId: createPhone
+      requestBody:
+        required: true
+        description: "Phone information"
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PhoneRequestBody"
+      responses:
+        201:
+          $ref: "#/components/responses/PhoneCreatedResponse"
+    get:
+      tags:
+        - Phone
+      summary: Find Phone
       security:
         - BearerAuth: []
         - OauthSecurityUser:
             - write
             - read
-      responses:
-        201:
-          $ref: "#/components/responses/PhoneCreated"
-    get:
-      tags:
-        - Phone
-      summary: Find Phone
       description: |
         
         ## Responsibilities
@@ -129,17 +141,12 @@ paths:
       parameters:
         - in: query
           name: phone
-          example: "+551290903909000"
+          example: "+55121234567890"
           schema:
             type: string
-      security:
-        - BearerAuth: []
-        - OauthSecurityUser:
-            - write
-            - read
       responses:
         200:
-          $ref: '#/components/responses/PhoneList'
+          $ref: '#/components/responses/PhoneReadResponse'
 
 components:
   securitySchemes:
@@ -179,41 +186,46 @@ components:
         default: id
       description: Named field to sort results by
   schemas:
-    AddressRequest:
+    AddressRequestBody:
       required:
+        - personId
         - street
         - number
-        - postalcode
+        - zipcode
         - city
       type: object
       properties:
+        personId:
+          type: string
+          minLength: 1
+          example: "67fe5f70f5c8e0274f05aee4"
         street:
           type: string
           minLength: 1
           maxLength: 200
-          example: Street name test
+          example: "Street name test"
         number:
           type: integer
           example: 1234
-        postalcode:
+        zipcode:
           type: string
           minLength: 1
           maxLength: 15
-          example: 12090000
+          example: "12090000"
         city:
           type: string
           minLength: 1
-          example: New York
-    AddressCreatedResponse:
+          example: "New York"
+    AddressCreatedResponseBody:
       type: object
       properties:
         id:
           type: string
           example: 620eb80e0f9f7c26ba190dfc
-    AddressListResponse:
+    AddressReadResponseBody:
       type: object
       properties:
-        id:
+        personId:
           type: string
           example: 620eb80e0f9f7c26ba190dfc
         street:
@@ -222,68 +234,72 @@ components:
         number:
           type: integer
           example: 1234
-        postalcode:
+        zipcode:
           type: string
           example: 12090000
         city:
           type: string
           example: New York
-    PhoneRequest:
+    PhoneRequestBody:
       required:
-        - name
-        - number
+        - personId
+        - phoneNumber
+        - phoneType
       type: object
       properties:
-        name:
+        personId:
           type: string
           minLength: 1
-          maxLength: 200
-          example: John Smith Viz
-        number:
+          example: "67fe5f70f5c8e0274f05aee4"
+        phoneNumber:
           type: string
           minLength: 1
           maxLength: 15
-          example: +551290903909000
-    PhoneCreatedResponse:
+          example: "+55121234567890"
+        phoneType:
+          type: string
+          example: "mobile"
+          enum: ["mobile", "home", "office"]
+    PhoneCreatedResponseBody:
       type: object
       properties:
         id:
           type: string
           example: 620eb80e0f9f7c26ba190dfc
-    PhoneListResponse:
+    PhoneReadResponseBody:
       type: object
       properties:
-        id:
+        personId:
           type: string
           example: 620eb80e0f9f7c26ba190dfc
-        name:
+        phoneNumber:
           type: string
-          example: John Smith Viz
-        number:
+          example: "+5512990990900"
+        phoneTYpe:
           type: string
-          example: +5512990990900
+          example: "mobile"
   responses:
-    AddressCreated:
+    AddressCreatedResponse:
       description: Address Created
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/AddressCreatedResponse'
-    AddressList:
+            $ref: '#/components/schemas/AddressCreatedResponseBody'
+    AddressReadResponse:
       description: Address List
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/AddressListResponse'
-    PhoneCreated:
+            $ref: '#/components/schemas/AddressReadResponseBody'
+    PhoneCreatedResponse:
       description: Phone Created
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/PhoneCreatedResponse'
-    PhoneList:
+            $ref: '#/components/schemas/PhoneCreatedResponseBody'
+    PhoneReadResponse:
       description: Phone List
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/PhoneListResponse'
+            $ref: '#/components/schemas/PhoneReadResponseBody'
