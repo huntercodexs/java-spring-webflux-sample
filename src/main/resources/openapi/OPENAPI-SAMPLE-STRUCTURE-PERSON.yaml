@@ -192,17 +192,47 @@ components:
         updatedAt:
           type: string
           example: "2025-04-20T21:18:23.524+00:00"
+          x-field-extra-annotation: "@JsonInclude(JsonInclude.Include.NON_NULL)"
         deletedAt:
           type: string
           example: "2025-04-20T21:18:23.524+00:00"
+          x-field-extra-annotation: "@JsonInclude(JsonInclude.Include.NON_NULL)"
         address:
-            type: array
-            items:
-              $ref: '#/components/schemas/AddressResponseBody'
+          x-field-extra-annotation: "@JsonInclude(JsonInclude.Include.NON_NULL)"
+          type: array
+          items:
+            $ref: '#/components/schemas/AddressResponseBody'
         phones:
-            type: array
-            items:
-              $ref: '#/components/schemas/PhoneResponseBody'
+          x-field-extra-annotation: "@JsonInclude(JsonInclude.Include.NON_NULL)"
+          type: array
+          items:
+            $ref: '#/components/schemas/PhoneResponseBody'
+    PersonOnlyReadResponseBody:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 620eb80e0f9f7c26ba190dfc
+        name:
+          type: string
+          example: John Smith Viz
+        email:
+          type: string
+          example: john@email.com
+        active:
+          type: boolean
+          example: true
+        createdAt:
+          type: string
+          example: "2025-04-20T21:18:23.524+00:00"
+        updatedAt:
+          type: string
+          example: "2025-04-20T21:18:23.524+00:00"
+          x-field-extra-annotation: "@JsonInclude(JsonInclude.Include.NON_NULL)"
+        deletedAt:
+          type: string
+          example: "2025-04-20T21:18:23.524+00:00"
+          x-field-extra-annotation: "@JsonInclude(JsonInclude.Include.NON_NULL)"
     PersonsReadResponseBody:
       type: object
       properties:
@@ -210,7 +240,7 @@ components:
           description: List of Persons
           type: array
           items:
-            $ref: '#/components/schemas/PersonReadResponseBody'
+            $ref: '#/components/schemas/PersonOnlyReadResponseBody'
     AddressResponseBody:
       type: object
       description: List of Address
@@ -241,9 +271,11 @@ components:
         updatedAt:
           type: string
           example: "2025-04-20T21:18:23.524+00:00"
+          x-field-extra-annotation: "@JsonInclude(JsonInclude.Include.NON_NULL)"
         deletedAt:
           type: string
           example: "2025-04-20T21:18:23.524+00:00"
+          x-field-extra-annotation: "@JsonInclude(JsonInclude.Include.NON_NULL)"
     PhoneResponseBody:
       type: object
       description: List of Phones
@@ -266,9 +298,11 @@ components:
         updatedAt:
           type: string
           example: "2025-04-20T21:18:23.524+00:00"
+          x-field-extra-annotation: "@JsonInclude(JsonInclude.Include.NON_NULL)"
         deletedAt:
           type: string
           example: "2025-04-20T21:18:23.524+00:00"
+          x-field-extra-annotation: "@JsonInclude(JsonInclude.Include.NON_NULL)"
   responses:
     PersonCreatedResponse:
       description: Person Created

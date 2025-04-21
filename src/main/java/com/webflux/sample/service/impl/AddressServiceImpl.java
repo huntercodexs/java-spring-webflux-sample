@@ -9,7 +9,6 @@ import com.webflux.sample.service.AddressService;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
-import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Log4j2
@@ -20,10 +19,10 @@ public class AddressServiceImpl implements AddressService {
     private AddressRepository addressRepository;
 
     @Override
-    public Mono<AddressCreatedResponseBody> create(Mono<AddressRequestBody> createAddressRequest) {
+    public Mono<AddressCreatedResponseBody> create(String personId, Mono<AddressRequestBody> createAddressRequest) {
         return createAddressRequest.flatMap(addressRequest -> {
             AddressDocument address = new AddressDocument();
-            address.setPersonId(addressRequest.getPersonId());
+            address.setPersonId(personId);
             address.setStreet(addressRequest.getStreet());
             address.setNumber(addressRequest.getNumber());
             address.setCity(addressRequest.getCity());
@@ -43,8 +42,8 @@ public class AddressServiceImpl implements AddressService {
     }
 
     @Override
-    public Mono<AddressReadResponseBody> find(String id) {
-        return addressRepository.findById(id)
+    public Mono<AddressReadResponseBody> find(String personId) {
+        return addressRepository.findById(personId)
                 .doFirst(() -> log.info(">>> Find started..."))
                 .doOnTerminate(() -> log.info(">>> Find finished..."))
                 .doOnSuccess(success -> log.info("The Find result is {}", success))
@@ -53,15 +52,9 @@ public class AddressServiceImpl implements AddressService {
                 .map(address -> address);
     }
 
-    @Override
-    public Flux<AddressReadResponseBody> findAll() {
-        return null;
-    }
-
     private Mono<AddressReadResponseBody> buildResponse(AddressDocument addressDocument) {
         return Mono.just(addressDocument).map(document -> {
             AddressReadResponseBody response = new AddressReadResponseBody();
-            response.setPersonId(document.getPersonId());
             response.setStreet(document.getStreet());
             response.setNumber(document.getNumber());
             response.setCity(document.getCity());

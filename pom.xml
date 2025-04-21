@@ -100,19 +100,36 @@
             <scope>provided</scope>
         </dependency>
 
-        <!--OTHERS-->
+        <!--JAKARTA-->
+        <dependency>
+            <groupId>jakarta.servlet</groupId>
+            <artifactId>jakarta.servlet-api</artifactId>
+        </dependency>
+
+        <!--JACKSON-->
+        <!--Core -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-core</artifactId>
+            <version>2.17.3</version>
+        </dependency>
+        <!--Annotations-->
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-annotations</artifactId>
+            <version>2.17.3</version>
+        </dependency>
+        <!--Nullable-->
         <dependency>
             <groupId>org.openapitools</groupId>
             <artifactId>jackson-databind-nullable</artifactId>
             <version>0.2.6</version>
         </dependency>
+        <!--Databind-->
         <dependency>
-            <groupId>jakarta.servlet</groupId>
-            <artifactId>jakarta.servlet-api</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.yaml</groupId>
-            <artifactId>snakeyaml</artifactId>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>2.17.3</version>
         </dependency>
 
         <!--OPENAPI-->
@@ -131,6 +148,10 @@
             <groupId>io.swagger.core.v3</groupId>
             <artifactId>swagger-core</artifactId>
             <version>2.2.21</version>
+        </dependency>
+        <dependency>
+            <groupId>org.yaml</groupId>
+            <artifactId>snakeyaml</artifactId>
         </dependency>
 
         <!--TESTS-->
@@ -171,6 +192,7 @@
             </resource>
         </resources>
         <plugins>
+            <!--maven-resources-plugin-->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-resources-plugin</artifactId>
@@ -179,6 +201,7 @@
                     <encoding>UTF-8</encoding>
                 </configuration>
             </plugin>
+            <!--maven-compiler-plugin-->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -187,6 +210,7 @@
                     <target>${java.version}</target>
                 </configuration>
             </plugin>
+            <!--spring-boot-maven-plugin-->
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
@@ -198,6 +222,7 @@
                     </execution>
                 </executions>
             </plugin>
+            <!--maven-surefire-plugin-->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
@@ -206,6 +231,7 @@
                     <parallel>none</parallel>
                 </configuration>
             </plugin>
+            <!--srcclr-maven-plugin-->
             <plugin>
                 <groupId>com.srcclr</groupId>
                 <artifactId>srcclr-maven-plugin</artifactId>
@@ -224,10 +250,12 @@
                     </execution>
                 </executions>
             </plugin>
+            <!--versions-maven-plugin-->
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>versions-maven-plugin</artifactId>
             </plugin>
+            <!--openapi-generator-maven-plugin-->
             <plugin>
                 <groupId>org.openapitools</groupId>
                 <artifactId>openapi-generator-maven-plugin</artifactId>
@@ -252,6 +280,9 @@
                                 <reactive>true</reactive>
                                 <skipDefaultInterface>true</skipDefaultInterface>
                             </configOptions>
+                            <templateDirectory>
+                                ${project.basedir}/src/main/resources/openapi/templates
+                            </templateDirectory>
                             <generateModelTests>false</generateModelTests>
                             <generateApiTests>false</generateApiTests>
                         </configuration>

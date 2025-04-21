@@ -3,7 +3,7 @@ package com.webflux.sample.controller;
 import com.webflux.sample.model.PhoneCreatedResponseBody;
 import com.webflux.sample.model.PhoneReadResponseBody;
 import com.webflux.sample.model.PhoneRequestBody;
-import com.webflux.sample.person_details.api.PhoneApi;
+import com.webflux.sample.person_details.api.PhonesApi;
 import com.webflux.sample.service.PhoneService;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -15,19 +15,20 @@ import reactor.core.publisher.Mono;
 @Log4j2
 @RestController
 @AllArgsConstructor
-public class PhoneController implements BaseController, PhoneApi {
+public class PhoneController implements BaseController, PhonesApi {
 
     PhoneService phoneService;
 
     @Override
     public Mono<ResponseEntity<PhoneCreatedResponseBody>> createPhone(
+            String personId,
             Mono<PhoneRequestBody> phoneRequestBody,
             ServerWebExchange exchange
     ) {
         log.info("[MARKER:createPhone] - START");
 
         Mono<ResponseEntity<PhoneCreatedResponseBody>> response = phoneService
-                .create(phoneRequestBody)
+                .create(personId, phoneRequestBody)
                 .doFirst(() -> log.info(">>> Create phone started"))
                 .doOnTerminate(() -> log.info(">>> Create phone finished"))
                 .map(ResponseEntity::ok)
@@ -40,8 +41,8 @@ public class PhoneController implements BaseController, PhoneApi {
     }
 
     @Override
-    public Mono<ResponseEntity<PhoneReadResponseBody>> findPhone(
-            String phone,
+    public Mono<ResponseEntity<PhoneReadResponseBody>> findPhones(
+            String personId,
             ServerWebExchange exchange
     ) {
         return null;

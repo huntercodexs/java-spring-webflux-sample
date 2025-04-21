@@ -8,6 +8,6 @@ import reactor.core.publisher.Mono;
 
 public interface PersonService {
     Mono<PersonCreatedResponseBody> create(Mono<PersonRequestBody> createPersonRequest);
-    Mono<PersonReadResponseBody> find(String id);
+    Mono<PersonReadResponseBody> find(String personId);
     Mono<PersonsReadResponseBody> findAll();
 }

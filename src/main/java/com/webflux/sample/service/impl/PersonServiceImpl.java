@@ -50,8 +50,8 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
-    public Mono<PersonReadResponseBody> find(String id) {
-        return personsRepository.findById(id)
+    public Mono<PersonReadResponseBody> find(String personId) {
+        return personsRepository.findById(personId)
                 .doFirst(() -> log.info("Find started..."))
                 .doOnTerminate(() -> log.info("Find finished..."))
                 .doOnSuccess(success -> log.info("The Find result is {}", success))
@@ -108,9 +108,9 @@ public class PersonServiceImpl implements PersonService {
     }
 
     private Mono<PersonsReadResponseBody> buildResponseForAll(List<PersonsDocument> personsDocumentList) {
-        List<PersonReadResponseBody> personsList = new ArrayList<>();
+        List<PersonOnlyReadResponseBody> personsList = new ArrayList<>();
         personsDocumentList.forEach(personsDocument -> {
-            personsList.add(this.buildPersonResponse(personsDocument));
+            personsList.add(this.buildPersonOnlyResponse(personsDocument));
         });
         PersonsReadResponseBody personsRead = new PersonsReadResponseBody();
         personsRead.setPersons(personsList);
@@ -135,8 +135,20 @@ public class PersonServiceImpl implements PersonService {
         return response;
     }
 
+    private PersonOnlyReadResponseBody buildPersonOnlyResponse(PersonsDocument document) {
+        PersonOnlyReadResponseBody response = new PersonOnlyReadResponseBody();
+        response.setId(document.getId());
+        response.setName(document.getName());
+        response.setEmail(document.getEmail());
+        response.setActive(document.isActive());
+        response.setCreatedAt(datetimeUtil(document.getCreatedAt()));
+        response.setUpdatedAt(datetimeUtil(document.getUpdatedAt()));
+        response.setDeletedAt(datetimeUtil(document.getDeletedAt()));
+        return response;
+    }
+
     private List<AddressResponseBody> buildAddressResponse(Set<AddressDocument> addressDocs) {
-        if (isNull(addressDocs)) return null;
+        if (isNull(addressDocs) || addressDocs.isEmpty()) return null;
         List<AddressResponseBody> addressResponseBody = new ArrayList<>();
 
         addressDocs.forEach(address -> {
@@ -158,7 +170,7 @@ public class PersonServiceImpl implements PersonService {
     }
 
     private List<PhoneResponseBody> buildPhoneResponse(Set<PhonesDocument> phonesDocs) {
-        if (isNull(phonesDocs)) return null;
+        if (isNull(phonesDocs) || phonesDocs.isEmpty()) return null;
         List<PhoneResponseBody> phoneResponseBody = new ArrayList<>();
 
         phonesDocs.forEach(phone -> {

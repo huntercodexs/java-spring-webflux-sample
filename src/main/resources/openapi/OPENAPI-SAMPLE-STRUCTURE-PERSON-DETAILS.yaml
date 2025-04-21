@@ -17,14 +17,14 @@ servers:
     description: PRODUCTION
 
 tags:
-  - name: Address
-  - name: Phone
+  - name: Addresses
+  - name: Phones
 
 paths:
-  /address:
+  /addresses/{personId}:
     post:
       tags:
-        - Address
+        - Addresses
       summary: Create a new address for one person
       security:
         - BearerAuth: []
@@ -43,6 +43,13 @@ paths:
         * `AUTH-BASIC` roles
 
       operationId: createAddress
+      parameters:
+        - in: path
+          name: personId
+          required: true
+          example: "67fe6bac382b9445e80b404e"
+          schema:
+            type: string
       requestBody:
         required: true
         description: "Address information"
@@ -55,8 +62,8 @@ paths:
           $ref: "#/components/responses/AddressCreatedResponse"
     get:
       tags:
-        - Address
-      summary: Find address
+        - Addresses
+      summary: Find addresses
       security:
         - BearerAuth: []
         - OauthSecurityUser:
@@ -72,22 +79,18 @@ paths:
         To access this endpoint, you must have one of the following sets of roles:
         * `AUTH-BASIC` role
 
-      operationId: findAddress
+      operationId: findAddresses
       parameters:
-        - in: query
-          name: street
-          example: "Street name"
-          schema:
-            type: string
-        - in: query
-          name: zipcode
-          example: "12090001"
+        - in: path
+          name: personId
+          required: true
+          example: "67fe6bac382b9445e80b404e"
           schema:
             type: string
       responses:
         200:
           $ref: '#/components/responses/AddressReadResponse'
-  /phone:
+  /phones/{personId}:
     post:
       tags:
         - Phone
@@ -108,6 +111,13 @@ paths:
         * `AUTH-BASIC` role
 
       operationId: createPhone
+      parameters:
+        - in: path
+          name: personId
+          required: true
+          example: "67fe6bac382b9445e80b404e"
+          schema:
+            type: string
       requestBody:
         required: true
         description: "Phone information"
@@ -120,8 +130,8 @@ paths:
           $ref: "#/components/responses/PhoneCreatedResponse"
     get:
       tags:
-        - Phone
-      summary: Find Phone
+        - Phones
+      summary: Find Phones
       security:
         - BearerAuth: []
         - OauthSecurityUser:
@@ -137,11 +147,12 @@ paths:
         To access this endpoint, you must have one of the following sets of roles:
         * `AUTH-BASIC` role
 
-      operationId: findPhone
+      operationId: findPhones
       parameters:
-        - in: query
-          name: phone
-          example: "+55121234567890"
+        - in: path
+          name: personId
+          required: true
+          example: "67fe6bac382b9445e80b404e"
           schema:
             type: string
       responses:
@@ -188,17 +199,12 @@ components:
   schemas:
     AddressRequestBody:
       required:
-        - personId
         - street
         - number
         - zipcode
         - city
       type: object
       properties:
-        personId:
-          type: string
-          minLength: 1
-          example: "67fe5f70f5c8e0274f05aee4"
         street:
           type: string
           minLength: 1
@@ -225,9 +231,6 @@ components:
     AddressReadResponseBody:
       type: object
       properties:
-        personId:
-          type: string
-          example: 620eb80e0f9f7c26ba190dfc
         street:
           type: string
           example: Street name sample
@@ -254,15 +257,10 @@ components:
           example: "2025-04-20T21:18:23.524+00:00"
     PhoneRequestBody:
       required:
-        - personId
         - phoneNumber
         - phoneType
       type: object
       properties:
-        personId:
-          type: string
-          minLength: 1
-          example: "67fe5f70f5c8e0274f05aee4"
         phoneNumber:
           type: string
           minLength: 1
@@ -281,9 +279,6 @@ components:
     PhoneReadResponseBody:
       type: object
       properties:
-        personId:
-          type: string
-          example: 620eb80e0f9f7c26ba190dfc
         phoneNumber:
           type: string
           example: "+5512990990900"
