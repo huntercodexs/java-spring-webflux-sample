@@ -23,7 +23,7 @@ public class PhoneServiceImpl implements PhoneService {
     public Mono<PhoneCreatedResponseBody> create(Mono<PhoneRequestBody> createPhoneRequest) {
         return createPhoneRequest.flatMap(phoneRequest -> {
             PhonesDocument address = new PhonesDocument();
-            address.setId(phoneRequest.getPersonId());
+            address.setPersonId(phoneRequest.getPersonId());
             address.setPhoneNumber(phoneRequest.getPhoneNumber());
             address.setPhoneType(phoneRequest.getPhoneType().getValue());
 
@@ -59,7 +59,7 @@ public class PhoneServiceImpl implements PhoneService {
     private Mono<PhoneReadResponseBody> buildResponse(PhonesDocument phonesDocument) {
         return Mono.just(phonesDocument).map(document -> {
             PhoneReadResponseBody response = new PhoneReadResponseBody();
-            response.setPersonId(document.getId());
+            response.setPersonId(document.getPersonId());
             response.setPhoneNumber(document.getPhoneNumber());
             response.setPhoneTYpe(document.getPhoneNumber());
             return response;

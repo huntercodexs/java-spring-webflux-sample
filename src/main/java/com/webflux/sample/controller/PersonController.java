@@ -27,13 +27,12 @@ public class PersonController implements BaseController, PersonApi {
     ) {
         log.info("[MARKER:createPerson] - START");
 
-        Mono<ResponseEntity<PersonCreatedResponseBody>> response = personService
-                .create(createPersonRequestBody)
-                .doFirst(() -> log.info(">>> Create person started"))
-                .doOnTerminate(() -> log.info(">>> Create person finished"))
-                .map(ResponseEntity::ok)
+        Mono<ResponseEntity<PersonCreatedResponseBody>> response = personService.create(createPersonRequestBody)
+                .doFirst(() -> log.info(">>> createPerson started"))
+                .doOnTerminate(() -> log.info(">>> createPerson finished"))
                 .doOnSuccess(result -> log.info(">>> The createPerson result is {}", result))
-                .doOnError(error -> log.error(">>> The createPerson error is {}", String.valueOf(error)));
+                .doOnError(error -> log.error(">>> The createPerson error is {}", String.valueOf(error)))
+                .map(ResponseEntity::ok);
 
         log.info("[MARKER:createPerson] - STOP");
 
@@ -47,13 +46,12 @@ public class PersonController implements BaseController, PersonApi {
     ) {
         log.info("[MARKER:findPersonById] - START");
 
-        Mono<ResponseEntity<PersonReadResponseBody>> response = personService
-                .find(personId)
-                .doFirst(() -> log.info(">>> findPersonById person started"))
-                .doOnTerminate(() -> log.info(">>> findPersonById person finished"))
-                .map(ResponseEntity::ok)
+        Mono<ResponseEntity<PersonReadResponseBody>> response = personService.find(personId)
+                .doFirst(() -> log.info(">>> findPersonById started"))
+                .doOnTerminate(() -> log.info(">>> findPersonById finished"))
                 .doOnSuccess(result -> log.info(">>> The findPersonById result is {}", result))
-                .doOnError(error -> log.error(">>> The findPersonById error is {}", String.valueOf(error)));
+                .doOnError(error -> log.error(">>> The findPersonById error is {}", String.valueOf(error)))
+                .map(ResponseEntity::ok);
 
         log.info("[MARKER:findPersonById] - STOP");
 
@@ -61,13 +59,19 @@ public class PersonController implements BaseController, PersonApi {
     }
 
     @Override
-    public Mono<ResponseEntity<PersonsReadResponseBody>> findPersons(
-            Integer limit,
-            Integer offset,
-            String sort,
-            ServerWebExchange exchange
-    ) {
-        return null;
+    public Mono<ResponseEntity<PersonsReadResponseBody>> findPersons(ServerWebExchange exchange) {
+        log.info("[MARKER:findPersons] - START");
+
+        Mono<ResponseEntity<PersonsReadResponseBody>> response = personService.findAll()
+                .doFirst(() -> log.info(">>> findPersons persons started"))
+                .doOnTerminate(() -> log.info(">>> findPersons persons finished"))
+                .doOnSuccess(result -> log.info(">>> The findPersons result is {}", result))
+                .doOnError(error -> log.error(">>> The findPersons error is {}", String.valueOf(error)))
+                .map(ResponseEntity::ok);
+
+        log.info("[MARKER:findPersons] - STOP");
+
+        return response;
     }
 
 }

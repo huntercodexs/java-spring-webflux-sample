@@ -72,10 +72,10 @@ paths:
            * `AUTH-BASIC` level
 
       operationId: findPersons
-      parameters:
-        - $ref: '#/components/parameters/QueryLimit'
-        - $ref: '#/components/parameters/QueryOffset'
-        - $ref: '#/components/parameters/QuerySort'
+#      parameters:
+#        - $ref: '#/components/parameters/QueryLimit'
+#        - $ref: '#/components/parameters/QueryOffset'
+#        - $ref: '#/components/parameters/QuerySort'
       responses:
         200:
           $ref: '#/components/responses/PersonsReadResponse'
@@ -125,29 +125,29 @@ components:
       type: http
       scheme: bearer
       bearerFormat: JWT
-  parameters:
-    QueryLimit:
-      name: limit
-      in: query
-      schema:
-        type: integer
-        default: 20
-      description: Total count of registries to fetch.
-    QueryOffset:
-      name: offset
-      in: query
-      schema:
-        type: integer
-        default: 0
-      description: From which index to seek for registries.
-    QuerySort:
-      name: sort
-      in: query
-      schema:
-        type: string
-        example: name
-        default: id
-      description: Named field to sort results by
+#  parameters:
+#    QueryLimit:
+#      name: limit
+#      in: query
+#      schema:
+#        type: integer
+#        default: 20
+#      description: Total count of registries to fetch.
+#    QueryOffset:
+#      name: offset
+#      in: query
+#      schema:
+#        type: integer
+#        default: 0
+#      description: From which index to seek for registries.
+#    QuerySort:
+#      name: sort
+#      in: query
+#      schema:
+#        type: string
+#        example: name
+#        default: id
+#      description: Named field to sort results by
   schemas:
     PersonRequestBody:
       required:
@@ -183,35 +183,37 @@ components:
         email:
           type: string
           example: john@email.com
+        active:
+          type: boolean
+          example: true
+        createdAt:
+          type: string
+          example: "2025-04-20T21:18:23.524+00:00"
+        updatedAt:
+          type: string
+          example: "2025-04-20T21:18:23.524+00:00"
+        deletedAt:
+          type: string
+          example: "2025-04-20T21:18:23.524+00:00"
         address:
-          type: object
-          example: Street name test 123
+            type: array
+            items:
+              $ref: '#/components/schemas/AddressResponseBody'
         phones:
-          type: object
-          example: +5512909022020
+            type: array
+            items:
+              $ref: '#/components/schemas/PhoneResponseBody'
     PersonsReadResponseBody:
       type: object
       properties:
-        id:
-          type: string
-          example: 620eb80e0f9f7c26ba190dfc
-        name:
-          type: string
-          example: John Smith Viz
-        email:
-          type: string
-          example: john@email.com
-        address:
-          $ref: '#/components/schemas/AddressResponseBody'
-        phones:
-          $ref: '#/components/schemas/PhoneResponseBody'
+        persons:
+          description: List of Persons
+          type: array
+          items:
+            $ref: '#/components/schemas/PersonReadResponseBody'
     AddressResponseBody:
       type: object
-      required:
-        - street
-        - number
-        - zipcode
-        - city
+      description: List of Address
       properties:
         street:
           type: string
@@ -230,11 +232,21 @@ components:
           type: string
           minLength: 1
           example: "New York"
+        active:
+          type: boolean
+          example: true
+        createdAt:
+          type: string
+          example: "2025-04-20T21:18:23.524+00:00"
+        updatedAt:
+          type: string
+          example: "2025-04-20T21:18:23.524+00:00"
+        deletedAt:
+          type: string
+          example: "2025-04-20T21:18:23.524+00:00"
     PhoneResponseBody:
       type: object
-      required:
-        - phoneNumber
-        - phoneType
+      description: List of Phones
       properties:
         phoneNumber:
           type: string
@@ -245,7 +257,18 @@ components:
           type: string
           minLength: 1
           example: "mobile"
-          enum: ["mobile", "home", "office"]
+        active:
+          type: boolean
+          example: true
+        createdAt:
+          type: string
+          example: "2025-04-20T21:18:23.524+00:00"
+        updatedAt:
+          type: string
+          example: "2025-04-20T21:18:23.524+00:00"
+        deletedAt:
+          type: string
+          example: "2025-04-20T21:18:23.524+00:00"
   responses:
     PersonCreatedResponse:
       description: Person Created
@@ -260,7 +283,7 @@ components:
           schema:
             $ref: '#/components/schemas/PersonReadResponseBody'
     PersonsReadResponse:
-      description: Persons Read
+      description: Person Read
       content:
         application/json:
           schema:

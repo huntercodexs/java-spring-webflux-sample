@@ -6,4 +6,5 @@ import reactor.core.publisher.Flux;
 
 public interface PhonesRepository extends ReactiveMongoRepository<PhonesDocument, String> {
     Flux<PhonesDocument> findAllById(String id);
+    Flux<PhonesDocument> findAllByPersonId(String id);
 }

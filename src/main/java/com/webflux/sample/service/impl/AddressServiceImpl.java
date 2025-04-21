@@ -23,7 +23,7 @@ public class AddressServiceImpl implements AddressService {
     public Mono<AddressCreatedResponseBody> create(Mono<AddressRequestBody> createAddressRequest) {
         return createAddressRequest.flatMap(addressRequest -> {
             AddressDocument address = new AddressDocument();
-            address.setId(addressRequest.getPersonId());
+            address.setPersonId(addressRequest.getPersonId());
             address.setStreet(addressRequest.getStreet());
             address.setNumber(addressRequest.getNumber());
             address.setCity(addressRequest.getCity());
@@ -61,7 +61,7 @@ public class AddressServiceImpl implements AddressService {
     private Mono<AddressReadResponseBody> buildResponse(AddressDocument addressDocument) {
         return Mono.just(addressDocument).map(document -> {
             AddressReadResponseBody response = new AddressReadResponseBody();
-            response.setPersonId(document.getId());
+            response.setPersonId(document.getPersonId());
             response.setStreet(document.getStreet());
             response.setNumber(document.getNumber());
             response.setCity(document.getCity());

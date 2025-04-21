@@ -10,6 +10,7 @@ import org.springframework.data.mongodb.core.mapping.DocumentReference;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.Set;
 
 @Data
@@ -31,8 +32,8 @@ public class PersonsDocument implements Serializable {
     private LocalDateTime deletedAt;
 
     @DocumentReference
-    private Set<PhonesDocument> phones;
+    private Set<AddressDocument> addresses = new HashSet<>();
     @DocumentReference
-    private Set<AddressDocument> addresses;
+    private Set<PhonesDocument> phones = new HashSet<>();
 
 }

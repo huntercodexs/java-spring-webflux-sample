@@ -18,6 +18,7 @@ public class PhonesDocument {
 
     @Id
     private String id;
+    private String personId;
     private String phoneNumber;
     private String phoneType;
     @Builder.Default

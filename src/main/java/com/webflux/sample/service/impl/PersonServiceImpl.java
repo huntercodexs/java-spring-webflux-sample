@@ -1,9 +1,9 @@
 package com.webflux.sample.service.impl;
 
+import com.webflux.sample.document.AddressDocument;
 import com.webflux.sample.document.PersonsDocument;
-import com.webflux.sample.model.PersonCreatedResponseBody;
-import com.webflux.sample.model.PersonReadResponseBody;
-import com.webflux.sample.model.PersonRequestBody;
+import com.webflux.sample.document.PhonesDocument;
+import com.webflux.sample.model.*;
 import com.webflux.sample.repository.AddressRepository;
 import com.webflux.sample.repository.PersonsRepository;
 import com.webflux.sample.repository.PhonesRepository;
@@ -11,10 +11,16 @@ import com.webflux.sample.service.PersonService;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
-import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import java.util.Collections;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+
+import static com.webflux.sample.util.WebFluxUtil.datetimeUtil;
+import static java.util.Objects.isNull;
 
 @Log4j2
 @Service
@@ -48,51 +54,129 @@ public class PersonServiceImpl implements PersonService {
     @Override
     public Mono<PersonReadResponseBody> find(String id) {
         return personsRepository.findById(id)
-                .doFirst(() -> log.info(">>> Find started..."))
-                .doOnTerminate(() -> log.info(">>> Find finished..."))
+                .doFirst(() -> log.info("Find started..."))
+                .doOnTerminate(() -> log.info("Find finished..."))
                 .doOnSuccess(success -> log.info("The Find result is {}", success))
                 .doOnError(error -> log.error( "The Find error is {}", String.valueOf(error)))
                 .flatMap(this::findAddress)
                 .flatMap(this::findPhones)
-                .flatMap(this::buildResponse)
+                .flatMap(this::buildResponseForOne)
                 .map(person -> person);
     }
 
     @Override
-    public Flux<PersonReadResponseBody> findAll() {
-        return null;
+    public Mono<PersonsReadResponseBody> findAll() {
+        return personsRepository.findAll()
+                .doFirst(() -> log.info("findAll is started"))
+                .doOnTerminate(() -> log.info("findAll is finished"))
+                .doOnError(error -> log.error( "The Find findAll is {}", String.valueOf(error)))
+                .collectList()
+                .doOnSuccess(success -> log.info("The findAll result is {}", success))
+                .flatMap(this::buildResponseForAll);
     }
 
     private Mono<PersonsDocument> findAddress(PersonsDocument personsDocument) {
-        return addressRepository.findById(personsDocument.getId())
-                .doOnSuccess(success -> log.info("The findAddress result is {}", success))
+        return addressRepository.findAllByPersonId(personsDocument.getId())
+                .doFirst(() -> log.info("findAddress is started"))
+                .doOnTerminate(() -> log.info("findAddress is finished"))
                 .doOnError(error -> log.error( "The Find findAddress is {}", String.valueOf(error)))
-                .map(addressDocument -> {
-                    personsDocument.setAddresses(Collections.singleton(addressDocument));
+                .collectList()
+                .doOnSuccess(success -> log.info("The findAddress result is {}", success))
+                .map(addressDocuments -> {
+
+                    addressDocuments.forEach(addressDoc -> {
+                        personsDocument.getAddresses().add(addressDoc);
+                    });
+
                     return personsDocument;
                 });
     }
 
     private Mono<PersonsDocument> findPhones(PersonsDocument personsDocument) {
-        return phonesRepository.findById(personsDocument.getId())
+        return phonesRepository.findAllByPersonId(personsDocument.getId())
+                .doFirst(() -> log.info("findPhones is started"))
+                .doOnTerminate(() -> log.info("findPhones is finished"))
+                .doOnError(error -> log.error( "The Find findPhones is {}", String.valueOf(error)))
+                .collectList()
                 .doOnSuccess(success -> log.info("The findPhones result is {}", success))
-                .doOnError(error -> log.error( "The findPhones error is {}", String.valueOf(error)))
-                .map(phonesDocument -> {
-                    personsDocument.setPhones(Collections.singleton(phonesDocument));
+                .map(phonesDocuments -> {
+
+                    phonesDocuments.forEach(phoneDoc -> {
+                        personsDocument.getPhones().add(phoneDoc);
+                    });
+
                     return personsDocument;
                 });
     }
 
-    private Mono<PersonReadResponseBody> buildResponse(PersonsDocument personsDocument) {
-        return Mono.just(personsDocument).map(document -> {
-            PersonReadResponseBody response = new PersonReadResponseBody();
-            response.setId(document.getId());
-            response.setName(document.getName());
-            response.setEmail(document.getEmail());
-            response.setAddress(document.getAddresses());
-            response.setPhones(document.getPhones());
-            return response;
+    private Mono<PersonsReadResponseBody> buildResponseForAll(List<PersonsDocument> personsDocumentList) {
+        List<PersonReadResponseBody> personsList = new ArrayList<>();
+        personsDocumentList.forEach(personsDocument -> {
+            personsList.add(this.buildPersonResponse(personsDocument));
         });
+        PersonsReadResponseBody personsRead = new PersonsReadResponseBody();
+        personsRead.setPersons(personsList);
+        return Mono.just(personsRead);
+    }
+
+    private Mono<PersonReadResponseBody> buildResponseForOne(PersonsDocument personsDocument) {
+        return Mono.just(personsDocument).map(this::buildPersonResponse);
+    }
+
+    private PersonReadResponseBody buildPersonResponse(PersonsDocument document) {
+        PersonReadResponseBody response = new PersonReadResponseBody();
+        response.setId(document.getId());
+        response.setName(document.getName());
+        response.setEmail(document.getEmail());
+        response.setActive(document.isActive());
+        response.setCreatedAt(datetimeUtil(document.getCreatedAt()));
+        response.setUpdatedAt(datetimeUtil(document.getUpdatedAt()));
+        response.setDeletedAt(datetimeUtil(document.getDeletedAt()));
+        response.setAddress(this.buildAddressResponse(document.getAddresses()));
+        response.setPhones(this.buildPhoneResponse(document.getPhones()));
+        return response;
+    }
+
+    private List<AddressResponseBody> buildAddressResponse(Set<AddressDocument> addressDocs) {
+        if (isNull(addressDocs)) return null;
+        List<AddressResponseBody> addressResponseBody = new ArrayList<>();
+
+        addressDocs.forEach(address -> {
+            AddressResponseBody addresses = new AddressResponseBody();
+
+            addresses.setStreet(address.getStreet());
+            addresses.setNumber(address.getNumber());
+            addresses.setZipcode(address.getZipcode());
+            addresses.setCity(address.getCity());
+            addresses.setActive(address.isActive());
+            addresses.setCreatedAt(datetimeUtil(address.getCreatedAt()));
+            addresses.setUpdatedAt(datetimeUtil(address.getUpdatedAt()));
+            addresses.setDeletedAt(datetimeUtil(address.getDeletedAt()));
+
+            addressResponseBody.add(addresses);
+        });
+
+        return addressResponseBody;
+    }
+
+    private List<PhoneResponseBody> buildPhoneResponse(Set<PhonesDocument> phonesDocs) {
+        if (isNull(phonesDocs)) return null;
+        List<PhoneResponseBody> phoneResponseBody = new ArrayList<>();
+
+        phonesDocs.forEach(phone -> {
+            PhoneResponseBody phones = new PhoneResponseBody();
+
+            phones.setPhoneNumber(phone.getPhoneNumber());
+            phones.setPhoneType(phone.getPhoneType());
+            phones.setActive(phone.isActive());
+            phones.setCreatedAt(datetimeUtil(phone.getCreatedAt()));
+            phones.setUpdatedAt(datetimeUtil(phone.getUpdatedAt()));
+            phones.setDeletedAt(datetimeUtil(phone.getDeletedAt()));
+
+            phoneResponseBody.add(phones);
+        });
+
+        return phoneResponseBody;
     }
 
 }
