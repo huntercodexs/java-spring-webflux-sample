@@ -13,8 +13,6 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -57,7 +55,7 @@ public class PersonServiceImpl implements PersonService {
                 .doFirst(() -> log.info("Find started..."))
                 .doOnTerminate(() -> log.info("Find finished..."))
                 .doOnSuccess(success -> log.info("The Find result is {}", success))
-                .doOnError(error -> log.error( "The Find error is {}", String.valueOf(error)))
+                .doOnError(error -> log.error("The Find error is {}", String.valueOf(error)))
                 .flatMap(this::findAddress)
                 .flatMap(this::findPhones)
                 .flatMap(this::buildResponseForOne)
@@ -69,7 +67,7 @@ public class PersonServiceImpl implements PersonService {
         return personsRepository.findAll()
                 .doFirst(() -> log.info("findAll is started"))
                 .doOnTerminate(() -> log.info("findAll is finished"))
-                .doOnError(error -> log.error( "The Find findAll is {}", String.valueOf(error)))
+                .doOnError(error -> log.error("The Find findAll is {}", String.valueOf(error)))
                 .collectList()
                 .doOnSuccess(success -> log.info("The findAll result is {}", success))
                 .flatMap(this::buildResponseForAll);
@@ -79,7 +77,7 @@ public class PersonServiceImpl implements PersonService {
         return addressRepository.findAllByPersonId(personsDocument.getId())
                 .doFirst(() -> log.info("findAddress is started"))
                 .doOnTerminate(() -> log.info("findAddress is finished"))
-                .doOnError(error -> log.error( "The Find findAddress is {}", String.valueOf(error)))
+                .doOnError(error -> log.error("The Find findAddress is {}", String.valueOf(error)))
                 .collectList()
                 .doOnSuccess(success -> log.info("The findAddress result is {}", success))
                 .map(addressDocuments -> {
@@ -96,7 +94,7 @@ public class PersonServiceImpl implements PersonService {
         return phonesRepository.findAllByPersonId(personsDocument.getId())
                 .doFirst(() -> log.info("findPhones is started"))
                 .doOnTerminate(() -> log.info("findPhones is finished"))
-                .doOnError(error -> log.error( "The Find findPhones is {}", String.valueOf(error)))
+                .doOnError(error -> log.error("The Find findPhones is {}", String.valueOf(error)))
                 .collectList()
                 .doOnSuccess(success -> log.info("The findPhones result is {}", success))
                 .map(phonesDocuments -> {

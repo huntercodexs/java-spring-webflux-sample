@@ -7,13 +7,13 @@ info:
     email: webflux.sample@email.com
   version: 1.0.0
 servers:
-  - url: https://api-dev.webflux.sample/enroll/v1
+  - url: https://api-dev.webflux.sample/webflux-sample/v1
     description: DEVELOPMENT
-  - url: https://api-qa.webflux.sample/enroll/v1
+  - url: https://api-qa.webflux.sample/webflux-sample/v1
     description: QA
-  - url: https://api-homolog.webflux.sample/enroll/v1
+  - url: https://api-homolog.webflux.sample/webflux-sample/v1
     description: HOMOLOG
-  - url: https://api.webflux.sample/enroll/v1
+  - url: https://api.webflux.sample/webflux-sample/v1
     description: PRODUCTION
 
 tags:
