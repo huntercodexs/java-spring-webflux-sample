@@ -74,4 +74,12 @@ public class PersonController implements BaseController, PersonApi {
         return response;
     }
 
+    public Mono<ResponseEntity<Void>> updatePerson(ServerWebExchange exchange) {
+        return null;
+    }
+
+    public Mono<ResponseEntity<Void>> deletePerson(String personId, ServerWebExchange exchange) {
+        return null;
+    }
+
 }

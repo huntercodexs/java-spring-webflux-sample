@@ -47,7 +47,7 @@ public class PhoneServiceImpl implements PhoneService {
 
     @Override
     public Mono<PhoneReadResponseBody> find(String personId) {
-        return phonesRepository.findAllByPersonId(personId)
+        return phonesRepository.findAllByPersonIdAndActiveTrue(personId)
                 .doFirst(() -> log.info(">>> Find started..."))
                 .doOnTerminate(() -> log.info(">>> Find finished..."))
                 .collectList()

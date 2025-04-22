@@ -49,7 +49,7 @@ public class AddressServiceImpl implements AddressService {
 
     @Override
     public Mono<AddressReadResponseBody> find(String personId) {
-        return addressRepository.findAllByPersonId(personId)
+        return addressRepository.findAllByPersonIdAndActiveTrue(personId)
                 .doFirst(() -> log.info(">>> Find started..."))
                 .doOnTerminate(() -> log.info(">>> Find finished..."))
                 .collectList()

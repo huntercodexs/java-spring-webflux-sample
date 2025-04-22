@@ -51,7 +51,7 @@ public class PersonServiceImpl implements PersonService {
 
     @Override
     public Mono<PersonReadResponseBody> find(String personId) {
-        return personsRepository.findById(personId)
+        return personsRepository.findByIdAndActiveTrue(personId)
                 .doFirst(() -> log.info("Find started..."))
                 .doOnTerminate(() -> log.info("Find finished..."))
                 .doOnSuccess(success -> log.info("The Find result is {}", success))
@@ -64,7 +64,7 @@ public class PersonServiceImpl implements PersonService {
 
     @Override
     public Mono<PersonsReadResponseBody> findAll() {
-        return personsRepository.findAll()
+        return personsRepository.findAllByActiveTrue()
                 .doFirst(() -> log.info("findAll is started"))
                 .doOnTerminate(() -> log.info("findAll is finished"))
                 .doOnError(error -> log.error("The Find findAll is {}", String.valueOf(error)))
@@ -74,7 +74,7 @@ public class PersonServiceImpl implements PersonService {
     }
 
     private Mono<PersonsDocument> findAddress(PersonsDocument personsDocument) {
-        return addressRepository.findAllByPersonId(personsDocument.getId())
+        return addressRepository.findAllByPersonIdAndActiveTrue(personsDocument.getId())
                 .doFirst(() -> log.info("findAddress is started"))
                 .doOnTerminate(() -> log.info("findAddress is finished"))
                 .doOnError(error -> log.error("The Find findAddress is {}", String.valueOf(error)))
@@ -91,7 +91,7 @@ public class PersonServiceImpl implements PersonService {
     }
 
     private Mono<PersonsDocument> findPhones(PersonsDocument personsDocument) {
-        return phonesRepository.findAllByPersonId(personsDocument.getId())
+        return phonesRepository.findAllByPersonIdAndActiveTrue(personsDocument.getId())
                 .doFirst(() -> log.info("findPhones is started"))
                 .doOnTerminate(() -> log.info("findPhones is finished"))
                 .doOnError(error -> log.error("The Find findPhones is {}", String.valueOf(error)))
