@@ -45,6 +45,17 @@ public class PhoneController implements BaseController, PhonesApi {
             String personId,
             ServerWebExchange exchange
     ) {
-        return null;
+        log.info("[MARKER:findPhones] - START");
+
+        Mono<ResponseEntity<PhoneReadResponseBody>> response = phoneService.find(personId)
+                .doFirst(() -> log.info(">>> findPhones started"))
+                .doOnTerminate(() -> log.info(">>> findPhones finished"))
+                .doOnSuccess(result -> log.info(">>> The findPhones result is {}", result))
+                .doOnError(error -> log.error(">>> The findPhones error is {}", String.valueOf(error)))
+                .map(ResponseEntity::ok);
+
+        log.info("[MARKER:findPhones] - STOP");
+
+        return response;
     }
 }

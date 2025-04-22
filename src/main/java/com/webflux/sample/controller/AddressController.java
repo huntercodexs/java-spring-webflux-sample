@@ -45,7 +45,18 @@ public class AddressController implements BaseController, AddressesApi {
             String personId,
             ServerWebExchange exchange
     ) {
-        return null;
+        log.info("[MARKER:findAddresses] - START");
+
+        Mono<ResponseEntity<AddressReadResponseBody>> response = addressService.find(personId)
+                .doFirst(() -> log.info(">>> findAddresses started"))
+                .doOnTerminate(() -> log.info(">>> findAddresses finished"))
+                .doOnSuccess(result -> log.info(">>> The findAddresses result is {}", result))
+                .doOnError(error -> log.error(">>> The findAddresses error is {}", String.valueOf(error)))
+                .map(ResponseEntity::ok);
+
+        log.info("[MARKER:findAddresses] - STOP");
+
+        return response;
     }
 
 }

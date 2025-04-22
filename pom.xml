@@ -310,6 +310,9 @@
                                 <dateLibrary>joda</dateLibrary>
                                 <serializableModel>true</serializableModel>
                             </configOptions>
+                            <templateDirectory>
+                                ${project.basedir}/src/main/resources/openapi/templates
+                            </templateDirectory>
                         </configuration>
                     </execution>
                 </executions>
