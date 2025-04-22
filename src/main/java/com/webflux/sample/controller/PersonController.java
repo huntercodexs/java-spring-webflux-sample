@@ -74,12 +74,40 @@ public class PersonController implements BaseController, PersonApi {
         return response;
     }
 
-    public Mono<ResponseEntity<Void>> updatePerson(ServerWebExchange exchange) {
-        return null;
+    @Override
+    public Mono<ResponseEntity<PersonReadResponseBody>> updatePersonById(
+            String personId,
+            Mono<PersonRequestBody> personRequestBody,
+            ServerWebExchange exchange
+    ) {
+        log.info("[MARKER:updatePersonById] - START");
+
+        Mono<ResponseEntity<PersonReadResponseBody>> response = personService.update(personId, personRequestBody)
+                .doFirst(() -> log.info(">>> updatePersonById started"))
+                .doOnTerminate(() -> log.info(">>> updatePersonById finished"))
+                .doOnSuccess(result -> log.info(">>> The updatePersonById result is {}", result))
+                .doOnError(error -> log.error(">>> The updatePersonById error is {}", String.valueOf(error)))
+                .map(ResponseEntity::ok);
+
+        log.info("[MARKER:updatePersonById] - STOP");
+
+        return response;
     }
 
-    public Mono<ResponseEntity<Void>> deletePerson(String personId, ServerWebExchange exchange) {
-        return null;
+    @Override
+    public Mono<ResponseEntity<Void>> deletePersonById(String personId, ServerWebExchange exchange) {
+        log.info("[MARKER:deletePersonById] - START");
+
+        Mono<ResponseEntity<Void>> response = personService.delete(personId)
+                .doFirst(() -> log.info(">>> deletePersonById started"))
+                .doOnTerminate(() -> log.info(">>> deletePersonById finished"))
+                .doOnSuccess(result -> log.info(">>> The deletePersonById result is {}", result))
+                .doOnError(error -> log.error(">>> The deletePersonById error is {}", String.valueOf(error)))
+                .map(ResponseEntity::ok);
+
+        log.info("[MARKER:deletePersonById] - STOP");
+
+        return response;
     }
 
 }

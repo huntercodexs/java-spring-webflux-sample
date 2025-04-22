@@ -8,11 +8,13 @@ import com.webflux.sample.repository.AddressRepository;
 import com.webflux.sample.repository.PersonsRepository;
 import com.webflux.sample.repository.PhonesRepository;
 import com.webflux.sample.service.PersonService;
+import io.swagger.codegen.v3.service.exception.NotFoundException;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -71,6 +73,52 @@ public class PersonServiceImpl implements PersonService {
                 .collectList()
                 .doOnSuccess(success -> log.info("The findAll result is {}", success))
                 .flatMap(this::buildResponseForAll);
+    }
+
+    @Override
+    public Mono<PersonReadResponseBody> update(String personId, Mono<PersonRequestBody> updatePersonRequest) {
+        return updatePersonRequest.flatMap(personRequest -> {
+            return personsRepository.findByIdAndActiveTrue(personId)
+                    .doFirst(() -> log.info(">>> Update started..."))
+                    .doOnTerminate(() -> log.info(">>> Update finished..."))
+                    .doOnSuccess(success -> log.info("The Update result is {}", success))
+                    .doOnError(error -> log.error("The Update error is {}", String.valueOf(error)))
+                    .flatMap(personsDocument -> {
+
+                        personsDocument.setName(personRequest.getName());
+                        personsDocument.setEmail(personRequest.getEmail());
+                        personsDocument.setUpdatedAt(LocalDateTime.now());
+
+                        return personsRepository.save(personsDocument)
+                                .doFirst(() -> log.info(">>> Save Update started..."))
+                                .doOnTerminate(() -> log.info(">>> Save Update finished..."))
+                                .doOnSuccess(success -> log.info("The Save Update result is {}", success))
+                                .doOnError(error -> log.error("The Save Update error is {}", String.valueOf(error)))
+                                .map(this::buildPersonResponse);
+
+                    })
+                    .switchIfEmpty(Mono.error(new NotFoundException("Not Found")));
+        });
+    }
+
+    @Override
+    public Mono<Void> delete(String personId) {
+        return personsRepository.findByIdAndActiveTrue(personId)
+                .doFirst(() -> log.info(">>> Delete started..."))
+                .doOnTerminate(() -> log.info(">>> Delete finished..."))
+                .doOnSuccess(success -> log.info("The Delete result is {}", success))
+                .doOnError(error -> log.error("The Delete error is {}", String.valueOf(error)))
+                .flatMap(personsDocument -> {
+
+                    personsDocument.setActive(false);
+                    personsDocument.setDeletedAt(LocalDateTime.now());
+
+                    return personsRepository.save(personsDocument)
+                            .doFirst(() -> log.info(">>> Save Delete started..."))
+                            .doOnTerminate(() -> log.info(">>> Save Delete finished..."))
+                            .doOnSuccess(success -> log.info("The Save Delete result is {}", success))
+                            .doOnError(error -> log.error("The Save Delete error is {}", String.valueOf(error)));
+                }).then();
     }
 
     private Mono<PersonsDocument> findAddress(PersonsDocument personsDocument) {
