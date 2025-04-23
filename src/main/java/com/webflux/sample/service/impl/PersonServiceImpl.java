@@ -7,7 +7,6 @@ import com.webflux.sample.repository.AddressRepository;
 import com.webflux.sample.repository.PersonsRepository;
 import com.webflux.sample.repository.PhonesRepository;
 import com.webflux.sample.service.PersonService;
-import io.swagger.codegen.v3.service.exception.NotFoundException;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
@@ -93,13 +92,12 @@ public class PersonServiceImpl implements PersonService {
                                 .doOnError(error -> log.error("The Save Update error is {}", String.valueOf(error)))
                                 .map(WebFluxSampleBuilder::buildPersonResponse);
 
-                    })
-                    .switchIfEmpty(Mono.error(new NotFoundException("Not Found")));
+                    });
         });
     }
 
     @Override
-    public Mono<Void> delete(String personId) {
+    public Mono<GenericsResponseBody> delete(String personId) {
         return personsRepository.findByIdAndActiveTrue(personId)
                 .doFirst(() -> log.info(">>> Delete started..."))
                 .doOnTerminate(() -> log.info(">>> Delete finished..."))
@@ -114,12 +112,13 @@ public class PersonServiceImpl implements PersonService {
                             .doFirst(() -> log.info(">>> Save Delete started..."))
                             .doOnTerminate(() -> log.info(">>> Save Delete finished..."))
                             .doOnSuccess(success -> log.info("The Save Delete result is {}", success))
-                            .doOnError(error -> log.error("The Save Delete error is {}", String.valueOf(error)));
-                }).then();
+                            .doOnError(error -> log.error("The Save Delete error is {}", String.valueOf(error)))
+                            .map(mapper -> buildGenericsResponse("Person deleted successfully"));
+                });
     }
 
     @Override
-    public Mono<Void> patch(String personId, Mono<PersonPatchRequestBody> patchRequestBodyMono) {
+    public Mono<GenericsResponseBody> patch(String personId, Mono<PersonPatchRequestBody> patchRequestBodyMono) {
         return patchRequestBodyMono.flatMap(patchRequest ->
                 personsRepository.findByIdAndActiveTrue(personId)
                         .doFirst(() -> log.info(">>> Patch started..."))
@@ -128,11 +127,11 @@ public class PersonServiceImpl implements PersonService {
                         .doOnError(error -> log.error("The Patch error is {}", String.valueOf(error)))
                         .flatMap(personsDocument ->
                                 personsRepository.save(buildAndPatch(patchRequest, personsDocument)))
-                        .then());
+                        .map(mapper -> buildGenericsResponse("Person patched successfully")));
     }
 
     @Override
-    public Mono<Void> patchByPath(String personId, String fieldName, Object fieldValue) {
+    public Mono<GenericsResponseBody> patchByPath(String personId, String fieldName, Object fieldValue) {
         return personsRepository.findByIdAndActiveTrue(personId)
                 .doFirst(() -> log.info(">>> patchByPath started..."))
                 .doOnTerminate(() -> log.info(">>> patchByPath finished..."))
@@ -140,7 +139,7 @@ public class PersonServiceImpl implements PersonService {
                 .doOnError(error -> log.error("The patchByPath error is {}", String.valueOf(error)))
                 .flatMap(document ->
                         personsRepository.save(buildAndPatchByPath(document, fieldName, fieldValue)))
-                .then();
+                .map(mapper -> buildGenericsResponse("Person patched successfully"));
     }
 
     private Mono<PersonsDocument> findAddress(PersonsDocument personsDocument) {

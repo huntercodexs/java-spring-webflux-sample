@@ -146,7 +146,7 @@ paths:
             schema:
               $ref: '#/components/schemas/PersonRequestBody'
       responses:
-        200:
+        202:
           $ref: '#/components/responses/PersonReadResponse'
       x-codegen-request-body-name: updatePersonRequestBody
     delete:
@@ -178,8 +178,7 @@ paths:
             type: string
       responses:
         204:
-          description: Person deleted successfully
-          content: {}
+          $ref: '#/components/responses/GenericsResponse'
       x-codegen-request-body-name: deletePersonRequestBody
     patch:
       tags:
@@ -215,9 +214,8 @@ paths:
             schema:
               $ref: '#/components/schemas/PersonPatchRequestBody'
       responses:
-        200:
-          description: Person patch successfully
-          content: {}
+        202:
+          $ref: '#/components/responses/GenericsResponse'
       x-codegen-request-body-name: patchPersonRequestBody
   /person/{personId}/{fieldName}/{fieldValue}:
     patch:
@@ -260,9 +258,8 @@ paths:
           schema:
             type: object
       responses:
-        200:
-          description: Person patch successfully
-          content: {}
+        202:
+          $ref: '#/components/responses/GenericsResponse'
       x-codegen-request-body-name: patchPersonByPathRequestBody
 
 components:
@@ -475,6 +472,13 @@ components:
           type: string
           example: "2025-04-20T21:18:23.524+00:00"
           x-field-extra-annotation: "@JsonInclude(JsonInclude.Include.NON_NULL)"
+    ## Generics Response
+    GenericsResponseBody:
+      type: object
+      properties:
+        message:
+          type: string
+          example: "Operation executed successfully"
   responses:
     PersonCreatedResponse:
       description: Person Created
@@ -494,3 +498,9 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/PersonsReadResponseBody'
+    GenericsResponse:
+      description: Generics Response
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/GenericsResponseBody'

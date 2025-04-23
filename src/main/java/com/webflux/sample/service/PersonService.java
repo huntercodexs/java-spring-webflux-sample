@@ -8,7 +8,7 @@ public interface PersonService {
     Mono<PersonReadResponseBody> read(String personId);
     Mono<PersonsReadResponseBody> readAll();
     Mono<PersonReadResponseBody> update(String personId, Mono<PersonRequestBody> updatePersonRequest);
-    Mono<Void> delete(String personId);
-    Mono<Void> patch(String personId, Mono<PersonPatchRequestBody> patchRequestBodyMono);
-    Mono<Void> patchByPath(String personId, String fieldName, Object fieldValue);
+    Mono<GenericsResponseBody> delete(String personId);
+    Mono<GenericsResponseBody> patch(String personId, Mono<PersonPatchRequestBody> patchRequestBodyMono);
+    Mono<GenericsResponseBody> patchByPath(String personId, String fieldName, Object fieldValue);
 }

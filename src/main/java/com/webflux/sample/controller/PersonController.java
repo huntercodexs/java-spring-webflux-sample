@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
+import static org.springframework.http.HttpStatus.*;
+
 @Log4j2
 @RestController
 @AllArgsConstructor
@@ -43,9 +45,9 @@ public class PersonController implements BaseController, PersonApi {
         Mono<ResponseEntity<PersonCreatedResponseBody>> response = personService.create(createPersonRequestBody)
                 .doFirst(() -> log.info(">>> createPerson started"))
                 .doOnTerminate(() -> log.info(">>> createPerson finished"))
-                .doOnSuccess(result -> log.info(">>> The createPerson result is {}", result))
+                .doOnSuccess(success -> log.info(">>> The createPerson result is {}", success))
                 .doOnError(error -> log.error(">>> The createPerson error is {}", String.valueOf(error)))
-                .map(ResponseEntity::ok);
+                .map(body -> ResponseEntity.status(CREATED).body(body));
 
         log.info("[MARKER:createPerson] - STOP");
 
@@ -64,7 +66,7 @@ public class PersonController implements BaseController, PersonApi {
                 .doOnTerminate(() -> log.info(">>> findPersonById finished"))
                 .doOnSuccess(result -> log.info(">>> The findPersonById result is {}", result))
                 .doOnError(error -> log.error(">>> The findPersonById error is {}", String.valueOf(error)))
-                .map(ResponseEntity::ok);
+                .map(body -> ResponseEntity.status(OK).body(body));
 
         log.info("[MARKER:findPersonById] - STOP");
 
@@ -80,7 +82,7 @@ public class PersonController implements BaseController, PersonApi {
                 .doOnTerminate(() -> log.info(">>> findPersons persons finished"))
                 .doOnSuccess(result -> log.info(">>> The findPersons result is {}", result))
                 .doOnError(error -> log.error(">>> The findPersons error is {}", String.valueOf(error)))
-                .map(ResponseEntity::ok);
+                .map(body -> ResponseEntity.status(OK).body(body));
 
         log.info("[MARKER:findPersons] - STOP");
 
@@ -100,7 +102,7 @@ public class PersonController implements BaseController, PersonApi {
                 .doOnTerminate(() -> log.info(">>> updatePersonById finished"))
                 .doOnSuccess(result -> log.info(">>> The updatePersonById result is {}", result))
                 .doOnError(error -> log.error(">>> The updatePersonById error is {}", String.valueOf(error)))
-                .map(ResponseEntity::ok);
+                .map(body -> ResponseEntity.status(ACCEPTED).body(body));
 
         log.info("[MARKER:updatePersonById] - STOP");
 
@@ -108,15 +110,15 @@ public class PersonController implements BaseController, PersonApi {
     }
 
     @Override
-    public Mono<ResponseEntity<Void>> deletePerson(String personId, ServerWebExchange exchange) {
+    public Mono<ResponseEntity<GenericsResponseBody>> deletePerson(String personId, ServerWebExchange exchange) {
         log.info("[MARKER:deletePersonById] - START");
 
-        Mono<ResponseEntity<Void>> response = personService.delete(personId)
+        Mono<ResponseEntity<GenericsResponseBody>> response = personService.delete(personId)
                 .doFirst(() -> log.info(">>> deletePersonById started"))
                 .doOnTerminate(() -> log.info(">>> deletePersonById finished"))
                 .doOnSuccess(result -> log.info(">>> The deletePersonById result is {}", result))
                 .doOnError(error -> log.error(">>> The deletePersonById error is {}", String.valueOf(error)))
-                .map(ResponseEntity::ok);
+                .map(body -> ResponseEntity.status(NO_CONTENT).body(body));
 
         log.info("[MARKER:deletePersonById] - STOP");
 
@@ -124,19 +126,19 @@ public class PersonController implements BaseController, PersonApi {
     }
 
     @Override
-    public Mono<ResponseEntity<Void>> patchPerson(
+    public Mono<ResponseEntity<GenericsResponseBody>> patchPerson(
             String personId,
             Mono<PersonPatchRequestBody> patchRequestBodyMono,
             ServerWebExchange exchange
     ) {
         log.info("[MARKER:patchPerson] - START");
 
-        Mono<ResponseEntity<Void>> response = personService.patch(personId, patchRequestBodyMono)
+        Mono<ResponseEntity<GenericsResponseBody>> response = personService.patch(personId, patchRequestBodyMono)
                 .doFirst(() -> log.info(">>> patchPerson started"))
                 .doOnTerminate(() -> log.info(">>> patchPerson finished"))
                 .doOnSuccess(result -> log.info(">>> The patchPerson result is {}", result))
                 .doOnError(error -> log.error(">>> The patchPerson error is {}", String.valueOf(error)))
-                .map(ResponseEntity::ok);
+                .map(body -> ResponseEntity.status(ACCEPTED).body(body));
 
         log.info("[MARKER:patchPerson] - STOP");
 
@@ -144,7 +146,7 @@ public class PersonController implements BaseController, PersonApi {
     }
 
     @Override
-    public Mono<ResponseEntity<Void>> patchPersonByPath(
+    public Mono<ResponseEntity<GenericsResponseBody>> patchPersonByPath(
             String personId,
             String fieldName,
             Object fieldValue,
@@ -152,12 +154,12 @@ public class PersonController implements BaseController, PersonApi {
     ) {
         log.info("[MARKER:patchPersonByPath] - START");
 
-        Mono<ResponseEntity<Void>> response = personService.patchByPath(personId, fieldName, fieldValue)
+        Mono<ResponseEntity<GenericsResponseBody>> response = personService.patchByPath(personId, fieldName, fieldValue)
                 .doFirst(() -> log.info(">>> patchPersonByPath started"))
                 .doOnTerminate(() -> log.info(">>> patchPersonByPath finished"))
                 .doOnSuccess(result -> log.info(">>> The patchPersonByPath result is {}", result))
                 .doOnError(error -> log.error(">>> The patchPersonByPath error is {}", String.valueOf(error)))
-                .map(ResponseEntity::ok);
+                .map(body -> ResponseEntity.status(ACCEPTED).body(body));
 
         log.info("[MARKER:patchPersonByPath] - STOP");
 

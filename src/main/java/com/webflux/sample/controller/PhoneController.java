@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
+import static org.springframework.http.HttpStatus.*;
+
 @Log4j2
 @RestController
 @AllArgsConstructor
@@ -31,9 +33,9 @@ public class PhoneController implements BaseController, PhonesApi {
                 .create(personId, phoneRequestBody)
                 .doFirst(() -> log.info(">>> Create phone started"))
                 .doOnTerminate(() -> log.info(">>> Create phone finished"))
-                .map(ResponseEntity::ok)
                 .doOnSuccess(result -> log.info(">>> The createPhone result is {}", result))
-                .doOnError(error -> log.error(">>> The createPhone error is {}", String.valueOf(error)));
+                .doOnError(error -> log.error(">>> The createPhone error is {}", String.valueOf(error)))
+                .map(body -> ResponseEntity.status(CREATED).body(body));
 
         log.info("[MARKER:createPhone] - STOP");
 
@@ -52,7 +54,7 @@ public class PhoneController implements BaseController, PhonesApi {
                 .doOnTerminate(() -> log.info(">>> findPhones finished"))
                 .doOnSuccess(result -> log.info(">>> The findPhones result is {}", result))
                 .doOnError(error -> log.error(">>> The findPhones error is {}", String.valueOf(error)))
-                .map(ResponseEntity::ok);
+                .map(body -> ResponseEntity.status(OK).body(body));
 
         log.info("[MARKER:findPhones] - STOP");
 

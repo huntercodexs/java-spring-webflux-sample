@@ -109,4 +109,10 @@ public class WebFluxSampleBuilder {
         return document;
     }
 
+    public static GenericsResponseBody buildGenericsResponse(String message) {
+        GenericsResponseBody response = new GenericsResponseBody();
+        response.setMessage(message);
+        return response;
+    }
+
 }
