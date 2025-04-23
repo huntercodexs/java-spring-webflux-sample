@@ -1,8 +1,7 @@
 package com.webflux.sample.service.impl;
 
-import com.webflux.sample.document.AddressDocument;
+import com.webflux.sample.builder.WebFluxSampleBuilder;
 import com.webflux.sample.document.PersonsDocument;
-import com.webflux.sample.document.PhonesDocument;
 import com.webflux.sample.model.*;
 import com.webflux.sample.repository.AddressRepository;
 import com.webflux.sample.repository.PersonsRepository;
@@ -17,10 +16,8 @@ import reactor.core.publisher.Mono;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
-import static com.webflux.sample.util.WebFluxUtil.datetimeUtil;
-import static java.util.Objects.isNull;
+import static com.webflux.sample.builder.WebFluxSampleBuilder.*;
 
 @Log4j2
 @Service
@@ -52,7 +49,7 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
-    public Mono<PersonReadResponseBody> find(String personId) {
+    public Mono<PersonReadResponseBody> read(String personId) {
         return personsRepository.findByIdAndActiveTrue(personId)
                 .doFirst(() -> log.info("Find started..."))
                 .doOnTerminate(() -> log.info("Find finished..."))
@@ -60,19 +57,19 @@ public class PersonServiceImpl implements PersonService {
                 .doOnError(error -> log.error("The Find error is {}", String.valueOf(error)))
                 .flatMap(this::findAddress)
                 .flatMap(this::findPhones)
-                .flatMap(this::buildResponseForOne)
+                .flatMap(this::responseOne)
                 .map(person -> person);
     }
 
     @Override
-    public Mono<PersonsReadResponseBody> findAll() {
+    public Mono<PersonsReadResponseBody> readAll() {
         return personsRepository.findAllByActiveTrue()
                 .doFirst(() -> log.info("findAll is started"))
                 .doOnTerminate(() -> log.info("findAll is finished"))
                 .doOnError(error -> log.error("The Find findAll is {}", String.valueOf(error)))
                 .collectList()
                 .doOnSuccess(success -> log.info("The findAll result is {}", success))
-                .flatMap(this::buildResponseForAll);
+                .flatMap(this::responseAll);
     }
 
     @Override
@@ -94,7 +91,7 @@ public class PersonServiceImpl implements PersonService {
                                 .doOnTerminate(() -> log.info(">>> Save Update finished..."))
                                 .doOnSuccess(success -> log.info("The Save Update result is {}", success))
                                 .doOnError(error -> log.error("The Save Update error is {}", String.valueOf(error)))
-                                .map(this::buildPersonResponse);
+                                .map(WebFluxSampleBuilder::buildPersonResponse);
 
                     })
                     .switchIfEmpty(Mono.error(new NotFoundException("Not Found")));
@@ -119,6 +116,31 @@ public class PersonServiceImpl implements PersonService {
                             .doOnSuccess(success -> log.info("The Save Delete result is {}", success))
                             .doOnError(error -> log.error("The Save Delete error is {}", String.valueOf(error)));
                 }).then();
+    }
+
+    @Override
+    public Mono<Void> patch(String personId, Mono<PersonPatchRequestBody> patchRequestBodyMono) {
+        return patchRequestBodyMono.flatMap(patchRequest ->
+                personsRepository.findByIdAndActiveTrue(personId)
+                        .doFirst(() -> log.info(">>> Patch started..."))
+                        .doOnTerminate(() -> log.info(">>> Patch finished..."))
+                        .doOnSuccess(success -> log.info("The Patch result is {}", success))
+                        .doOnError(error -> log.error("The Patch error is {}", String.valueOf(error)))
+                        .flatMap(personsDocument ->
+                                personsRepository.save(buildAndPatch(patchRequest, personsDocument)))
+                        .then());
+    }
+
+    @Override
+    public Mono<Void> patchByPath(String personId, String fieldName, Object fieldValue) {
+        return personsRepository.findByIdAndActiveTrue(personId)
+                .doFirst(() -> log.info(">>> patchByPath started..."))
+                .doOnTerminate(() -> log.info(">>> patchByPath finished..."))
+                .doOnSuccess(success -> log.info("The patchByPath result is {}", success))
+                .doOnError(error -> log.error("The patchByPath error is {}", String.valueOf(error)))
+                .flatMap(document ->
+                        personsRepository.save(buildAndPatchByPath(document, fieldName, fieldValue)))
+                .then();
     }
 
     private Mono<PersonsDocument> findAddress(PersonsDocument personsDocument) {
@@ -155,86 +177,18 @@ public class PersonServiceImpl implements PersonService {
                 });
     }
 
-    private Mono<PersonsReadResponseBody> buildResponseForAll(List<PersonsDocument> personsDocumentList) {
+    private Mono<PersonsReadResponseBody> responseAll(List<PersonsDocument> personsDocumentList) {
         List<PersonOnlyReadResponseBody> personsList = new ArrayList<>();
         personsDocumentList.forEach(personsDocument -> {
-            personsList.add(this.buildPersonOnlyResponse(personsDocument));
+            personsList.add(buildPersonOnlyResponse(personsDocument));
         });
         PersonsReadResponseBody personsRead = new PersonsReadResponseBody();
         personsRead.setPersons(personsList);
         return Mono.just(personsRead);
     }
 
-    private Mono<PersonReadResponseBody> buildResponseForOne(PersonsDocument personsDocument) {
-        return Mono.just(personsDocument).map(this::buildPersonResponse);
-    }
-
-    private PersonReadResponseBody buildPersonResponse(PersonsDocument document) {
-        PersonReadResponseBody response = new PersonReadResponseBody();
-        response.setId(document.getId());
-        response.setName(document.getName());
-        response.setEmail(document.getEmail());
-        response.setActive(document.isActive());
-        response.setCreatedAt(datetimeUtil(document.getCreatedAt()));
-        response.setUpdatedAt(datetimeUtil(document.getUpdatedAt()));
-        response.setDeletedAt(datetimeUtil(document.getDeletedAt()));
-        response.setAddress(this.buildAddressResponse(document.getAddresses()));
-        response.setPhones(this.buildPhoneResponse(document.getPhones()));
-        return response;
-    }
-
-    private PersonOnlyReadResponseBody buildPersonOnlyResponse(PersonsDocument document) {
-        PersonOnlyReadResponseBody response = new PersonOnlyReadResponseBody();
-        response.setId(document.getId());
-        response.setName(document.getName());
-        response.setEmail(document.getEmail());
-        response.setActive(document.isActive());
-        response.setCreatedAt(datetimeUtil(document.getCreatedAt()));
-        response.setUpdatedAt(datetimeUtil(document.getUpdatedAt()));
-        response.setDeletedAt(datetimeUtil(document.getDeletedAt()));
-        return response;
-    }
-
-    private List<AddressResponseBody> buildAddressResponse(Set<AddressDocument> addressDocs) {
-        if (isNull(addressDocs) || addressDocs.isEmpty()) return null;
-        List<AddressResponseBody> addressResponseBody = new ArrayList<>();
-
-        addressDocs.forEach(address -> {
-            AddressResponseBody addresses = new AddressResponseBody();
-
-            addresses.setStreet(address.getStreet());
-            addresses.setNumber(address.getNumber());
-            addresses.setZipcode(address.getZipcode());
-            addresses.setCity(address.getCity());
-            addresses.setActive(address.isActive());
-            addresses.setCreatedAt(datetimeUtil(address.getCreatedAt()));
-            addresses.setUpdatedAt(datetimeUtil(address.getUpdatedAt()));
-            addresses.setDeletedAt(datetimeUtil(address.getDeletedAt()));
-
-            addressResponseBody.add(addresses);
-        });
-
-        return addressResponseBody;
-    }
-
-    private List<PhoneResponseBody> buildPhoneResponse(Set<PhonesDocument> phonesDocs) {
-        if (isNull(phonesDocs) || phonesDocs.isEmpty()) return null;
-        List<PhoneResponseBody> phoneResponseBody = new ArrayList<>();
-
-        phonesDocs.forEach(phone -> {
-            PhoneResponseBody phones = new PhoneResponseBody();
-
-            phones.setPhoneNumber(phone.getPhoneNumber());
-            phones.setPhoneType(phone.getPhoneType());
-            phones.setActive(phone.isActive());
-            phones.setCreatedAt(datetimeUtil(phone.getCreatedAt()));
-            phones.setUpdatedAt(datetimeUtil(phone.getUpdatedAt()));
-            phones.setDeletedAt(datetimeUtil(phone.getDeletedAt()));
-
-            phoneResponseBody.add(phones);
-        });
-
-        return phoneResponseBody;
+    private Mono<PersonReadResponseBody> responseOne(PersonsDocument personsDocument) {
+        return Mono.just(personsDocument).map(WebFluxSampleBuilder::buildPersonResponse);
     }
 
 }

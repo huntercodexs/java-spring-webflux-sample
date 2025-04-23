@@ -1,0 +1,329 @@
+{
+	"info": {
+		"_postman_id": "5c5ed2b6-1cab-476c-be78-82232bde12d9",
+		"name": "Spring Webflux Sample",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "33184804",
+		"_collection_link": "https://jereeltondevelteam.postman.co/workspace/Team-Workspace~b2284a6a-02af-4805-802d-8ae6bea36fc1/collection/33184804-5c5ed2b6-1cab-476c-be78-82232bde12d9?action=share&source=collection_link&creator=33184804"
+	},
+	"item": [
+		{
+			"name": "Create Person",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"Samantha Smith Viz\",\n    \"email\": \"samantha-smith@email.com\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/webflux-sample/v1/person",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"webflux-sample",
+						"v1",
+						"person"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Person",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"Samantha Smith Viz 2\",\n    \"email\": \"samantha-smith-2@email.com\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/webflux-sample/v1/person/68084a07291d934054493c7d",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"webflux-sample",
+						"v1",
+						"person",
+						"68084a07291d934054493c7d"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Patch Person",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\": \"samantha@email.com\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/webflux-sample/v1/person/68084a07291d934054493c7d",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"webflux-sample",
+						"v1",
+						"person",
+						"68084a07291d934054493c7d"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Patch Person By Path",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"John Smith Viz New\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/webflux-sample/v1/person/68084a07291d934054493c7d/email/samantha-patch@email.com",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"webflux-sample",
+						"v1",
+						"person",
+						"68084a07291d934054493c7d",
+						"email",
+						"samantha-patch@email.com"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Person",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/webflux-sample/v1/person/68084a07291d934054493c7d",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"webflux-sample",
+						"v1",
+						"person",
+						"68084a07291d934054493c7d"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Address",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"street\": \"Street name test 2\",\n  \"number\": 1235,\n  \"zipcode\": \"12090000\",\n  \"city\": \"Ohio\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/webflux-sample/v1/addresses/68084a07291d934054493c7d",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"webflux-sample",
+						"v1",
+						"addresses",
+						"68084a07291d934054493c7d"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Phone",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"phoneNumber\": \"+55121234567891\",\n  \"phoneType\": \"office\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/webflux-sample/v1/phones/68084a07291d934054493c7d",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"webflux-sample",
+						"v1",
+						"phones",
+						"68084a07291d934054493c7d"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Read Person",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/webflux-sample/v1/person/68084a07291d934054493c7d",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"webflux-sample",
+						"v1",
+						"person",
+						"68084a07291d934054493c7d"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Read Persons",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/webflux-sample/v1/person",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"webflux-sample",
+						"v1",
+						"person"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Read Addresses",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/webflux-sample/v1/addresses/68084a07291d934054493c7d",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"webflux-sample",
+						"v1",
+						"addresses",
+						"68084a07291d934054493c7d"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Read Phones",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/webflux-sample/v1/phones/68084a07291d934054493c7d",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"webflux-sample",
+						"v1",
+						"phones",
+						"68084a07291d934054493c7d"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Test",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/webflux-sample/v1/test/my%20name%20is%20test",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"webflux-sample",
+						"v1",
+						"test",
+						"my%20name%20is%20test"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

@@ -24,7 +24,7 @@ paths:
     post:
       tags:
         - Person
-      summary: Create person
+      summary: Create one person
       security:
         - BearerAuth: []
         - OauthSecurityUser:
@@ -55,7 +55,7 @@ paths:
     get:
       tags:
         - Person
-      summary: Read persons
+      summary: Read all persons
       security:
         - BearerAuth: []
         - OauthSecurityUser:
@@ -71,7 +71,7 @@ paths:
         To access this endpoint, you must have one of the following sets of roles:
            * `AUTH-BASIC` level
 
-      operationId: findPersons
+      operationId: readAllPersons
 #      parameters:
 #        - $ref: '#/components/parameters/QueryLimit'
 #        - $ref: '#/components/parameters/QueryOffset'
@@ -79,11 +79,12 @@ paths:
       responses:
         200:
           $ref: '#/components/responses/PersonsReadResponse'
+      x-codegen-request-body-name: readPersonsRequestBody
   /person/{personId}:
     get:
       tags:
         - Person
-      summary: Read person
+      summary: Read one person
       security:
         - BearerAuth: []
         - OauthSecurityUser:
@@ -99,7 +100,7 @@ paths:
         To access this endpoint, you must have one of the following sets of roles:
            * `AUTH-BASIC` level
 
-      operationId: findPersonById
+      operationId: readOnePerson
       parameters:
         - in: path
           name: personId
@@ -110,10 +111,11 @@ paths:
       responses:
         200:
           $ref: '#/components/responses/PersonReadResponse'
+      x-codegen-request-body-name: readPersonRequestBody
     put:
       tags:
         - Person
-      summary: Update person
+      summary: Update one person
       security:
         - BearerAuth: []
         - OauthSecurityUser:
@@ -129,7 +131,7 @@ paths:
         To access this endpoint, you must have one of the following sets of roles:
            * `AUTH-BASIC` level
 
-      operationId: updatePersonById
+      operationId: updatePerson
       parameters:
         - in: path
           name: personId
@@ -145,11 +147,12 @@ paths:
               $ref: '#/components/schemas/PersonRequestBody'
       responses:
         200:
-          $ref: '#/components/responses/PersonUpdateResponse'
+          $ref: '#/components/responses/PersonReadResponse'
+      x-codegen-request-body-name: updatePersonRequestBody
     delete:
       tags:
         - Person
-      summary: Delete person
+      summary: Delete one person
       security:
         - BearerAuth: []
         - OauthSecurityUser:
@@ -165,7 +168,7 @@ paths:
         To access this endpoint, you must have one of the following sets of roles:
            * `AUTH-BASIC` level
 
-      operationId: deletePersonById
+      operationId: deletePerson
       parameters:
         - in: path
           name: personId
@@ -177,6 +180,90 @@ paths:
         204:
           description: Person deleted successfully
           content: {}
+      x-codegen-request-body-name: deletePersonRequestBody
+    patch:
+      tags:
+        - Person
+      summary: Patch one person
+      security:
+        - BearerAuth: []
+        - OauthSecurityUser:
+            - write
+            - read
+      description: |
+        
+        ## Responsibilities
+        Patch one specific detail in one specific person
+
+        ---
+        ## Requirements
+        To access this endpoint, you must have one of the following sets of roles:
+           * `AUTH-BASIC` level
+
+      operationId: patchPerson
+      parameters:
+        - in: path
+          name: personId
+          required: true
+          example: "67fe6bac382b9445e80b404e"
+          schema:
+            type: string
+      requestBody:
+        description: Person Data
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PersonPatchRequestBody'
+      responses:
+        200:
+          description: Person patch successfully
+          content: {}
+      x-codegen-request-body-name: patchPersonRequestBody
+  /person/{personId}/{fieldName}/{fieldValue}:
+    patch:
+      tags:
+        - Person
+      summary: Patch one person using path parameters
+      security:
+        - BearerAuth: []
+        - OauthSecurityUser:
+            - write
+            - read
+      description: |
+        
+        ## Responsibilities
+        Patch one specific detail in one specific person using only path parameters
+
+        ---
+        ## Requirements
+        To access this endpoint, you must have one of the following sets of roles:
+           * `AUTH-BASIC` level
+
+      operationId: patchPersonByPath
+      parameters:
+        - in: path
+          name: personId
+          required: true
+          example: "67fe6bac382b9445e80b404e"
+          schema:
+            type: string
+        - in: path
+          name: fieldName
+          required: true
+          example: "name"
+          schema:
+            type: string
+        - in: path
+          name: fieldValue
+          required: true
+          example: "my%20name%20is%20John%20Smith%20Viz"
+          schema:
+            type: object
+      responses:
+        200:
+          description: Person patch successfully
+          content: {}
+      x-codegen-request-body-name: patchPersonByPathRequestBody
 
 components:
   securitySchemes:
@@ -216,6 +303,7 @@ components:
 #        default: id
 #      description: Named field to sort results by
   schemas:
+    ## Create, Update
     PersonRequestBody:
       required:
         - name
@@ -232,12 +320,28 @@ components:
           minLength: 1
           maxLength: 200
           example: john-smith@email.com
+    ## Patch
+    PersonPatchRequestBody:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 1
+          maxLength: 200
+          example: John Smith Viz
+        email:
+          type: string
+          minLength: 1
+          maxLength: 200
+          example: john-smith@email.com
+    ## Create Response
     PersonCreatedResponseBody:
       type: object
       properties:
         id:
           type: string
           example: 620eb80e0f9f7c26ba190dfc
+    ## Read Response
     PersonReadResponseBody:
       type: object
       properties:
@@ -274,6 +378,7 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/PhoneResponseBody'
+    ## Read Only One Response
     PersonOnlyReadResponseBody:
       type: object
       properties:

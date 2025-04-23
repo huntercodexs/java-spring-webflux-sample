@@ -1,15 +1,14 @@
 package com.webflux.sample.service;
 
-import com.webflux.sample.model.PersonCreatedResponseBody;
-import com.webflux.sample.model.PersonReadResponseBody;
-import com.webflux.sample.model.PersonRequestBody;
-import com.webflux.sample.model.PersonsReadResponseBody;
+import com.webflux.sample.model.*;
 import reactor.core.publisher.Mono;
 
 public interface PersonService {
     Mono<PersonCreatedResponseBody> create(Mono<PersonRequestBody> createPersonRequest);
-    Mono<PersonReadResponseBody> find(String personId);
-    Mono<PersonsReadResponseBody> findAll();
+    Mono<PersonReadResponseBody> read(String personId);
+    Mono<PersonsReadResponseBody> readAll();
     Mono<PersonReadResponseBody> update(String personId, Mono<PersonRequestBody> updatePersonRequest);
     Mono<Void> delete(String personId);
+    Mono<Void> patch(String personId, Mono<PersonPatchRequestBody> patchRequestBodyMono);
+    Mono<Void> patchByPath(String personId, String fieldName, Object fieldValue);
 }
