@@ -3,14 +3,9 @@ package com.webflux.sample.controller;
 import com.webflux.sample.model.*;
 import com.webflux.sample.person.api.PersonApi;
 import com.webflux.sample.service.PersonService;
-import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
@@ -23,17 +18,6 @@ import static org.springframework.http.HttpStatus.*;
 public class PersonController implements BaseController, PersonApi {
 
     private PersonService personService;
-
-    @RequestMapping(
-            method = RequestMethod.GET,
-            value = "/test/{testValue}"
-    )
-    public void test(
-            @Parameter(name = "testValue", description = "", required = true, in = ParameterIn.PATH)
-            @PathVariable("testValue") String testValue
-    ) {
-        System.out.println(testValue);
-    }
 
     @Override
     public Mono<ResponseEntity<PersonCreatedResponseBody>> createPerson(
