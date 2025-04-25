@@ -2,7 +2,7 @@ package com.webflux.sample.handler.reactor;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.webflux.sample.handler.reactor.exception.BadRequestExceptionReactor;
+import com.webflux.sample.handler.reactor.exception.HttpExceptionReactor;
 import org.springframework.boot.web.reactive.error.ErrorWebExceptionHandler;
 import org.springframework.core.annotation.Order;
 import org.springframework.core.io.buffer.DataBuffer;
@@ -19,7 +19,7 @@ public class GlobalExceptionHandlerReactor implements ErrorWebExceptionHandler {
 
     public Mono<Void> handle(ServerWebExchange webExchange, Throwable throwable) {
 
-        if (throwable instanceof BadRequestExceptionReactor ex) {
+        if (throwable instanceof HttpExceptionReactor ex) {
             ServerWebExchange exchange = this.exchange(webExchange, ex.getStatus());
             String response = this.response(ex);
             return exchange.getResponse().writeWith(Mono.just(buffer(exchange, response))).then();
@@ -34,7 +34,7 @@ public class GlobalExceptionHandlerReactor implements ErrorWebExceptionHandler {
         return exchange;
     }
 
-    private String response(BadRequestExceptionReactor ex) {
+    private String response(HttpExceptionReactor ex) {
         try {
             ObjectMapper mapper = new ObjectMapper();
             return mapper.writeValueAsString(new CustomResponseExceptionReactor(ex.getMessage(), ex.getCode(), ex.getTrack()));

@@ -2,6 +2,7 @@ package com.webflux.sample.controller;
 
 import com.webflux.sample.handler.noreactor.exception.BadRequestException;
 import com.webflux.sample.handler.reactor.exception.BadRequestExceptionReactor;
+import com.webflux.sample.handler.reactor.exception.NotFoundExceptionReactor;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import lombok.AllArgsConstructor;
@@ -43,7 +44,8 @@ public class FreeController implements BaseController {
 //        throw new BadRequestExceptionReactor("Bad Request for Reactor");
 //        throw new BadRequestExceptionReactor("Bad Request for Reactor", 123);
 //        throw new BadRequestExceptionReactor("Bad Request for Reactor", "8540958349058439085490");
-        throw new BadRequestExceptionReactor("Bad Request for Reactor", 123, "8540958349058439085490");
+//        throw new BadRequestExceptionReactor("Bad Request for Reactor", 123, "8540958349058439085490");
+        throw new NotFoundExceptionReactor("Not Found for Reactor", 123, "8540958349058439085490");
     }
 
 }
