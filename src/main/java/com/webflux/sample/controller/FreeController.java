@@ -1,8 +1,7 @@
 package com.webflux.sample.controller;
 
+import com.webflux.sample.exception.NotFoundExceptionReactor;
 import com.webflux.sample.handler.noreactor.exception.BadRequestException;
-import com.webflux.sample.handler.reactor.exception.BadRequestExceptionReactor;
-import com.webflux.sample.handler.reactor.exception.NotFoundExceptionReactor;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import lombok.AllArgsConstructor;
@@ -46,6 +45,10 @@ public class FreeController implements BaseController {
 //        throw new BadRequestExceptionReactor("Bad Request for Reactor", "8540958349058439085490");
 //        throw new BadRequestExceptionReactor("Bad Request for Reactor", 123, "8540958349058439085490");
         throw new NotFoundExceptionReactor("Not Found for Reactor", 123, "8540958349058439085490");
+//        throw new InternalError("Internal Error Java Lang"); ///// ERROR throwIfFatal detected a jvm fatal exception
+//        throw new InternalErrorExceptionReactor("Internal Error for Reactor", 123, "8540958349058439085490");
+//        throw new InternalErrorExceptionReactor("Internal Error for Reactor");
+//        throw new RuntimeException("Runtime Exception Java Lang");
     }
 
 }

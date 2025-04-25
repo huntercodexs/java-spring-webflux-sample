@@ -7,34 +7,30 @@ import org.springframework.web.client.RestClientException;
 @Getter
 public class HttpExceptionReactor extends RestClientException {
 
-    public HttpStatus status;
+    public HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
     public String message;
     public int code = 0;
     public String track = null;
 
-    public HttpExceptionReactor(String message, HttpStatus status) {
+    public HttpExceptionReactor(String message) {
         super(message);
-        this.status = status;
         this.message = message;
     }
 
-    public HttpExceptionReactor(String message, int code, HttpStatus status) {
+    public HttpExceptionReactor(String message, int code) {
         super(message);
-        this.status = status;
         this.message = message;
         this.code = code;
     }
 
-    public HttpExceptionReactor(String message, String track, HttpStatus status) {
+    public HttpExceptionReactor(String message, String track) {
         super(message);
-        this.status = status;
         this.message = message;
         this.track = track;
     }
 
-    public HttpExceptionReactor(String message, int code, String track, HttpStatus status) {
+    public HttpExceptionReactor(String message, int code, String track) {
         super(message);
-        this.status = status;
         this.message = message;
         this.code = code;
         this.track = track;
