@@ -13,7 +13,7 @@ import java.util.Set;
 import static com.webflux.sample.util.WebFluxUtil.datetimeUtil;
 import static java.util.Objects.isNull;
 
-public class WebFluxSampleBuilder {
+public class PersonBuilder {
 
     public static PersonReadResponseBody buildPersonResponse(PersonsDocument document) {
         PersonReadResponseBody response = new PersonReadResponseBody();

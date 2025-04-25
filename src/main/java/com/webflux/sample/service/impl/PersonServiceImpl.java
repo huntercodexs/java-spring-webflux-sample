@@ -1,6 +1,6 @@
 package com.webflux.sample.service.impl;
 
-import com.webflux.sample.builder.WebFluxSampleBuilder;
+import com.webflux.sample.builder.PersonBuilder;
 import com.webflux.sample.document.PersonsDocument;
 import com.webflux.sample.model.*;
 import com.webflux.sample.repository.AddressRepository;
@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.webflux.sample.builder.WebFluxSampleBuilder.*;
+import static com.webflux.sample.builder.PersonBuilder.*;
 
 @Log4j2
 @Service
@@ -90,7 +90,7 @@ public class PersonServiceImpl implements PersonService {
                                 .doOnTerminate(() -> log.info(">>> Save Update finished..."))
                                 .doOnSuccess(success -> log.info("The Save Update result is {}", success))
                                 .doOnError(error -> log.error("The Save Update error is {}", String.valueOf(error)))
-                                .map(WebFluxSampleBuilder::buildPersonResponse);
+                                .map(PersonBuilder::buildPersonResponse);
 
                     });
         });
@@ -187,7 +187,7 @@ public class PersonServiceImpl implements PersonService {
     }
 
     private Mono<PersonReadResponseBody> responseOne(PersonsDocument personsDocument) {
-        return Mono.just(personsDocument).map(WebFluxSampleBuilder::buildPersonResponse);
+        return Mono.just(personsDocument).map(PersonBuilder::buildPersonResponse);
     }
 
 }
