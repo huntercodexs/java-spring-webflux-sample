@@ -24,7 +24,7 @@ import static java.util.Objects.isNull;
 public class GlobalExceptionHandlerReactor implements ErrorWebExceptionHandler {
 
     private final HttpStatus internalError = HttpStatus.INTERNAL_SERVER_ERROR;
-    private final int internalCode = 0x999;
+    private final int internalCode = 999;
 
     public Mono<Void> handle(ServerWebExchange webExchange, Throwable throwable) {
         if (throwable instanceof HttpExceptionReactor ex) {

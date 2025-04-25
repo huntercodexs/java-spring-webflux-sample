@@ -1,20 +1,21 @@
 package com.webflux.sample.controller;
 
-import com.webflux.sample.exception.NotFoundExceptionReactor;
-import com.webflux.sample.handler.noreactor.exception.BadRequestException;
+import com.webflux.sample.service.FreeService;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ServerWebExchange;
-import reactor.core.publisher.Mono;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
 @Log4j2
 @RestController
 @AllArgsConstructor
 public class FreeController implements BaseController {
+
+    FreeService freeService;
 
     @RequestMapping(
             method = RequestMethod.GET,
@@ -25,30 +26,6 @@ public class FreeController implements BaseController {
             @PathVariable("testValue") String testValue
     ) {
         System.out.println(testValue);
-    }
-
-    @RequestMapping(method = RequestMethod.GET, value = "/test-exception")
-    @ResponseBody
-    public Mono<ResponseEntity<Object>> testException(ServerWebExchange exchange) {
-//        throw new CustomException("Message", 123, "8540958349058439085490", HttpStatus.BAD_REQUEST);
-//        throw new BadRequestException("Sample Bad Request");
-//        throw new BadRequestException("Sample Bad Request", 123);
-//        throw new BadRequestException("Sample Bad Request", "8540958349058439085490");
-        throw new BadRequestException("Sample Bad Request", 123, "8540958349058439085490");
-    }
-
-    @RequestMapping(method = RequestMethod.GET, value = "/test-exception-reactor")
-    @ResponseBody
-    public Mono<ResponseEntity<Object>> testExceptionReactor(ServerWebExchange exchange) {
-//        throw new BadRequestExceptionReactor("Bad Request for Reactor");
-//        throw new BadRequestExceptionReactor("Bad Request for Reactor", 123);
-//        throw new BadRequestExceptionReactor("Bad Request for Reactor", "8540958349058439085490");
-//        throw new BadRequestExceptionReactor("Bad Request for Reactor", 123, "8540958349058439085490");
-        throw new NotFoundExceptionReactor("Not Found for Reactor", 123, "8540958349058439085490");
-//        throw new InternalError("Internal Error Java Lang"); ///// ERROR throwIfFatal detected a jvm fatal exception
-//        throw new InternalErrorExceptionReactor("Internal Error for Reactor", 123, "8540958349058439085490");
-//        throw new InternalErrorExceptionReactor("Internal Error for Reactor");
-//        throw new RuntimeException("Runtime Exception Java Lang");
     }
 
 }
