@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -11,7 +12,7 @@ import java.util.List;
 @NoArgsConstructor
 public class WebFluxSampleModel {
 
-    private List<SampleProduct> sampleProduct;
+    private List<SampleProduct> sampleProduct = new ArrayList<>();
 
     @Data
     @AllArgsConstructor

@@ -8,8 +8,6 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.time.Duration;
-import java.util.ArrayList;
-import java.util.List;
 
 @Log4j2
 @Service
@@ -49,9 +47,9 @@ public class WebFluxSampleService {
         log.info("[SYNC] #### => Calling Flat Map 1");
         Mono<WebFluxSampleModel> flatMap1 = flatMap1();
         log.info("[SYNC] #### => Calling Flat Map 2");
-        Mono<WebFluxSampleModel> flatMap2 = flatMap2(flatMap1);
+        Mono<WebFluxSampleModel> flatMap2 = flatMap2(this.extractProduct(flatMap1));
         log.info("[SYNC] #### => Calling Flat Map 3");
-        Mono<WebFluxSampleModel> flatMap3 = flatMap3(flatMap2);
+        Mono<WebFluxSampleModel> flatMap3 = flatMap3(this.extractProduct(flatMap2));
         return Mono.zip(flatMap1, flatMap2, flatMap3)
                 .map(tuples -> {
                     log.info("[ASYNC][SYNC][T1] {}", tuples.getT1());
@@ -76,8 +74,8 @@ public class WebFluxSampleService {
 
     public Mono<Void> zip() {
         Mono<WebFluxSampleModel> flatMap1 = flatMap1();
-        Mono<WebFluxSampleModel> flatMap2 = flatMap2(flatMap1);
-        Mono<WebFluxSampleModel> flatMap3 = flatMap3(flatMap2);
+        Mono<WebFluxSampleModel> flatMap2 = flatMap2(this.extractProduct(flatMap1));
+        Mono<WebFluxSampleModel> flatMap3 = flatMap3(this.extractProduct(flatMap2));
         return Mono.zip(flatMap1, flatMap2, flatMap3).map(tuples -> {
             log.info(tuples.getT1());
             log.info(tuples.getT2());
@@ -107,25 +105,28 @@ public class WebFluxSampleService {
                 .doOnSuccess(success -> log.info("[ASYNC] --> Flat Map 1 OK"))
                 .flatMap(obj -> this.flatMapRun(obj, 1, 1, 6))
                 .flatMap(obj -> this.flatMapRun(obj, 2, 1, 6))
-                .flatMap(obj -> this.flatMapRun(obj, 3, 1, 6))
+                .map(product -> product)
                 .delaySubscription(Duration.ofSeconds(3));
     }
 
-    private Mono<WebFluxSampleModel> flatMap2(Mono<WebFluxSampleModel> webFluxSampleModel) {
+    private Mono<WebFluxSampleModel> flatMap2(WebFluxSampleModel webFluxSampleModel) {
         return this.addSampleProduct(webFluxSampleModel, "Shorts", 44.00, 5)
                 .doOnSuccess(success -> log.info("[ASYNC] --> Flat Map 2 OK"))
                 .flatMap(obj -> this.flatMapRun(obj, 1, 2, 4))
                 .flatMap(obj -> this.flatMapRun(obj, 2, 2, 4))
                 .flatMap(obj -> this.flatMapRun(obj, 3, 2, 4))
+                .flatMap(obj -> this.flatMapRun(obj, 4, 2, 4))
+                .flatMap(obj -> this.flatMapRun(obj, 5, 2, 4))
                 .delaySubscription(Duration.ofSeconds(2));
     }
 
-    private Mono<WebFluxSampleModel> flatMap3(Mono<WebFluxSampleModel> webFluxSampleModel) {
+    private Mono<WebFluxSampleModel> flatMap3(WebFluxSampleModel webFluxSampleModel) {
         return this.addSampleProduct(webFluxSampleModel, "Pants", 60.00, 25)
                 .doOnSuccess(success -> log.info("[ASYNC] --> Flat Map 3 OK"))
                 .flatMap(obj -> this.flatMapRun(obj, 1, 3, 2))
                 .flatMap(obj -> this.flatMapRun(obj, 2, 3, 2))
                 .flatMap(obj -> this.flatMapRun(obj, 3, 3, 2))
+                .flatMap(obj -> this.flatMapRun(obj, 4, 3, 2))
                 .delaySubscription(Duration.ofSeconds(1));
     }
 
@@ -135,20 +136,25 @@ public class WebFluxSampleService {
     }
 
     private Mono<WebFluxSampleModel> createSampleProduct(String name, double price, int stock) {
-        return this.addSampleProduct(Mono.just(new WebFluxSampleModel()), name, price, stock);
+        return this.addSampleProduct(new WebFluxSampleModel(), name, price, stock);
     }
 
-    private Mono<WebFluxSampleModel> addSampleProduct(Mono<WebFluxSampleModel> webFluxSampleModel, String name, double price, int stock) {
+    private Mono<WebFluxSampleModel> addSampleProduct(WebFluxSampleModel webFluxSampleModel, String name, double price, int stock) {
         WebFluxSampleModel.SampleProduct sampleProduct = new WebFluxSampleModel.SampleProduct();
         sampleProduct.setName(name);
         sampleProduct.setPrice(price);
         sampleProduct.setStock(stock);
-        List<WebFluxSampleModel.SampleProduct> sampleProductList = new ArrayList<>();
-        sampleProductList.add(sampleProduct);
-        return webFluxSampleModel.map(mapper -> {
-            mapper.setSampleProduct(sampleProductList);
-            return mapper;
+        webFluxSampleModel.getSampleProduct().add(sampleProduct);
+        return Mono.just(webFluxSampleModel);
+    }
+
+    private WebFluxSampleModel extractProduct(Mono<WebFluxSampleModel> webFluxSampleModelMono) {
+        WebFluxSampleModel model = new WebFluxSampleModel();
+        webFluxSampleModelMono.map(mapper -> {
+            model.setSampleProduct(mapper.getSampleProduct());
+            return model;
         });
+        return model;
     }
 
 }
