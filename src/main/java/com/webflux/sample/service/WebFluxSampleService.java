@@ -8,6 +8,8 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.time.Duration;
+import java.util.ArrayList;
+import java.util.List;
 
 @Log4j2
 @Service
@@ -52,10 +54,17 @@ public class WebFluxSampleService {
         Mono<WebFluxSampleModel> flatMap3 = flatMap3(this.extractProduct(flatMap2));
         return Mono.zip(flatMap1, flatMap2, flatMap3)
                 .map(tuples -> {
-                    log.info("[ASYNC][SYNC][T1] {}", tuples.getT1());
-                    log.info("[ASYNC][SYNC][T2] {}", tuples.getT2());
-                    log.info("[ASYNC][SYNC][T3] {}", tuples.getT3());
-                    return Mono.empty();
+                    List<WebFluxSampleModel.SampleProduct> productList = new ArrayList<>();
+                    productList.add(tuples.getT1().getSampleProduct().getFirst());
+                    productList.add(tuples.getT2().getSampleProduct().getFirst());
+                    productList.add(tuples.getT3().getSampleProduct().getFirst());
+
+                    WebFluxSampleModel webFluxSampleModel = new WebFluxSampleModel();
+                    webFluxSampleModel.setSampleProduct(productList);
+
+                    log.info("[RETURN] >>> Final Result {}", webFluxSampleModel);
+
+                    return webFluxSampleModel;
                 })
                 .then();
     }
@@ -72,16 +81,22 @@ public class WebFluxSampleService {
         return null;
     }
 
-    public Mono<Void> zip() {
+    public Mono<WebFluxSampleModel> zip() {
         Mono<WebFluxSampleModel> flatMap1 = flatMap1();
         Mono<WebFluxSampleModel> flatMap2 = flatMap2(this.extractProduct(flatMap1));
         Mono<WebFluxSampleModel> flatMap3 = flatMap3(this.extractProduct(flatMap2));
         return Mono.zip(flatMap1, flatMap2, flatMap3).map(tuples -> {
-            log.info(tuples.getT1());
-            log.info(tuples.getT2());
-            log.info(tuples.getT3());
-            return Mono.empty();
-        }).then();
+
+            List<WebFluxSampleModel.SampleProduct> productList = new ArrayList<>();
+            productList.add(tuples.getT1().getSampleProduct().getFirst());
+            productList.add(tuples.getT2().getSampleProduct().getFirst());
+            productList.add(tuples.getT3().getSampleProduct().getFirst());
+
+            WebFluxSampleModel webFluxSampleModel = new WebFluxSampleModel();
+            webFluxSampleModel.setSampleProduct(productList);
+
+            return webFluxSampleModel;
+        });
     }
 
     public Mono<Void> zipWhen() {
@@ -131,7 +146,7 @@ public class WebFluxSampleService {
     }
 
     private Mono<WebFluxSampleModel> flatMapRun(WebFluxSampleModel webFluxSampleModel, int step, int from, int seconds) {
-        log.info("[SYNC][STEP:{}][FROM:{}] >> Flat Map {}", step, from, webFluxSampleModel);
+        log.info("[ASYNC][STEP:{}][FROM:{}] >> Flat Map {}", step, from, webFluxSampleModel);
         return Mono.just(webFluxSampleModel).delaySubscription(Duration.ofSeconds(seconds));
     }
 
@@ -145,7 +160,7 @@ public class WebFluxSampleService {
         sampleProduct.setPrice(price);
         sampleProduct.setStock(stock);
         webFluxSampleModel.getSampleProduct().add(sampleProduct);
-        return Mono.just(webFluxSampleModel);
+        return Mono.just(webFluxSampleModel).doFirst(() -> log.info(">>> GET {}", webFluxSampleModel.getSampleProduct()));
     }
 
     private WebFluxSampleModel extractProduct(Mono<WebFluxSampleModel> webFluxSampleModelMono) {

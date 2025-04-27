@@ -1,5 +1,6 @@
 package com.webflux.sample.controller;
 
+import com.webflux.sample.model.WebFluxSampleModel;
 import com.webflux.sample.service.WebFluxSampleService;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -123,7 +124,7 @@ public class WebFluxSampleController implements BaseController {
 
     @RequestMapping(method = RequestMethod.GET, value = "/test/zip")
     @ResponseBody
-    public Mono<ResponseEntity<Void>> zip(ServerWebExchange exchange) {
+    public Mono<ResponseEntity<WebFluxSampleModel>> zip(ServerWebExchange exchange) {
         return webFluxSampleService.zip()
                 .doFirst(() -> log.info(">>> zip started"))
                 .doOnTerminate(() -> log.info(">>> zip finished"))
