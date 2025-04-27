@@ -1,0 +1,154 @@
+package com.webflux.sample.service;
+
+import com.webflux.sample.model.WebFluxSampleModel;
+import lombok.AllArgsConstructor;
+import lombok.extern.log4j.Log4j2;
+import org.springframework.stereotype.Service;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
+
+import java.time.Duration;
+import java.util.ArrayList;
+import java.util.List;
+
+@Log4j2
+@Service
+@AllArgsConstructor
+public class WebFluxSampleService {
+
+    public Mono<Void> mono() {
+        return Mono.empty();
+    }
+
+    public Flux<Void> flux() {
+        return Flux.empty();
+    }
+
+    public Mono<Void> map() {
+        return Mono.empty().map(mapper -> null);
+    }
+
+    public Mono<Void> flatMap() {
+        return this.createSampleProduct("Shorts", 100.00,3)
+                .doOnSuccess(success -> log.info("[ASYNC] --> flatMap OK"))
+                .flatMap(product -> this.flatMapRun(product, 1, 1, 2))
+                .flatMap(product -> this.flatMapRun(product, 2, 1, 2))
+                .flatMap(product -> this.flatMapRun(product, 3, 1, 2))
+                .map(check -> {
+                    if ((check.getSampleProduct().getLast().getStock() == 12)) {
+                        log.info("[ASYNC][SYNC] QUANTITY IS OK");
+                    } else {
+                        log.error("[ASYNC][SYNC] QUANTITY IS NOK {}", check.getSampleProduct().getLast().getStock());
+                    }
+                    return check;
+                })
+                .then();
+    }
+
+    public Mono<Void> flatMapAndZip() {
+        log.info("[SYNC] #### => Calling Flat Map 1");
+        Mono<WebFluxSampleModel> flatMap1 = flatMap1();
+        log.info("[SYNC] #### => Calling Flat Map 2");
+        Mono<WebFluxSampleModel> flatMap2 = flatMap2(flatMap1);
+        log.info("[SYNC] #### => Calling Flat Map 3");
+        Mono<WebFluxSampleModel> flatMap3 = flatMap3(flatMap2);
+        return Mono.zip(flatMap1, flatMap2, flatMap3)
+                .map(tuples -> {
+                    log.info("[ASYNC][SYNC][T1] {}", tuples.getT1());
+                    log.info("[ASYNC][SYNC][T2] {}", tuples.getT2());
+                    log.info("[ASYNC][SYNC][T3] {}", tuples.getT3());
+                    return Mono.empty();
+                })
+                .then();
+    }
+
+    public Mono<Void> then() {
+        return null;
+    }
+
+    public Mono<Void> thenReturn() {
+        return null;
+    }
+
+    public Mono<Void> switchIfEmpty() {
+        return null;
+    }
+
+    public Mono<Void> zip() {
+        Mono<WebFluxSampleModel> flatMap1 = flatMap1();
+        Mono<WebFluxSampleModel> flatMap2 = flatMap2(flatMap1);
+        Mono<WebFluxSampleModel> flatMap3 = flatMap3(flatMap2);
+        return Mono.zip(flatMap1, flatMap2, flatMap3).map(tuples -> {
+            log.info(tuples.getT1());
+            log.info(tuples.getT2());
+            log.info(tuples.getT3());
+            return Mono.empty();
+        }).then();
+    }
+
+    public Mono<Void> zipWhen() {
+        return null;
+    }
+
+    public Mono<Void> zipWith() {
+        return null;
+    }
+
+    public Mono<Void> subscribe() {
+        return null;
+    }
+
+    public Mono<Void> webclient() {
+        return null;
+    }
+
+    private Mono<WebFluxSampleModel> flatMap1() {
+        return this.createSampleProduct("T-Shirt", 15.00, 5)
+                .doOnSuccess(success -> log.info("[ASYNC] --> Flat Map 1 OK"))
+                .flatMap(obj -> this.flatMapRun(obj, 1, 1, 6))
+                .flatMap(obj -> this.flatMapRun(obj, 2, 1, 6))
+                .flatMap(obj -> this.flatMapRun(obj, 3, 1, 6))
+                .delaySubscription(Duration.ofSeconds(3));
+    }
+
+    private Mono<WebFluxSampleModel> flatMap2(Mono<WebFluxSampleModel> webFluxSampleModel) {
+        return this.addSampleProduct(webFluxSampleModel, "Shorts", 44.00, 5)
+                .doOnSuccess(success -> log.info("[ASYNC] --> Flat Map 2 OK"))
+                .flatMap(obj -> this.flatMapRun(obj, 1, 2, 4))
+                .flatMap(obj -> this.flatMapRun(obj, 2, 2, 4))
+                .flatMap(obj -> this.flatMapRun(obj, 3, 2, 4))
+                .delaySubscription(Duration.ofSeconds(2));
+    }
+
+    private Mono<WebFluxSampleModel> flatMap3(Mono<WebFluxSampleModel> webFluxSampleModel) {
+        return this.addSampleProduct(webFluxSampleModel, "Pants", 60.00, 25)
+                .doOnSuccess(success -> log.info("[ASYNC] --> Flat Map 3 OK"))
+                .flatMap(obj -> this.flatMapRun(obj, 1, 3, 2))
+                .flatMap(obj -> this.flatMapRun(obj, 2, 3, 2))
+                .flatMap(obj -> this.flatMapRun(obj, 3, 3, 2))
+                .delaySubscription(Duration.ofSeconds(1));
+    }
+
+    private Mono<WebFluxSampleModel> flatMapRun(WebFluxSampleModel webFluxSampleModel, int step, int from, int seconds) {
+        log.info("[SYNC][STEP:{}][FROM:{}] >> Flat Map {}", step, from, webFluxSampleModel);
+        return Mono.just(webFluxSampleModel).delaySubscription(Duration.ofSeconds(seconds));
+    }
+
+    private Mono<WebFluxSampleModel> createSampleProduct(String name, double price, int stock) {
+        return this.addSampleProduct(Mono.just(new WebFluxSampleModel()), name, price, stock);
+    }
+
+    private Mono<WebFluxSampleModel> addSampleProduct(Mono<WebFluxSampleModel> webFluxSampleModel, String name, double price, int stock) {
+        WebFluxSampleModel.SampleProduct sampleProduct = new WebFluxSampleModel.SampleProduct();
+        sampleProduct.setName(name);
+        sampleProduct.setPrice(price);
+        sampleProduct.setStock(stock);
+        List<WebFluxSampleModel.SampleProduct> sampleProductList = new ArrayList<>();
+        sampleProductList.add(sampleProduct);
+        return webFluxSampleModel.map(mapper -> {
+            mapper.setSampleProduct(sampleProductList);
+            return mapper;
+        });
+    }
+
+}
