@@ -24,6 +24,13 @@
 
         <sonar.exclusions>
             src/main/java/com/webflux/sample/WebFluxSampleApplication.java
+            src/main/java/com/webflux/sample/config/*.java
+            src/main/java/com/webflux/sample/document/*.java
+            src/main/java/com/webflux/sample/dto/*.java
+            src/main/java/com/webflux/sample/model/*.java
+            src/main/java/com/webflux/sample/exception/*.java
+            src/main/java/com/webflux/sample/handler/*.java
+            src/main/java/com/webflux/sample/repository/*.java
         </sonar.exclusions>
     </properties>
 

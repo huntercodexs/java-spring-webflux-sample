@@ -32,9 +32,9 @@ public class WebFluxSampleService {
     public Mono<Void> flatMap() {
         return this.createSampleProduct("Shorts", 100.00,3)
                 .doOnSuccess(success -> log.info("[ASYNC] --> flatMap OK"))
-                .flatMap(product -> this.flatMapRun(product, 1, 1, 2))
-                .flatMap(product -> this.flatMapRun(product, 2, 1, 2))
-                .flatMap(product -> this.flatMapRun(product, 3, 1, 2))
+                .flatMap(product -> this.flatMapRun(product, 1, 1, 5))
+                .flatMap(product -> this.flatMapRun(product, 2, 1, 3))
+                .flatMap(product -> this.flatMapRun(product, 3, 1, 1))
                 .map(check -> {
                     if ((check.getSampleProduct().getLast().getStock() == 12)) {
                         log.info("[ASYNC][SYNC] QUANTITY IS OK");
