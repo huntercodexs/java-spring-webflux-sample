@@ -70,15 +70,28 @@ public class WebFluxSampleService {
     }
 
     public Mono<Void> then() {
-        return null;
+        return Mono.just(new Object())
+                .then(Mono.empty()
+                        .then(Mono.just(new Object())
+                                .then()));
     }
 
-    public Mono<Void> thenReturn() {
-        return null;
+    public Mono<Object> thenReturn() {
+        return this.createSampleProduct("Shorts", 100.00,3)
+                .doOnSuccess(success -> log.info("[ASYNC] --> thenReturn OK"))
+                .flatMap(product -> this.flatMapRun(product, 1, 1, 2))
+                .thenReturn(Mono.empty());
     }
 
-    public Mono<Void> switchIfEmpty() {
-        return null;
+    public Mono<WebFluxSampleModel> switchIfEmpty() {
+        return this.findProduct(false)
+                .doOnSuccess(success -> log.info("[ASYNC] --> switchIfEmpty OK"))
+                .flatMap(product -> this.flatMapRun(product, 1, 1, 2))
+                .switchIfEmpty(this.findProduct(true))
+                .map(found -> {
+                    log.info("[SWITCH IF EMPTY] {}", found);
+                    return found;
+                });
     }
 
     public Mono<WebFluxSampleModel> zip() {
@@ -99,12 +112,36 @@ public class WebFluxSampleService {
         });
     }
 
-    public Mono<Void> zipWhen() {
-        return null;
+    public Mono<WebFluxSampleModel> zipWith() {
+        Mono<WebFluxSampleModel> flatMap1 = flatMap1();
+        Mono<WebFluxSampleModel> flatMap2 = flatMap2(this.extractProduct(flatMap1));
+        return flatMap1.zipWith(flatMap2).map(tuples -> {
+
+            List<WebFluxSampleModel.SampleProduct> productList = new ArrayList<>();
+            productList.add(tuples.getT1().getSampleProduct().getFirst());
+            productList.add(tuples.getT2().getSampleProduct().getFirst());
+
+            WebFluxSampleModel webFluxSampleModel = new WebFluxSampleModel();
+            webFluxSampleModel.setSampleProduct(productList);
+
+            return webFluxSampleModel;
+        });
     }
 
-    public Mono<Void> zipWith() {
-        return null;
+    public Mono<WebFluxSampleModel> zipWhen() {
+        Mono<WebFluxSampleModel> flatMap1 = flatMap1();
+        return flatMap1.zipWhen(name -> {
+            return this.findProductByName(name.getSampleProduct().getFirst().getName(), false);
+        }).map(tuples -> {
+
+            List<WebFluxSampleModel.SampleProduct> productList = new ArrayList<>();
+            productList.add(tuples.getT1().getSampleProduct().getFirst());
+
+            WebFluxSampleModel webFluxSampleModel = new WebFluxSampleModel();
+            webFluxSampleModel.setSampleProduct(productList);
+
+            return webFluxSampleModel;
+        });
     }
 
     public Mono<Void> subscribe() {
@@ -170,6 +207,18 @@ public class WebFluxSampleService {
             return model;
         });
         return model;
+    }
+
+    private Mono<WebFluxSampleModel> findProduct(boolean shouldCreate) {
+        if (!shouldCreate)
+            return Mono.empty();
+        return this.createSampleProduct("test", 100.00, 4);
+    }
+
+    private Mono<WebFluxSampleModel> findProductByName(String name, boolean simulateNotFound) {
+        if (simulateNotFound)
+            return Mono.empty();
+        return this.createSampleProduct(name, 100.00, 4);
     }
 
 }

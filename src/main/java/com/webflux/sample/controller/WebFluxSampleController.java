@@ -102,7 +102,7 @@ public class WebFluxSampleController implements BaseController {
 
     @RequestMapping(method = RequestMethod.GET, value = "/test/thenReturn")
     @ResponseBody
-    public Mono<ResponseEntity<Void>> thenReturn(ServerWebExchange exchange) {
+    public Mono<ResponseEntity<Object>> thenReturn(ServerWebExchange exchange) {
         return webFluxSampleService.thenReturn()
                 .doFirst(() -> log.info(">>> thenReturn started"))
                 .doOnTerminate(() -> log.info(">>> thenReturn finished"))
@@ -113,7 +113,7 @@ public class WebFluxSampleController implements BaseController {
 
     @RequestMapping(method = RequestMethod.GET, value = "/test/switchIfEmpty")
     @ResponseBody
-    public Mono<ResponseEntity<Void>> switchIfEmpty(ServerWebExchange exchange) {
+    public Mono<ResponseEntity<WebFluxSampleModel>> switchIfEmpty(ServerWebExchange exchange) {
         return webFluxSampleService.switchIfEmpty()
                 .doFirst(() -> log.info(">>> switchIfEmpty started"))
                 .doOnTerminate(() -> log.info(">>> switchIfEmpty finished"))
@@ -133,25 +133,25 @@ public class WebFluxSampleController implements BaseController {
                 .map(body -> ResponseEntity.status(OK).body(body));
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/test/zipWhen")
-    @ResponseBody
-    public Mono<ResponseEntity<Void>> zipWhen(ServerWebExchange exchange) {
-        return webFluxSampleService.zipWhen()
-                .doFirst(() -> log.info(">>> zipWhen started"))
-                .doOnTerminate(() -> log.info(">>> zipWhen finished"))
-                .doOnSuccess(success -> log.info(">>> The zipWhen result is {}", success))
-                .doOnError(error -> log.error(">>> The zipWhen error is {}", String.valueOf(error)))
-                .map(body -> ResponseEntity.status(OK).body(body));
-    }
-
     @RequestMapping(method = RequestMethod.GET, value = "/test/zipWith")
     @ResponseBody
-    public Mono<ResponseEntity<Void>> zipWith(ServerWebExchange exchange) {
+    public Mono<ResponseEntity<WebFluxSampleModel>> zipWith(ServerWebExchange exchange) {
         return webFluxSampleService.zipWith()
                 .doFirst(() -> log.info(">>> zipWith started"))
                 .doOnTerminate(() -> log.info(">>> zipWith finished"))
                 .doOnSuccess(success -> log.info(">>> The zipWith result is {}", success))
                 .doOnError(error -> log.error(">>> The zipWith error is {}", String.valueOf(error)))
+                .map(body -> ResponseEntity.status(OK).body(body));
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value = "/test/zipWhen")
+    @ResponseBody
+    public Mono<ResponseEntity<WebFluxSampleModel>> zipWhen(ServerWebExchange exchange) {
+        return webFluxSampleService.zipWhen()
+                .doFirst(() -> log.info(">>> zipWhen started"))
+                .doOnTerminate(() -> log.info(">>> zipWhen finished"))
+                .doOnSuccess(success -> log.info(">>> The zipWhen result is {}", success))
+                .doOnError(error -> log.error(">>> The zipWhen error is {}", String.valueOf(error)))
                 .map(body -> ResponseEntity.status(OK).body(body));
     }
 
