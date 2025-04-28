@@ -1,5 +1,6 @@
 package com.webflux.sample.service;
 
+import com.webflux.sample.exception.InternalErrorExceptionReactor;
 import com.webflux.sample.model.WebFluxSampleModel;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -145,7 +146,44 @@ public class WebFluxSampleService {
     }
 
     public Mono<Void> subscribe() {
-        return null;
+        Flux<Double> doubles = Flux.just(Math.random(), Math.random(), Math.random(), Math.random(), Math.random())
+                .map(n -> {
+                    if (n < 0) {
+                        throw new InternalErrorExceptionReactor("[double] Invalid Random Number " + n);
+                    }
+                    return n * 2;
+                }).delaySubscription(Duration.ofSeconds(5));
+
+        doubles.subscribe(
+                value -> System.out.println(">> [double] Received: " + value),
+                error -> System.err.println("[double] Error: " + error.getMessage()),
+                () -> System.out.println("[double] Completed")
+        );
+
+        Flux<Integer> integers = Flux.just(Math.max(9, 100), Math.max(0, 100), Math.max(100,1000), Math.max(20,100))
+                .map(n -> {
+                    if (n < 10) {
+                        throw new InternalErrorExceptionReactor("[integer] Invalid Random Number " + n);
+                    }
+                    return n * 2;
+                }).delaySubscription(Duration.ofSeconds(2));
+
+        integers.subscribe(
+                value -> System.out.println(">> [integer] Received: " + value),
+                error -> System.err.println("[integer] Error: " + error.getMessage()),
+                () -> System.out.println("[integer] Completed")
+        );
+
+        Mono<String> text = Mono.just("text for tests")
+                .map(n -> n + " processed").delaySubscription(Duration.ofSeconds(1));
+
+        text.subscribe(
+                value -> System.out.println(">> [text] Received: " + value),
+                error -> System.err.println("[text] Error: " + error.getMessage()),
+                () -> System.out.println("[text] Completed")
+        );
+
+        return Mono.empty();
     }
 
     public Mono<Void> webclient() {
