@@ -166,15 +166,4 @@ public class WebFluxSampleController implements BaseController {
                 .map(body -> ResponseEntity.status(OK).body(body));
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/test/webclient")
-    @ResponseBody
-    public Mono<ResponseEntity<Void>> webclient(ServerWebExchange exchange) {
-        return webFluxSampleService.webclient()
-                .doFirst(() -> log.info(">>> webclient started"))
-                .doOnTerminate(() -> log.info(">>> webclient finished"))
-                .doOnSuccess(success -> log.info(">>> The webclient result is {}", success))
-                .doOnError(error -> log.error(">>> The webclient error is {}", String.valueOf(error)))
-                .map(body -> ResponseEntity.status(OK).body(body));
-    }
-
 }

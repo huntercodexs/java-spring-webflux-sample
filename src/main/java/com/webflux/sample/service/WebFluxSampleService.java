@@ -186,10 +186,6 @@ public class WebFluxSampleService {
         return Mono.empty();
     }
 
-    public Mono<Void> webclient() {
-        return null;
-    }
-
     private Mono<WebFluxSampleModel> flatMap1() {
         return this.createSampleProduct("T-Shirt", 15.00, 5)
                 .doOnSuccess(success -> log.info("[ASYNC] --> Flat Map 1 OK"))
