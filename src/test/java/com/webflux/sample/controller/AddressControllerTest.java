@@ -1,5 +1,7 @@
 package com.webflux.sample.controller;
 
+import com.webflux.sample.exception.InternalErrorExceptionReactor;
+import com.webflux.sample.exception.NotFoundExceptionReactor;
 import com.webflux.sample.service.AddressService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -8,6 +10,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.test.context.support.WithAnonymousUser;
 import reactor.core.publisher.Mono;
 
+import static com.webflux.sample.DataBuilder.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
@@ -21,59 +24,61 @@ class AddressControllerTest extends BaseControllerTest {
     private AddressService addressService;
 
     @Test
-    @DisplayName("should Create One Address POST - /webflux-sample/v1/addresses/{personId}")
-    void shouldCreateOneAddressSuccessfully() {
-        when(addressService.create(anyString(), any())).thenReturn(Mono.just(null));
-
-        webClient.post()
-                .uri("/path")
-                .contentType(APPLICATION_JSON)
-                .body(null)
-                .exchange()
-                .expectStatus().isCreated()
-                .expectBody()
-                .consumeWith(System.out::println)
-                .jsonPath("$.personId")
-                .isEqualTo(null);
-    }
-
-    @Test
-    @DisplayName("should NOT Create One Address POST - /webflux-sample/v1/addresses/{personId}")
-    void shouldNotCreateOneAddressSuccessfully() {
-        when(addressService.create(anyString(), any())).thenReturn(Mono.just(null));
-
-        webClient.post()
-                .uri("/path")
-                .contentType(APPLICATION_JSON)
-                .body(null)
-                .exchange()
-                .expectStatus().isCreated()
-                .expectBody()
-                .consumeWith(System.out::println)
-                .jsonPath("$.personId")
-                .isEqualTo(null);
-    }
-
-    @Test
-    @DisplayName("should Read All Address for One Person GET - /webflux-sample/v1/addresses/{personId}")
+    @DisplayName("Should Create One Address for One Person POST - /addresses/{personId}")
     @WithAnonymousUser
-    void shouldReadAllAddressForOnePersonSuccessfully() {
-        webClient.get()
-                .uri("/path")
+    void shouldCreateOneAddressSuccessfully() {
+        when(addressService.create(anyString(), any())).thenReturn(Mono.just(buildAddressCreatedResponseBodyForTests()));
+
+        webClient.post()
+                .uri(BASE_URL+API_PREFIX+"/addresses/"+PERSON_ID)
+                .contentType(APPLICATION_JSON)
+                .body(fromValue(buildAddressRequestBodyForTests()))
                 .exchange()
-                .expectStatus().isUnauthorized()
+                .expectStatus().isCreated()
+                .expectBody()
+                .consumeWith(System.out::println)
+                .jsonPath("$.id").isEqualTo(PERSON_ID);
+    }
+
+    @Test
+    @DisplayName("Should NOT Create One Address POST - /addresses/{personId}")
+    void shouldNotCreateOneAddressSuccessfully() {
+        when(addressService.create(anyString(), any())).thenReturn(Mono.error(new InternalErrorExceptionReactor("Some Error")));
+
+        webClient.post()
+                .uri(BASE_URL+API_PREFIX+"/addresses/"+PERSON_ID)
+                .contentType(APPLICATION_JSON)
+                .body(fromValue(buildAddressRequestBodyForTests()))
+                .exchange()
+                .expectStatus().is5xxServerError()
                 .expectBody()
                 .consumeWith(System.out::println);
     }
 
     @Test
-    @DisplayName("should NOT Read All Address for One Person GET - /webflux-sample/v1/addresses/{personId}")
+    @DisplayName("Should Read All Address for One Person GET - /addresses/{personId}")
+    @WithAnonymousUser
+    void shouldReadAllAddressForOnePersonSuccessfully() {
+        when(addressService.find(anyString())).thenReturn(Mono.just(buildAddressReadResponseBodyForTests()));
+
+        webClient.get()
+                .uri(BASE_URL+API_PREFIX+"/addresses/"+PERSON_ID)
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody()
+                .consumeWith(System.out::println);
+    }
+
+    @Test
+    @DisplayName("Should NOT Read All Address for One Person GET - /addresses/{personId}")
     @WithAnonymousUser
     void shouldNotReadAllAddressForOnePersonSuccessfully() {
+        when(addressService.find(anyString())).thenReturn(Mono.error(new NotFoundExceptionReactor("Some Error")));
+
         webClient.get()
-                .uri("/path")
+                .uri(BASE_URL+API_PREFIX+"/addresses/"+PERSON_ID)
                 .exchange()
-                .expectStatus().isUnauthorized()
+                .expectStatus().isNotFound()
                 .expectBody()
                 .consumeWith(System.out::println);
     }

@@ -18,7 +18,7 @@ import static reactor.test.StepVerifier.create;
 
 @DisplayName("Test class AddressServiceImplTest")
 @ExtendWith({SpringExtension.class, MockitoExtension.class})
-class AddressServiceImplTest {
+class ExceptionServiceTest {
 
     @MockBean
     AddressService addressService;

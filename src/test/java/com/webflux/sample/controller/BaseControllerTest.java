@@ -14,7 +14,7 @@ import static org.mockito.MockitoAnnotations.openMocks;
 
 @TestPropertySource(locations = "classpath:application-default.properties")
 @TestPropertySource(properties = "spring.main.lazy-initialization=true")
-@EnableAspectJAutoProxy(proxyTargetClass = true)
+//@EnableAspectJAutoProxy(proxyTargetClass = true)
 @ExtendWith({SpringExtension.class, MockitoExtension.class})
 @WithMockUser(roles = {"AUTH-BASIC"})
 public abstract class BaseControllerTest {
