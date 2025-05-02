@@ -29,7 +29,7 @@ class AddressControllerTest extends BaseControllerTest {
     void shouldCreateOneAddressSuccessfully() {
         when(addressService.create(anyString(), any())).thenReturn(Mono.just(buildAddressCreatedResponseBodyForTests()));
 
-        webClient.post()
+        webTestClient.post()
                 .uri(BASE_URL+API_PREFIX+"/addresses/"+PERSON_ID)
                 .contentType(APPLICATION_JSON)
                 .body(fromValue(buildAddressRequestBodyForTests()))
@@ -45,7 +45,7 @@ class AddressControllerTest extends BaseControllerTest {
     void shouldNotCreateOneAddressSuccessfully() {
         when(addressService.create(anyString(), any())).thenReturn(Mono.error(new InternalErrorExceptionReactor("Some Error")));
 
-        webClient.post()
+        webTestClient.post()
                 .uri(BASE_URL+API_PREFIX+"/addresses/"+PERSON_ID)
                 .contentType(APPLICATION_JSON)
                 .body(fromValue(buildAddressRequestBodyForTests()))
@@ -61,7 +61,7 @@ class AddressControllerTest extends BaseControllerTest {
     void shouldReadAllAddressForOnePersonSuccessfully() {
         when(addressService.find(anyString())).thenReturn(Mono.just(buildAddressReadResponseBodyForTests()));
 
-        webClient.get()
+        webTestClient.get()
                 .uri(BASE_URL+API_PREFIX+"/addresses/"+PERSON_ID)
                 .exchange()
                 .expectStatus().isOk()
@@ -75,7 +75,7 @@ class AddressControllerTest extends BaseControllerTest {
     void shouldNotReadAllAddressForOnePersonSuccessfully() {
         when(addressService.find(anyString())).thenReturn(Mono.error(new NotFoundExceptionReactor("Some Error")));
 
-        webClient.get()
+        webTestClient.get()
                 .uri(BASE_URL+API_PREFIX+"/addresses/"+PERSON_ID)
                 .exchange()
                 .expectStatus().isNotFound()

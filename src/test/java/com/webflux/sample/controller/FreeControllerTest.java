@@ -20,7 +20,7 @@ class FreeControllerTest extends BaseControllerTest {
     @DisplayName("GET /test-value-path/{testValue} - Should Return Value Path")
     @WithAnonymousUser
     void shouldReturnValuePathTest() {
-        webClient.get()
+        webTestClient.get()
                 .uri(BASE_URL+API_PREFIX+"/test-value-path/Some value for test path")
                 .exchange()
                 .expectStatus().isOk()

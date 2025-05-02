@@ -1,5 +1,7 @@
 package com.webflux.sample;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.webflux.sample.model.*;
 
 import java.util.ArrayList;
@@ -24,10 +26,23 @@ public class DataBuilder {
         return addressRequestBody;
     }
 
+    public static PhoneRequestBody buildPhoneRequestBodyForTests() {
+        PhoneRequestBody addressRequestBody = new PhoneRequestBody();
+        addressRequestBody.setPhoneNumber("1209909009090");
+        addressRequestBody.setPhoneType(PhoneRequestBody.PhoneTypeEnum.HOME);
+        return addressRequestBody;
+    }
+
     public static AddressCreatedResponseBody buildAddressCreatedResponseBodyForTests() {
         AddressCreatedResponseBody addressCreatedResponseBody = new AddressCreatedResponseBody();
         addressCreatedResponseBody.setId(PERSON_ID);
         return addressCreatedResponseBody;
+    }
+
+    public static PhoneCreatedResponseBody buildPhoneCreatedResponseBodyForTests() {
+        PhoneCreatedResponseBody phoneCreatedResponseBody = new PhoneCreatedResponseBody();
+        phoneCreatedResponseBody.setId(PERSON_ID);
+        return phoneCreatedResponseBody;
     }
 
     public static AddressReadResponseBody buildAddressReadResponseBodyForTests() {
@@ -41,6 +56,18 @@ public class DataBuilder {
         itemsResponseBodyList.add(addressItemsResponseBody);
         addressReadResponseBody.setAddresses(itemsResponseBodyList);
         return addressReadResponseBody;
+    }
+
+    public static PhoneReadResponseBody buildPhoneReadResponseBodyForTests() {
+        PhoneReadResponseBody phoneReadResponseBody = new PhoneReadResponseBody();
+        List<PhonesItemsResponseBody> itemsResponseBodyList = new ArrayList<>();
+        PhonesItemsResponseBody phonesItemsResponseBody = new PhonesItemsResponseBody();
+        phonesItemsResponseBody.setPhoneNumber("1209909009090");
+        phonesItemsResponseBody.setPhoneType(PhoneRequestBody.PhoneTypeEnum.HOME.getValue());
+        phonesItemsResponseBody.setActive(true);
+        itemsResponseBodyList.add(phonesItemsResponseBody);
+        phoneReadResponseBody.setPhones(itemsResponseBodyList);
+        return phoneReadResponseBody;
     }
 
     public static PersonRequestBody buildPersonRequestBodyForTests() {
@@ -75,6 +102,30 @@ public class DataBuilder {
         GenericsResponseBody genericsResponseBody = new GenericsResponseBody();
         genericsResponseBody.setMessage(message);
         return genericsResponseBody;
+    }
+
+    public static ZipcodeModel buildZipcodeModelForTests() {
+        ZipcodeModel zipcodeModel = new ZipcodeModel();
+        zipcodeModel.setBairro("Nob Neighbor");
+        zipcodeModel.setUf("SC");
+        zipcodeModel.setIbge("111011");
+        zipcodeModel.setGia("GIA-12");
+        zipcodeModel.setDdd("22");
+        zipcodeModel.setLocalidade("Brazil Sao Paulo Brasilia");
+        zipcodeModel.setLogradouro("Log fake");
+        zipcodeModel.setSiafi("121212");
+        zipcodeModel.setComplemento("Smart house park");
+        zipcodeModel.setCep("18090000");
+        return zipcodeModel;
+    }
+
+    public static String buildZipcodeModelJsonForTests() {
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            return mapper.writeValueAsString(buildZipcodeModelForTests());
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e.getMessage());
+        }
     }
 
 }

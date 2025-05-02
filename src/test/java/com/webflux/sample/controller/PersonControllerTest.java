@@ -33,7 +33,7 @@ class PersonControllerTest extends BaseControllerTest {
     void shouldCreateOnePersonSuccessfully() {
         when(personService.create(any())).thenReturn(Mono.just(buildPersonCreatedResponseBodyForTests()));
 
-        webClient.post()
+        webTestClient.post()
                 .uri(BASE_URL+API_PREFIX+"/person")
                 .contentType(APPLICATION_JSON)
                 .body(fromValue(buildPersonRequestBodyForTests()))
@@ -49,7 +49,7 @@ class PersonControllerTest extends BaseControllerTest {
     void shouldNotCreateOnePerson() {
         when(personService.create(any())).thenReturn(Mono.error(new BadRequestExceptionReactor("Some Error")));
 
-        webClient.post()
+        webTestClient.post()
                 .uri(BASE_URL+API_PREFIX+"/person")
                 .contentType(APPLICATION_JSON)
                 .body(null)
@@ -65,7 +65,7 @@ class PersonControllerTest extends BaseControllerTest {
     void shouldReadOnePersonSuccessfully() {
         when(personService.read(anyString())).thenReturn(Mono.just(buildPersonReadResponseBodyForTests()));
 
-        webClient.get()
+        webTestClient.get()
                 .uri(BASE_URL+API_PREFIX+"/person/"+PERSON_ID)
                 .exchange()
                 .expectStatus().isOk()
@@ -83,7 +83,7 @@ class PersonControllerTest extends BaseControllerTest {
     void shouldNotReadOnePersonSuccessfully() {
         when(personService.read(anyString())).thenReturn(Mono.error(new NotFoundExceptionReactor("Person Not Found")));
 
-        webClient.get()
+        webTestClient.get()
                 .uri(BASE_URL+API_PREFIX+"/person/1234567890")
                 .exchange()
                 .expectStatus().isNotFound()
@@ -98,7 +98,7 @@ class PersonControllerTest extends BaseControllerTest {
     void shouldReadAllPersonSuccessfully() {
         when(personService.readAll()).thenReturn(Mono.just(buildPersonsReadResponseBodyForTests()));
 
-        webClient.get()
+        webTestClient.get()
                 .uri(BASE_URL+API_PREFIX+"/person")
                 .exchange()
                 .expectStatus().isOk()
@@ -113,7 +113,7 @@ class PersonControllerTest extends BaseControllerTest {
     void shouldNotReadAllPersonSuccessfully() {
         when(personService.readAll()).thenReturn(Mono.error(new InternalErrorExceptionReactor("Some Error")));
 
-        webClient.get()
+        webTestClient.get()
                 .uri(BASE_URL+API_PREFIX+"/person")
                 .exchange()
                 .expectStatus().is5xxServerError()
@@ -128,7 +128,7 @@ class PersonControllerTest extends BaseControllerTest {
     void shouldUpdateOnePersonSuccessfully() {
         when(personService.update(anyString(), any())).thenReturn(Mono.just(buildPersonReadResponseBodyForTests()));
 
-        webClient.put()
+        webTestClient.put()
                 .uri(BASE_URL+API_PREFIX+"/person/"+PERSON_ID)
                 .contentType(APPLICATION_JSON)
                 .body(fromValue(buildPersonRequestBodyForTests()))
@@ -148,7 +148,7 @@ class PersonControllerTest extends BaseControllerTest {
     void shouldNotUpdateOnePersonSuccessfully() {
         when(personService.update(anyString(), any())).thenReturn(Mono.error(new BadRequestExceptionReactor("Some Bad Request")));
 
-        webClient.put()
+        webTestClient.put()
                 .uri(BASE_URL+API_PREFIX+"/person/"+PERSON_ID)
                 .contentType(APPLICATION_JSON)
                 .body(fromValue(buildPersonRequestBodyForTests()))
@@ -165,7 +165,7 @@ class PersonControllerTest extends BaseControllerTest {
     void shouldDeleteOnePersonSuccessfully() {
         when(personService.delete(anyString())).thenReturn(Mono.just(buildGenericsResponseBodyForTests("User deleted successfully")));
 
-        webClient.delete()
+        webTestClient.delete()
                 .uri(BASE_URL+API_PREFIX+"/person/"+PERSON_ID)
                 .exchange()
                 .expectStatus().isNoContent()
@@ -180,7 +180,7 @@ class PersonControllerTest extends BaseControllerTest {
     void shouldNotDeleteOnePersonSuccessfully() {
         when(personService.delete(anyString())).thenReturn(Mono.error(new NotFoundExceptionReactor("Person Not Found to Delete")));
 
-        webClient.delete()
+        webTestClient.delete()
                 .uri(BASE_URL+API_PREFIX+"/person/1234567890")
                 .exchange()
                 .expectStatus().is4xxClientError()
@@ -195,7 +195,7 @@ class PersonControllerTest extends BaseControllerTest {
     void shouldPatchOnePersonSuccessfully() {
         when(personService.patch(anyString(), any())).thenReturn(Mono.just(buildGenericsResponseBodyForTests("User Patched Successfully")));
 
-        webClient.patch()
+        webTestClient.patch()
                 .uri(BASE_URL+API_PREFIX+"/person/"+PERSON_ID)
                 .contentType(APPLICATION_JSON)
                 .body(fromValue(buildPersonRequestBodyForTests()))
@@ -212,7 +212,7 @@ class PersonControllerTest extends BaseControllerTest {
     void shouldNotPatchOnePersonSuccessfully() {
         when(personService.patch(anyString(), any())).thenReturn(Mono.error(new BadRequestExceptionReactor("Some Bad Request for Patch")));
 
-        webClient.patch()
+        webTestClient.patch()
                 .uri(BASE_URL+API_PREFIX+"/person/"+PERSON_ID)
                 .contentType(APPLICATION_JSON)
                 .body(fromValue(buildPersonRequestBodyForTests()))
@@ -229,7 +229,7 @@ class PersonControllerTest extends BaseControllerTest {
     void shouldPatchByPathOnePersonSuccessfully() {
         when(personService.patchByPath(anyString(), anyString(), any())).thenReturn(Mono.just(buildGenericsResponseBodyForTests("User Patched Successfully")));
 
-        webClient.patch()
+        webTestClient.patch()
                 .uri(BASE_URL+API_PREFIX+"/person/"+PERSON_ID+"/"+FIELD_NAME+"/"+FIELD_VALUE)
                 .contentType(APPLICATION_JSON)
                 .body(null)
@@ -246,7 +246,7 @@ class PersonControllerTest extends BaseControllerTest {
     void shouldNotPatchByPathOnePersonSuccessfully() {
         when(personService.patchByPath(anyString(), anyString(), any())).thenReturn(Mono.error(new ConflictExceptionReactor("Something went wrong")));
 
-        webClient.patch()
+        webTestClient.patch()
                 .uri(BASE_URL+API_PREFIX+"/person/"+PERSON_ID+"/"+FIELD_NAME+"/"+FIELD_VALUE)
                 .contentType(APPLICATION_JSON)
                 .body(null)
