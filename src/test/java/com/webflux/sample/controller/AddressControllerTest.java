@@ -24,7 +24,7 @@ class AddressControllerTest extends BaseControllerTest {
     private AddressService addressService;
 
     @Test
-    @DisplayName("Should Create One Address for One Person POST - /addresses/{personId}")
+    @DisplayName("POST /addresses/{personId} - Should Create One Address for One Person")
     @WithAnonymousUser
     void shouldCreateOneAddressSuccessfully() {
         when(addressService.create(anyString(), any())).thenReturn(Mono.just(buildAddressCreatedResponseBodyForTests()));
@@ -41,7 +41,7 @@ class AddressControllerTest extends BaseControllerTest {
     }
 
     @Test
-    @DisplayName("Should NOT Create One Address POST - /addresses/{personId}")
+    @DisplayName("POST /addresses/{personId} - Should NOT Create One Address")
     void shouldNotCreateOneAddressSuccessfully() {
         when(addressService.create(anyString(), any())).thenReturn(Mono.error(new InternalErrorExceptionReactor("Some Error")));
 
@@ -56,7 +56,7 @@ class AddressControllerTest extends BaseControllerTest {
     }
 
     @Test
-    @DisplayName("Should Read All Address for One Person GET - /addresses/{personId}")
+    @DisplayName("GET /addresses/{personId} - Should Read All Address for One Person")
     @WithAnonymousUser
     void shouldReadAllAddressForOnePersonSuccessfully() {
         when(addressService.find(anyString())).thenReturn(Mono.just(buildAddressReadResponseBodyForTests()));
@@ -70,7 +70,7 @@ class AddressControllerTest extends BaseControllerTest {
     }
 
     @Test
-    @DisplayName("Should NOT Read All Address for One Person GET - /addresses/{personId}")
+    @DisplayName("GET /addresses/{personId} - Should NOT Read All Address for One Person")
     @WithAnonymousUser
     void shouldNotReadAllAddressForOnePersonSuccessfully() {
         when(addressService.find(anyString())).thenReturn(Mono.error(new NotFoundExceptionReactor("Some Error")));

@@ -2,6 +2,7 @@ package com.webflux.sample.service.impl;
 
 import com.webflux.sample.builder.PersonBuilder;
 import com.webflux.sample.document.PersonsDocument;
+import com.webflux.sample.exception.NotFoundExceptionReactor;
 import com.webflux.sample.model.*;
 import com.webflux.sample.repository.AddressRepository;
 import com.webflux.sample.repository.PersonsRepository;
@@ -57,7 +58,8 @@ public class PersonServiceImpl implements PersonService {
                 .flatMap(this::findAddress)
                 .flatMap(this::findPhones)
                 .flatMap(this::responseOne)
-                .map(person -> person);
+                .map(person -> person)
+                .switchIfEmpty(Mono.error(new NotFoundExceptionReactor("Person Not Found")));
     }
 
     @Override

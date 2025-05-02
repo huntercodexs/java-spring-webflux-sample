@@ -21,11 +21,11 @@ public class FreeController implements BaseController {
             method = RequestMethod.GET,
             value = "/test-value-path/{testValue}"
     )
-    public void testValuePath(
+    public String returnValuePath(
             @Parameter(name = "testValue", description = "", required = true, in = ParameterIn.PATH)
             @PathVariable("testValue") String testValue
     ) {
-        System.out.println(testValue);
+        return "The value for tests is: " + testValue;
     }
 
 }
