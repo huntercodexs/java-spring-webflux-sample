@@ -1,6 +1,7 @@
-package com.webflux.sample.service;
+package com.webflux.sample.service.impl;
 
 import com.webflux.sample.repository.AddressRepository;
+import com.webflux.sample.service.AddressService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -18,7 +19,7 @@ import static reactor.test.StepVerifier.create;
 
 @DisplayName("Test class AddressServiceImplTest")
 @ExtendWith({SpringExtension.class, MockitoExtension.class})
-class AddressServiceImplTest {
+class PhoneServiceImplTest {
 
     @MockBean
     AddressService addressService;

@@ -33,7 +33,7 @@ class ZipcodeIntegrationTest {
     private WebClientSampleService webClientSampleService;
 
     @BeforeEach
-    void setup() {
+    void setUp() {
         openMocks(this);
     }
 
