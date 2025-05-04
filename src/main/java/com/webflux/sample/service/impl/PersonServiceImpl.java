@@ -128,7 +128,7 @@ public class PersonServiceImpl implements PersonService {
                         .doOnSuccess(success -> log.info("The Patch result is {}", success))
                         .doOnError(error -> log.error("The Patch error is {}", String.valueOf(error)))
                         .flatMap(personsDocument ->
-                                personsRepository.save(buildAndPatch(patchRequest, personsDocument)))
+                                personsRepository.save(buildToPatch(patchRequest, personsDocument)))
                         .map(mapper -> buildGenericsResponse("Person patched successfully")));
     }
 
@@ -141,7 +141,7 @@ public class PersonServiceImpl implements PersonService {
                 .doOnError(error -> log.error("The patchByPath error is {}", String.valueOf(error)))
                 .flatMap(document ->
                         personsRepository.save(buildAndPatchByPath(document, fieldName, fieldValue)))
-                .map(mapper -> buildGenericsResponse("Person patched successfully"));
+                .map(mapper -> buildGenericsResponse("Person patched by path successfully"));
     }
 
     private Mono<PersonsDocument> findAddress(PersonsDocument personsDocument) {

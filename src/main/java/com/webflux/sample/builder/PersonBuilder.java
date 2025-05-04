@@ -83,7 +83,7 @@ public class PersonBuilder {
         return phoneResponseBody;
     }
 
-    public static PersonsDocument buildAndPatch(PersonPatchRequestBody patchRequest, PersonsDocument personsDocument) {
+    public static PersonsDocument buildToPatch(PersonPatchRequestBody patchRequest, PersonsDocument personsDocument) {
         if (patchRequest.getName() != null) {
             personsDocument.setName(patchRequest.getName());
         } else if (patchRequest.getEmail() != null) {
