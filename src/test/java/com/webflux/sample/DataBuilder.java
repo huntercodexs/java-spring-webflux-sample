@@ -3,8 +3,10 @@ package com.webflux.sample;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.webflux.sample.document.AddressDocument;
+import com.webflux.sample.document.ExampleDocument;
 import com.webflux.sample.document.PersonsDocument;
 import com.webflux.sample.document.PhonesDocument;
+import com.webflux.sample.dto.ExampleRequest;
 import com.webflux.sample.model.*;
 import com.webflux.sample.model.PhoneRequestBody.PhoneTypeEnum;
 
@@ -32,12 +34,24 @@ public class DataBuilder {
     public static final PhoneTypeEnum PHONE_TYPE_OFFICE = PhoneTypeEnum.OFFICE;
     public static final PhoneTypeEnum PHONE_TYPE_MOBILE = PhoneTypeEnum.MOBILE;
 
+    public static final String PRODUCT_ID = "123456";
+    public static final String PRODUCT_NAME = "PRODUCT NAME";
+    public static final String PRODUCT_DESCRIPTION = "PRODUCT DESCRIPTION";
+
     public static PersonsDocument buildPersonsDocumentForTests() {
         PersonsDocument personsDocument = new PersonsDocument();
         personsDocument.setId(PERSON_ID);
         personsDocument.setName(PERSON_NAME);
         personsDocument.setEmail(PERSON_EMAIL);
         return personsDocument;
+    }
+
+    public static ExampleDocument buildExampleDocumentForTests() {
+        ExampleDocument exampleDocument = new ExampleDocument();
+        exampleDocument.setId(PRODUCT_ID);
+        exampleDocument.setProduct(PRODUCT_NAME);
+        exampleDocument.setDescription(PRODUCT_DESCRIPTION);
+        return exampleDocument;
     }
 
     public static AddressDocument buildAddressDocumentForTests() {
@@ -116,6 +130,14 @@ public class DataBuilder {
         personRequestBody.setName(PERSON_NAME);
         personRequestBody.setEmail(PERSON_EMAIL);
         return personRequestBody;
+    }
+
+    public static ExampleRequest buildExampleRequestBodyForTests() {
+        ExampleRequest exampleRequest = new ExampleRequest();
+        exampleRequest.setId(PRODUCT_ID);
+        exampleRequest.setProduct(PRODUCT_NAME);
+        exampleRequest.setDescription(PRODUCT_DESCRIPTION);
+        return exampleRequest;
     }
 
     public static PersonPatchRequestBody buildPersonPatchRequestBodyForTests() {
