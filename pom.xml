@@ -165,6 +165,13 @@
             <artifactId>snakeyaml</artifactId>
         </dependency>
 
+        <!--BLOCK HOUND-->
+        <dependency>
+            <groupId>io.projectreactor.tools</groupId>
+            <artifactId>blockhound</artifactId>
+            <version>1.0.10.RELEASE</version>
+        </dependency>
+
         <!--TESTS-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -240,6 +247,16 @@
                 <version>3.5.2</version>
                 <configuration>
                     <parallel>none</parallel>
+                    <argLine>
+                        <!--Java HotSpot(TM) 64-Bit Server VM warning: Sharing is only supported for boot loader classes because bootstrap classpath has been appended-->
+                        -ea
+                        -Xshare:off
+                        -XX:+EnableDynamicAgentLoading
+                        --add-opens java.base/java.util=ALL-UNNAMED
+                        --add-opens java.base/java.lang=ALL-UNNAMED
+                        <!--BlockHound: Java 13+-->
+                        -XX:+AllowRedefinitionToAddDeleteMethods
+                    </argLine>
                 </configuration>
             </plugin>
             <!--srcclr-maven-plugin-->

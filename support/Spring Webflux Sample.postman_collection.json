@@ -8,322 +8,1018 @@
 	},
 	"item": [
 		{
-			"name": "Create Person",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n    \"name\": \"Samantha Smith Viz\",\n    \"email\": \"samantha-smith@email.com\"\n}",
-					"options": {
-						"raw": {
-							"language": "json"
+			"name": "Tests",
+			"item": [
+				{
+					"name": "Test",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/webflux-sample/v1/test/value-path/my%20name%20is%20test",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"webflux-sample",
+								"v1",
+								"test",
+								"value-path",
+								"my%20name%20is%20test"
+							]
 						}
-					}
+					},
+					"response": []
 				},
-				"url": {
-					"raw": "http://localhost:8080/webflux-sample/v1/person",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"webflux-sample",
-						"v1",
-						"person"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Update Person",
-			"request": {
-				"method": "PUT",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n    \"name\": \"Samantha Smith Viz 2\",\n    \"email\": \"samantha-smith-2@email.com\"\n}",
-					"options": {
-						"raw": {
-							"language": "json"
+				{
+					"name": "Test Exception",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/webflux-sample/v1/test/exception",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"webflux-sample",
+								"v1",
+								"test",
+								"exception"
+							]
 						}
-					}
+					},
+					"response": []
 				},
-				"url": {
-					"raw": "http://localhost:8080/webflux-sample/v1/person/68084a07291d934054493c7d",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"webflux-sample",
-						"v1",
-						"person",
-						"68084a07291d934054493c7d"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Patch Person",
-			"request": {
-				"method": "PATCH",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n    \"email\": \"samantha@email.com\"\n}",
-					"options": {
-						"raw": {
-							"language": "json"
+				{
+					"name": "Test Exception Reactor",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/webflux-sample/v1/test/exception-reactor",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"webflux-sample",
+								"v1",
+								"test",
+								"exception-reactor"
+							]
 						}
-					}
+					},
+					"response": []
 				},
-				"url": {
-					"raw": "http://localhost:8080/webflux-sample/v1/person/68084a07291d934054493c7d",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"webflux-sample",
-						"v1",
-						"person",
-						"68084a07291d934054493c7d"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Patch Person By Path",
-			"request": {
-				"method": "PATCH",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n    \"name\": \"John Smith Viz New\"\n}",
-					"options": {
-						"raw": {
-							"language": "json"
+				{
+					"name": "Test Service Exception Reactor",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/webflux-sample/v1/test/service-exception-reactor",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"webflux-sample",
+								"v1",
+								"test",
+								"service-exception-reactor"
+							]
 						}
-					}
+					},
+					"response": []
 				},
-				"url": {
-					"raw": "http://localhost:8080/webflux-sample/v1/person/68084a07291d934054493c7d/email/samantha-patch@email.com",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"webflux-sample",
-						"v1",
-						"person",
-						"68084a07291d934054493c7d",
-						"email",
-						"samantha-patch@email.com"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Delete Person",
-			"request": {
-				"method": "DELETE",
-				"header": [],
-				"url": {
-					"raw": "http://localhost:8080/webflux-sample/v1/person/68084a07291d934054493c7d",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"webflux-sample",
-						"v1",
-						"person",
-						"68084a07291d934054493c7d"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Create Address",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n  \"street\": \"Street name test 2\",\n  \"number\": 1235,\n  \"zipcode\": \"12090000\",\n  \"city\": \"Ohio\"\n}",
-					"options": {
-						"raw": {
-							"language": "json"
+				{
+					"name": "Test BadRequestExceptionReactor",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/webflux-sample/v1/test/exception/bad-request-reactor",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"webflux-sample",
+								"v1",
+								"test",
+								"exception",
+								"bad-request-reactor"
+							]
 						}
-					}
+					},
+					"response": []
 				},
-				"url": {
-					"raw": "http://localhost:8080/webflux-sample/v1/addresses/68084a07291d934054493c7d",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"webflux-sample",
-						"v1",
-						"addresses",
-						"68084a07291d934054493c7d"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Create Phone",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n  \"phoneNumber\": \"+55121234567891\",\n  \"phoneType\": \"office\"\n}",
-					"options": {
-						"raw": {
-							"language": "json"
+				{
+					"name": "Test IllegalArgumentException",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/webflux-sample/v1/test/exception/illegal-argument",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"webflux-sample",
+								"v1",
+								"test",
+								"exception",
+								"illegal-argument"
+							]
 						}
-					}
+					},
+					"response": []
 				},
-				"url": {
-					"raw": "http://localhost:8080/webflux-sample/v1/phones/68084a07291d934054493c7d",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"webflux-sample",
-						"v1",
-						"phones",
-						"68084a07291d934054493c7d"
-					]
+				{
+					"name": "Test NullPointerException",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/webflux-sample/v1/test/exception/null-pointer",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"webflux-sample",
+								"v1",
+								"test",
+								"exception",
+								"null-pointer"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Test IllegalAccessException",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/webflux-sample/v1/test/exception/illegal-access",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"webflux-sample",
+								"v1",
+								"test",
+								"exception",
+								"illegal-access"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Test HttpException",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/webflux-sample/v1/test/exception/http-exception",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"webflux-sample",
+								"v1",
+								"test",
+								"exception",
+								"http-exception"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Test IndexOutOfBoundsException",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/webflux-sample/v1/test/exception/index-out-of-bounds",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"webflux-sample",
+								"v1",
+								"test",
+								"exception",
+								"index-out-of-bounds"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Test NotFoundExceptionReactor",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/webflux-sample/v1/test/exception/not-found-reactor",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"webflux-sample",
+								"v1",
+								"test",
+								"exception",
+								"not-found-reactor"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Test NotFoundException",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/webflux-sample/v1/test/exception/not-found-swagger",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"webflux-sample",
+								"v1",
+								"test",
+								"exception",
+								"not-found-swagger"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Test Error",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/webflux-sample/v1/test/exception/error",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"webflux-sample",
+								"v1",
+								"test",
+								"exception",
+								"error"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Test InternalError",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/webflux-sample/v1/test/exception/internal-error",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"webflux-sample",
+								"v1",
+								"test",
+								"exception",
+								"internal-error"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Test InternalErrorException",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/webflux-sample/v1/test/exception/internal-error-exception",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"webflux-sample",
+								"v1",
+								"test",
+								"exception",
+								"internal-error-exception"
+							]
+						}
+					},
+					"response": []
 				}
-			},
-			"response": []
+			]
 		},
 		{
-			"name": "Read Person",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "http://localhost:8080/webflux-sample/v1/person/68084a07291d934054493c7d",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"webflux-sample",
-						"v1",
-						"person",
-						"68084a07291d934054493c7d"
-					]
+			"name": "Person",
+			"item": [
+				{
+					"name": "Create Person",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Beatriz Smith Viz\",\n    \"email\": \"beatriz-smith@email.com\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/webflux-sample/v1/person",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"webflux-sample",
+								"v1",
+								"person"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Address",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"street\": \"Street name test 2\",\n  \"number\": 1235,\n  \"zipcode\": \"12090000\",\n  \"city\": \"Ohio\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/webflux-sample/v1/addresses/68093a2f5f5e40392facb4d3",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"webflux-sample",
+								"v1",
+								"addresses",
+								"68093a2f5f5e40392facb4d3"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Phone",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"phoneNumber\": \"+55121234567892\",\n  \"phoneType\": \"office\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/webflux-sample/v1/phones/68093a2f5f5e40392facb4d3",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"webflux-sample",
+								"v1",
+								"phones",
+								"68093a2f5f5e40392facb4d3"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Read Persons",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/webflux-sample/v1/person",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"webflux-sample",
+								"v1",
+								"person"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Read Person",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/webflux-sample/v1/person/68093a2f5f5e40392facb4d3",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"webflux-sample",
+								"v1",
+								"person",
+								"68093a2f5f5e40392facb4d3"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Read Addresses",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/webflux-sample/v1/addresses/68093a2f5f5e40392facb4d3",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"webflux-sample",
+								"v1",
+								"addresses",
+								"68093a2f5f5e40392facb4d3"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Read Phones",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/webflux-sample/v1/phones/68093a2f5f5e40392facb4d3",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"webflux-sample",
+								"v1",
+								"phones",
+								"68093a2f5f5e40392facb4d3"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Person",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Beatriz Smith Aliaz\",\n    \"email\": \"beatriz-smith-2@email.com\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/webflux-sample/v1/person/68093a2f5f5e40392facb4d3",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"webflux-sample",
+								"v1",
+								"person",
+								"68093a2f5f5e40392facb4d3"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Person",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/webflux-sample/v1/person/68093dad44517b4a7f12598b",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"webflux-sample",
+								"v1",
+								"person",
+								"68093dad44517b4a7f12598b"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Patch Person",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"beatriz-1234@email.com.br\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/webflux-sample/v1/person/68093a2f5f5e40392facb4d3",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"webflux-sample",
+								"v1",
+								"person",
+								"68093a2f5f5e40392facb4d3"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Patch Person By Path",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"John Smith Viz New\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/webflux-sample/v1/person/68093a2f5f5e40392facb4d3/email/beatriz@email.com",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"webflux-sample",
+								"v1",
+								"person",
+								"68093a2f5f5e40392facb4d3",
+								"email",
+								"beatriz@email.com"
+							]
+						}
+					},
+					"response": []
 				}
-			},
-			"response": []
+			]
 		},
 		{
-			"name": "Read Persons",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "http://localhost:8080/webflux-sample/v1/person",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"webflux-sample",
-						"v1",
-						"person"
-					]
+			"name": "Samples",
+			"item": [
+				{
+					"name": "Test mono",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/webflux-sample/v1/test/mono",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"webflux-sample",
+								"v1",
+								"test",
+								"mono"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Test flux",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/webflux-sample/v1/test/flux",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"webflux-sample",
+								"v1",
+								"test",
+								"flux"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Test map",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/webflux-sample/v1/test/map",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"webflux-sample",
+								"v1",
+								"test",
+								"map"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Test flatMap",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/webflux-sample/v1/test/flatMap",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"webflux-sample",
+								"v1",
+								"test",
+								"flatMap"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Test flatMapAndZip",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/webflux-sample/v1/test/flatMapAndZip",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"webflux-sample",
+								"v1",
+								"test",
+								"flatMapAndZip"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Test then",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/webflux-sample/v1/test/then",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"webflux-sample",
+								"v1",
+								"test",
+								"then"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Test thenReturn",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/webflux-sample/v1/test/thenReturn",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"webflux-sample",
+								"v1",
+								"test",
+								"thenReturn"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Test switchIfEmpty",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/webflux-sample/v1/test/switchIfEmpty",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"webflux-sample",
+								"v1",
+								"test",
+								"switchIfEmpty"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Test zip",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/webflux-sample/v1/test/zip",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"webflux-sample",
+								"v1",
+								"test",
+								"zip"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Test zipWith",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/webflux-sample/v1/test/zipWith",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"webflux-sample",
+								"v1",
+								"test",
+								"zipWith"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Test zipWhen",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/webflux-sample/v1/test/zipWhen",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"webflux-sample",
+								"v1",
+								"test",
+								"zipWhen"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Test subscribe",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/webflux-sample/v1/test/subscribe",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"webflux-sample",
+								"v1",
+								"test",
+								"subscribe"
+							]
+						}
+					},
+					"response": []
 				}
-			},
-			"response": []
+			]
 		},
 		{
-			"name": "Read Addresses",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "http://localhost:8080/webflux-sample/v1/addresses/68084a07291d934054493c7d",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"webflux-sample",
-						"v1",
-						"addresses",
-						"68084a07291d934054493c7d"
-					]
+			"name": "WebClient",
+			"item": [
+				{
+					"name": "Test webclient get",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/webflux-sample/v1/test/webclient/get",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"webflux-sample",
+								"v1",
+								"test",
+								"webclient",
+								"get"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Test webclient post",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/webflux-sample/v1/test/webclient/post",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"webflux-sample",
+								"v1",
+								"test",
+								"webclient",
+								"post"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Test webclient put",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/webflux-sample/v1/test/webclient/put",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"webflux-sample",
+								"v1",
+								"test",
+								"webclient",
+								"put"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Test webclient delete",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/webflux-sample/v1/test/webclient/delete",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"webflux-sample",
+								"v1",
+								"test",
+								"webclient",
+								"delete"
+							]
+						}
+					},
+					"response": []
 				}
-			},
-			"response": []
-		},
-		{
-			"name": "Read Phones",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "http://localhost:8080/webflux-sample/v1/phones/68084a07291d934054493c7d",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"webflux-sample",
-						"v1",
-						"phones",
-						"68084a07291d934054493c7d"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Test",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "http://localhost:8080/webflux-sample/v1/test/my%20name%20is%20test",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"webflux-sample",
-						"v1",
-						"test",
-						"my%20name%20is%20test"
-					]
-				}
-			},
-			"response": []
+			]
 		}
 	]
 }

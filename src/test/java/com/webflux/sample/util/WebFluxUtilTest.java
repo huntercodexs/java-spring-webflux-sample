@@ -1,7 +1,9 @@
 package com.webflux.sample.util;
 
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import reactor.blockhound.BlockHound;
 
 import java.time.LocalDateTime;
 
@@ -9,6 +11,11 @@ import static com.webflux.sample.util.WebFluxUtil.datetimeUtil;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class WebFluxUtilTest {
+
+    @BeforeAll
+    static void setUp() {
+        BlockHound.install();
+    }
 
     @Test
     @DisplayName("UTIL - datetimeUtilTestIsNull")

@@ -12,6 +12,7 @@ import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import reactor.blockhound.BlockHound;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
@@ -35,6 +36,7 @@ class PhoneServiceImplTest {
 
     @BeforeEach
     public void init() {
+        BlockHound.install();
         openMocks(this);
 
         setField(phoneService, "phonesRepository", phonesRepository);

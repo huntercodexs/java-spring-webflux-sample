@@ -8,6 +8,7 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.reactive.server.WebTestClient;
+import reactor.blockhound.BlockHound;
 
 import java.time.Duration;
 
@@ -27,6 +28,7 @@ public abstract class BaseControllerTest {
 
     @BeforeEach
     public void setUp() {
+        BlockHound.install();
         openMocks(this);
         //This setup fix the error: java.lang.IllegalStateException: Timeout on blocking read for 5000000000 NANOSECONDS
         webTestClient = webTestClient.mutate()
