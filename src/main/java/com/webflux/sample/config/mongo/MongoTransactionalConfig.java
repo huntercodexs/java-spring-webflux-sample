@@ -1,4 +1,4 @@
-package com.webflux.sample.config;
+package com.webflux.sample.config.mongo;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

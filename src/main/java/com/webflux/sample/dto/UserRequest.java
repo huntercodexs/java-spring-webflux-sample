@@ -1,4 +1,4 @@
-package com.webflux.sample.config.security.user;
+package com.webflux.sample.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
