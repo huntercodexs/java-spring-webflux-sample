@@ -21,21 +21,23 @@
         <maven.compiler.source>21</maven.compiler.source>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-
-        <sonar.exclusions>
-            src/main/java/com/webflux/sample/config/*.java
-            src/main/java/com/webflux/sample/document/*.java
-            src/main/java/com/webflux/sample/dto/*.java
-            src/main/java/com/webflux/sample/model/*.java
-            src/main/java/com/webflux/sample/exception/*.java
-            src/main/java/com/webflux/sample/handler/*.java
-            src/main/java/com/webflux/sample/repository/*.java
-            src/main/java/com/webflux/sample/WebFluxSampleApplication.java
-            src/main/java/com/webflux/sample/service/ExceptionService.java
-            src/main/java/com/webflux/sample/service/FreeService.java
-            src/main/java/com/webflux/sample/service/WebClientSampleService.java
+        <sonar-exclusions>
+            src/main/java/com/webflux/sample/config/*.java,
+            src/main/java/com/webflux/sample/document/*.java,
+            src/main/java/com/webflux/sample/dto/*.java,
+            src/main/java/com/webflux/sample/model/*.java,
+            src/main/java/com/webflux/sample/exception/*.java,
+            src/main/java/com/webflux/sample/handler/*.java,
+            src/main/java/com/webflux/sample/repository/*.java,
+            src/main/java/com/webflux/sample/WebFluxSampleApplication.java,
+            src/main/java/com/webflux/sample/service/ExceptionService.java,
+            src/main/java/com/webflux/sample/service/FreeService.java,
+            src/main/java/com/webflux/sample/service/WebClientSampleService.java,
             src/main/java/com/webflux/sample/service/WebFluxSampleService.java
-        </sonar.exclusions>
+        </sonar-exclusions>
+
+        <sonar.exclusions>${sonar-exclusions}</sonar.exclusions>
+        <sonar.coverage.exclusions>${sonar-exclusions}</sonar.coverage.exclusions>
     </properties>
 
     <dependencies>
@@ -215,7 +217,7 @@
         <resources>
             <resource>
                 <directory>src/main/resources</directory>
-                <filtering>false</filtering>
+                <filtering>true</filtering>
             </resource>
         </resources>
         <plugins>
@@ -353,6 +355,24 @@
                         </configuration>
                     </execution>
                 </executions>
+            </plugin>
+            <!--sonar-maven-plugin-->
+            <plugin>
+                <groupId>org.sonarsource.scanner.maven</groupId>
+                <artifactId>sonar-maven-plugin</artifactId>
+                <version>3.7.0.1746</version>
+            </plugin>
+            <!--jacoco-maven-plugin - Sonarqube-->
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>0.8.10</version>
+                <configuration>
+                    <!--Use this configuration to set witch files should be ignored in the sonar measures/metrics-->
+                    <!--<excludes>
+                        <exclude>${sonar-exclusions}</exclude>
+                    </excludes>-->
+                </configuration>
             </plugin>
         </plugins>
     </build>
