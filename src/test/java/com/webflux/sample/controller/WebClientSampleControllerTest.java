@@ -1,12 +1,13 @@
 package com.webflux.sample.controller;
 
 import com.webflux.sample.exception.BadRequestExceptionReactor;
+import com.webflux.sample.repository.UserRepository;
 import com.webflux.sample.service.WebClientSampleService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.security.test.context.support.WithAnonymousUser;
+import org.springframework.security.test.context.support.WithMockUser;
 import reactor.core.publisher.Mono;
 
 import static com.webflux.sample.DataBuilder.*;
@@ -18,9 +19,12 @@ class WebClientSampleControllerTest extends BaseControllerTest {
     @MockBean
     private WebClientSampleService webClientSampleService;
 
+    @MockBean
+    private UserRepository userRepository;
+
     @Test
     @DisplayName("GET /test/webclient/get - Should Execute One HTTP GET Request Successfully")
-    @WithAnonymousUser
+    @WithMockUser
     void shouldExecuteOneHttpGetRequestSuccessfully() {
         when(webClientSampleService.get()).thenReturn(Mono.just(buildZipcodeModelForTests()));
 
@@ -35,7 +39,7 @@ class WebClientSampleControllerTest extends BaseControllerTest {
 
     @Test
     @DisplayName("GET /test/webclient/get - Should NOT Execute One HTTP GET Request Successfully")
-    @WithAnonymousUser
+    @WithMockUser
     void shouldNotExecuteOneHttpGetRequestSuccessfully() {
         when(webClientSampleService.get()).thenReturn(Mono.error(new BadRequestExceptionReactor("Some Bad Request")));
 
@@ -50,7 +54,7 @@ class WebClientSampleControllerTest extends BaseControllerTest {
 
     @Test
     @DisplayName("GET /test/webclient/post - Should Execute One HTTP POST Request Successfully")
-    @WithAnonymousUser
+    @WithMockUser
     void shouldExecuteOneHttpPostRequestSuccessfully() {
         when(webClientSampleService.post()).thenReturn(Mono.empty());
 
@@ -64,7 +68,7 @@ class WebClientSampleControllerTest extends BaseControllerTest {
 
     @Test
     @DisplayName("GET /test/webclient/put - Should Execute One HTTP PUT Request Successfully")
-    @WithAnonymousUser
+    @WithMockUser
     void shouldExecuteOneHttpPutRequestSuccessfully() {
         when(webClientSampleService.put()).thenReturn(Mono.empty());
 
@@ -78,7 +82,7 @@ class WebClientSampleControllerTest extends BaseControllerTest {
 
     @Test
     @DisplayName("GET /test/webclient/delete - Should Execute One HTTP DELETE Request Successfully")
-    @WithAnonymousUser
+    @WithMockUser
     void shouldExecuteOneHttpDeleteRequestSuccessfully() {
         when(webClientSampleService.delete()).thenReturn(Mono.empty());
 

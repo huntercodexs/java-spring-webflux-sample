@@ -2,12 +2,13 @@ package com.webflux.sample.controller;
 
 import com.webflux.sample.exception.InternalErrorExceptionReactor;
 import com.webflux.sample.exception.NotFoundExceptionReactor;
+import com.webflux.sample.repository.UserRepository;
 import com.webflux.sample.service.PhoneService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.security.test.context.support.WithAnonymousUser;
+import org.springframework.security.test.context.support.WithMockUser;
 import reactor.core.publisher.Mono;
 
 import static com.webflux.sample.DataBuilder.*;
@@ -23,9 +24,12 @@ class PhoneControllerTest extends BaseControllerTest {
     @MockBean
     private PhoneService phoneService;
 
+    @MockBean
+    private UserRepository userRepository;
+
     @Test
     @DisplayName("POST /phones/{personId} - Should Create One Phone for One Person")
-    @WithAnonymousUser
+    @WithMockUser
     void shouldCreateOnePhoneSuccessfully() {
         when(phoneService.create(anyString(), any())).thenReturn(Mono.just(buildPhoneCreatedResponseBodyForTests()));
 
@@ -57,7 +61,7 @@ class PhoneControllerTest extends BaseControllerTest {
 
     @Test
     @DisplayName("GET /phones/{personId} - Should Read All Phone for One Person")
-    @WithAnonymousUser
+    @WithMockUser
     void shouldReadAllPhoneForOnePersonSuccessfully() {
         when(phoneService.find(anyString())).thenReturn(Mono.just(buildPhoneReadResponseBodyForTests()));
 
@@ -71,7 +75,7 @@ class PhoneControllerTest extends BaseControllerTest {
 
     @Test
     @DisplayName("GET /phones/{personId} - Should NOT Read All Phone for One Person")
-    @WithAnonymousUser
+    @WithMockUser
     void shouldNotReadAllPhoneForOnePersonSuccessfully() {
         when(phoneService.find(anyString())).thenReturn(Mono.error(new NotFoundExceptionReactor("Some Error")));
 

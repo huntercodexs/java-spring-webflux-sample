@@ -33,17 +33,22 @@ class FreeServiceTest {
 
     @Test
     void shouldVerifyBlockHoundWorkTest() {
-        Mono.delay(Duration.ofSeconds(1))
-                .doFirst(() -> log.info("Should fail"))
-                .doOnNext(it -> {
-                    try {
-                        Thread.sleep(3);
-                    }
-                    catch (InterruptedException e) {
-                        throw new RuntimeException(e);
-                    }
-                })
-                .block();
+        Exception exception = null;
+        try {
+            Mono.delay(Duration.ofSeconds(1))
+                    .doFirst(() -> log.info("Should fail"))
+                    .doOnNext(it -> {
+                        try {
+                            Thread.sleep(3);
+                        } catch (InterruptedException e) {
+                            throw new RuntimeException(e);
+                        }
+                    })
+                    .block();
+        } catch (Exception e) {
+            exception = e;
+        }
+        assert exception != null && exception.getCause() instanceof reactor.blockhound.BlockingOperationError;
     }
 
 }

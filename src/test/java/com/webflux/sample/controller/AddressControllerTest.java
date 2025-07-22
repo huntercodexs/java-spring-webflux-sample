@@ -2,12 +2,14 @@ package com.webflux.sample.controller;
 
 import com.webflux.sample.exception.InternalErrorExceptionReactor;
 import com.webflux.sample.exception.NotFoundExceptionReactor;
+import com.webflux.sample.repository.UserRepository;
 import com.webflux.sample.service.AddressService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.test.context.support.WithAnonymousUser;
+import org.springframework.security.test.context.support.WithMockUser;
 import reactor.core.publisher.Mono;
 
 import static com.webflux.sample.DataBuilder.*;
@@ -23,9 +25,12 @@ class AddressControllerTest extends BaseControllerTest {
     @MockBean
     private AddressService addressService;
 
+    @MockBean
+    private UserRepository userRepository;
+
     @Test
     @DisplayName("POST /addresses/{personId} - Should Create One Address for One Person")
-    @WithAnonymousUser
+    @WithMockUser
     void shouldCreateOneAddressSuccessfully() {
         when(addressService.create(anyString(), any())).thenReturn(Mono.just(buildAddressCreatedResponseBodyForTests()));
 
@@ -57,7 +62,7 @@ class AddressControllerTest extends BaseControllerTest {
 
     @Test
     @DisplayName("GET /addresses/{personId} - Should Read All Address for One Person")
-    @WithAnonymousUser
+    @WithMockUser
     void shouldReadAllAddressForOnePersonSuccessfully() {
         when(addressService.find(anyString())).thenReturn(Mono.just(buildAddressReadResponseBodyForTests()));
 
@@ -71,7 +76,7 @@ class AddressControllerTest extends BaseControllerTest {
 
     @Test
     @DisplayName("GET /addresses/{personId} - Should NOT Read All Address for One Person")
-    @WithAnonymousUser
+    @WithMockUser
     void shouldNotReadAllAddressForOnePersonSuccessfully() {
         when(addressService.find(anyString())).thenReturn(Mono.error(new NotFoundExceptionReactor("Some Error")));
 

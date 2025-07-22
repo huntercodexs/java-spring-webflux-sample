@@ -1,5 +1,6 @@
 package com.webflux.sample.controller;
 
+import com.webflux.sample.repository.UserRepository;
 import com.webflux.sample.service.FreeService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -15,6 +16,9 @@ class FreeControllerTest extends BaseControllerTest {
 
     @MockBean
     private FreeService freeService;
+
+    @MockBean
+    private UserRepository userRepository;
 
     @Test
     @DisplayName("GET /test-value-path/{testValue} - Should Return Value Path")

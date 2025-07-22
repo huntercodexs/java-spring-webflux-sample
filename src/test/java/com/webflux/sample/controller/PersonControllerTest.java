@@ -4,12 +4,14 @@ import com.webflux.sample.exception.BadRequestExceptionReactor;
 import com.webflux.sample.exception.ConflictExceptionReactor;
 import com.webflux.sample.exception.InternalErrorExceptionReactor;
 import com.webflux.sample.exception.NotFoundExceptionReactor;
+import com.webflux.sample.repository.UserRepository;
 import com.webflux.sample.service.PersonService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.test.context.support.WithAnonymousUser;
+import org.springframework.security.test.context.support.WithMockUser;
 import reactor.core.publisher.Mono;
 
 import java.util.ArrayList;
@@ -27,9 +29,12 @@ class PersonControllerTest extends BaseControllerTest {
     @MockBean
     private PersonService personService;
 
+    @MockBean
+    private UserRepository userRepository;
+
     @Test
     @DisplayName("POST /person - Should Create One Person Successfully")
-    @WithAnonymousUser
+    @WithMockUser
     void shouldCreateOnePersonSuccessfully() {
         when(personService.create(any())).thenReturn(Mono.just(buildPersonCreatedResponseBodyForTests()));
 
@@ -61,7 +66,7 @@ class PersonControllerTest extends BaseControllerTest {
 
     @Test
     @DisplayName("GET /person/{personId} - Should Read One Person")
-    @WithAnonymousUser
+    @WithMockUser
     void shouldReadOnePersonSuccessfully() {
         when(personService.read(anyString())).thenReturn(Mono.just(buildPersonReadResponseBodyForTests()));
 
@@ -79,7 +84,7 @@ class PersonControllerTest extends BaseControllerTest {
 
     @Test
     @DisplayName("GET /person/1234567890 - Should NOT Read One Person")
-    @WithAnonymousUser
+    @WithMockUser
     void shouldNotReadOnePersonSuccessfully() {
         when(personService.read(anyString())).thenReturn(Mono.error(new NotFoundExceptionReactor("Person Not Found")));
 
@@ -94,7 +99,7 @@ class PersonControllerTest extends BaseControllerTest {
 
     @Test
     @DisplayName("GET /person - Should Read All Person")
-    @WithAnonymousUser
+    @WithMockUser
     void shouldReadAllPersonSuccessfully() {
         when(personService.readAll()).thenReturn(Mono.just(buildPersonsReadResponseBodyForTests()));
 
@@ -109,7 +114,7 @@ class PersonControllerTest extends BaseControllerTest {
 
     @Test
     @DisplayName("GET /person - Should NOT Read All Person")
-    @WithAnonymousUser
+    @WithMockUser
     void shouldNotReadAllPersonSuccessfully() {
         when(personService.readAll()).thenReturn(Mono.error(new InternalErrorExceptionReactor("Some Error")));
 
@@ -124,7 +129,7 @@ class PersonControllerTest extends BaseControllerTest {
 
     @Test
     @DisplayName("PUT /person/{personId} - Should Update One Person Successfully")
-    @WithAnonymousUser
+    @WithMockUser
     void shouldUpdateOnePersonSuccessfully() {
         when(personService.update(anyString(), any())).thenReturn(Mono.just(buildPersonReadResponseBodyForTests()));
 
@@ -144,7 +149,7 @@ class PersonControllerTest extends BaseControllerTest {
 
     @Test
     @DisplayName("PUT /person/{personId} - Should NOT Update One Person Successfully")
-    @WithAnonymousUser
+    @WithMockUser
     void shouldNotUpdateOnePersonSuccessfully() {
         when(personService.update(anyString(), any())).thenReturn(Mono.error(new BadRequestExceptionReactor("Some Bad Request")));
 
@@ -161,7 +166,7 @@ class PersonControllerTest extends BaseControllerTest {
 
     @Test
     @DisplayName("DELETE /person/{personId} - Should Delete One Person")
-    @WithAnonymousUser
+    @WithMockUser
     void shouldDeleteOnePersonSuccessfully() {
         when(personService.delete(anyString())).thenReturn(Mono.just(buildGenericsResponseBodyForTests("User deleted successfully")));
 
@@ -176,7 +181,7 @@ class PersonControllerTest extends BaseControllerTest {
 
     @Test
     @DisplayName("DELETE /person/1234567890 - Should NOT Delete One Person")
-    @WithAnonymousUser
+    @WithMockUser
     void shouldNotDeleteOnePersonSuccessfully() {
         when(personService.delete(anyString())).thenReturn(Mono.error(new NotFoundExceptionReactor("Person Not Found to Delete")));
 
@@ -191,7 +196,7 @@ class PersonControllerTest extends BaseControllerTest {
 
     @Test
     @DisplayName("PATCH /person/{personId} - Should Patch One Person Successfully")
-    @WithAnonymousUser
+    @WithMockUser
     void shouldPatchOnePersonSuccessfully() {
         when(personService.patch(anyString(), any())).thenReturn(Mono.just(buildGenericsResponseBodyForTests("User Patched Successfully")));
 
@@ -208,7 +213,7 @@ class PersonControllerTest extends BaseControllerTest {
 
     @Test
     @DisplayName("PATCH /person/{personId} - Should NOT Patch One Person Successfully")
-    @WithAnonymousUser
+    @WithMockUser
     void shouldNotPatchOnePersonSuccessfully() {
         when(personService.patch(anyString(), any())).thenReturn(Mono.error(new BadRequestExceptionReactor("Some Bad Request for Patch")));
 
@@ -225,7 +230,7 @@ class PersonControllerTest extends BaseControllerTest {
 
     @Test
     @DisplayName("PATCH /person/{personId}/{fieldName}/{fieldValue} - Should Patch by Path One Person Successfully")
-    @WithAnonymousUser
+    @WithMockUser
     void shouldPatchByPathOnePersonSuccessfully() {
         when(personService.patchByPath(anyString(), anyString(), any())).thenReturn(Mono.just(buildGenericsResponseBodyForTests("User Patched Successfully")));
 
@@ -242,7 +247,7 @@ class PersonControllerTest extends BaseControllerTest {
 
     @Test
     @DisplayName("PATCH /person/{personId}/{fieldName}/{fieldValue} - Should NOT Patch by Path One Person Successfully")
-    @WithAnonymousUser
+    @WithMockUser
     void shouldNotPatchByPathOnePersonSuccessfully() {
         when(personService.patchByPath(anyString(), anyString(), any())).thenReturn(Mono.error(new ConflictExceptionReactor("Something went wrong")));
 
