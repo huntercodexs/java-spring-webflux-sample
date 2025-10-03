@@ -4,11 +4,12 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.webflux.sample.document.AddressDocument;
 import com.webflux.sample.document.ExampleDocument;
-import com.webflux.sample.document.PersonsDocument;
-import com.webflux.sample.document.PhonesDocument;
+import com.webflux.sample.document.UserDocument;
+import com.webflux.sample.document.PhoneDocument;
 import com.webflux.sample.dto.ExampleRequest;
 import com.webflux.sample.model.*;
-import com.webflux.sample.model.PhoneRequestBody.PhoneTypeEnum;
+import com.webflux.sample.user.model.*;
+import com.webflux.sample.user_details.model.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,9 +19,9 @@ public class DataBuilder {
     public static final String BASE_URL = "http://localhost:8080";
     public static final String API_PREFIX = "/webflux-sample/v1";
 
-    public static final String PERSON_NAME = "John Smith Viz";
-    public static final String PERSON_EMAIL = "john@email.com";
-    public static final String PERSON_ID = "68093a2f5f5e40392f31t4d3";
+    public static final String USER_NAME = "John Smith Viz";
+    public static final String USER_EMAIL = "john@email.com";
+    public static final String USER_ID = "68093a2f5f5e40392f31t4d3";
     public static final String FIELD_NAME = "name";
     public static final String FIELD_VALUE = "John Smith Hunt";
 
@@ -30,20 +31,20 @@ public class DataBuilder {
     public static final String ADDRESS_CODE = "1122334455";
 
     public static final String PHONE_NUMBER = "12158912345678";
-    public static final PhoneTypeEnum PHONE_TYPE_HOME = PhoneTypeEnum.HOME;
-    public static final PhoneTypeEnum PHONE_TYPE_OFFICE = PhoneTypeEnum.OFFICE;
-    public static final PhoneTypeEnum PHONE_TYPE_MOBILE = PhoneTypeEnum.MOBILE;
+    public static final PhoneRequestBody.PhoneTypeEnum PHONE_TYPE_HOME = PhoneRequestBody.PhoneTypeEnum.HOME;
+    public static final PhoneRequestBody.PhoneTypeEnum PHONE_TYPE_OFFICE = PhoneRequestBody.PhoneTypeEnum.OFFICE;
+    public static final PhoneRequestBody.PhoneTypeEnum PHONE_TYPE_MOBILE = PhoneRequestBody.PhoneTypeEnum.MOBILE;
 
     public static final String PRODUCT_ID = "123456";
     public static final String PRODUCT_NAME = "PRODUCT NAME";
     public static final String PRODUCT_DESCRIPTION = "PRODUCT DESCRIPTION";
 
-    public static PersonsDocument buildPersonsDocumentForTests() {
-        PersonsDocument personsDocument = new PersonsDocument();
-        personsDocument.setId(PERSON_ID);
-        personsDocument.setName(PERSON_NAME);
-        personsDocument.setEmail(PERSON_EMAIL);
-        return personsDocument;
+    public static UserDocument buildUserDocumentForTests() {
+        UserDocument userDocument = new UserDocument();
+        userDocument.setId(USER_ID);
+        userDocument.setName(USER_NAME);
+        userDocument.setEmail(USER_EMAIL);
+        return userDocument;
     }
 
     public static ExampleDocument buildExampleDocumentForTests() {
@@ -56,7 +57,7 @@ public class DataBuilder {
 
     public static AddressDocument buildAddressDocumentForTests() {
         AddressDocument addressDocument = new AddressDocument();
-        addressDocument.setId(PERSON_ID);
+        addressDocument.setId(USER_ID);
         addressDocument.setStreet(ADDRESS_STREET);
         addressDocument.setNumber(ADDRESS_NUMBER);
         addressDocument.setCity(ADDRESS_CITY);
@@ -64,12 +65,12 @@ public class DataBuilder {
         return addressDocument;
     }
 
-    public static PhonesDocument buildPhonesDocumentForTests() {
-        PhonesDocument phonesDocument = new PhonesDocument();
-        phonesDocument.setId(PERSON_ID);
-        phonesDocument.setPhoneNumber(PHONE_NUMBER);
-        phonesDocument.setPhoneType(PHONE_TYPE_MOBILE.getValue());
-        return phonesDocument;
+    public static PhoneDocument buildPhonesDocumentForTests() {
+        PhoneDocument phoneDocument = new PhoneDocument();
+        phoneDocument.setId(USER_ID);
+        phoneDocument.setPhoneNumber(PHONE_NUMBER);
+        phoneDocument.setPhoneType(PHONE_TYPE_MOBILE.getValue());
+        return phoneDocument;
     }
 
     public static AddressRequestBody buildAddressRequestBodyForTests() {
@@ -90,13 +91,13 @@ public class DataBuilder {
 
     public static AddressCreatedResponseBody buildAddressCreatedResponseBodyForTests() {
         AddressCreatedResponseBody addressCreatedResponseBody = new AddressCreatedResponseBody();
-        addressCreatedResponseBody.setId(PERSON_ID);
+        addressCreatedResponseBody.setId(USER_ID);
         return addressCreatedResponseBody;
     }
 
     public static PhoneCreatedResponseBody buildPhoneCreatedResponseBodyForTests() {
         PhoneCreatedResponseBody phoneCreatedResponseBody = new PhoneCreatedResponseBody();
-        phoneCreatedResponseBody.setId(PERSON_ID);
+        phoneCreatedResponseBody.setId(USER_ID);
         return phoneCreatedResponseBody;
     }
 
@@ -125,11 +126,11 @@ public class DataBuilder {
         return phoneReadResponseBody;
     }
 
-    public static PersonRequestBody buildPersonRequestBodyForTests() {
-        PersonRequestBody personRequestBody = new PersonRequestBody();
-        personRequestBody.setName(PERSON_NAME);
-        personRequestBody.setEmail(PERSON_EMAIL);
-        return personRequestBody;
+    public static UserRequestBody buildUserRequestBodyForTests() {
+        UserRequestBody userRequestBody = new UserRequestBody();
+        userRequestBody.setName(USER_NAME);
+        userRequestBody.setEmail(USER_EMAIL);
+        return userRequestBody;
     }
 
     public static ExampleRequest buildExampleRequestBodyForTests() {
@@ -140,31 +141,31 @@ public class DataBuilder {
         return exampleRequest;
     }
 
-    public static PersonPatchRequestBody buildPersonPatchRequestBodyForTests() {
-        PersonPatchRequestBody personPatchRequestBody = new PersonPatchRequestBody();
-        personPatchRequestBody.setName(PERSON_NAME);
-        return personPatchRequestBody;
+    public static UserPatchRequestBody buildUserPatchRequestBodyForTests() {
+        UserPatchRequestBody userPatchRequestBody = new UserPatchRequestBody();
+        userPatchRequestBody.setName(USER_NAME);
+        return userPatchRequestBody;
     }
 
-    public static PersonCreatedResponseBody buildPersonCreatedResponseBodyForTests() {
-        PersonCreatedResponseBody personCreatedResponseBody = new PersonCreatedResponseBody();
-        personCreatedResponseBody.setId(PERSON_ID);
-        return personCreatedResponseBody;
+    public static UserCreatedResponseBody buildUserCreatedResponseBodyForTests() {
+        UserCreatedResponseBody userCreatedResponseBody = new UserCreatedResponseBody();
+        userCreatedResponseBody.setId(USER_ID);
+        return userCreatedResponseBody;
     }
 
-    public static PersonReadResponseBody buildPersonReadResponseBodyForTests() {
-        PersonReadResponseBody personReadResponseBody = new PersonReadResponseBody();
-        personReadResponseBody.setId(PERSON_ID);
-        personReadResponseBody.setName(PERSON_NAME);
-        personReadResponseBody.setEmail(PERSON_EMAIL);
-        personReadResponseBody.setActive(true);
-        return personReadResponseBody;
+    public static UserReadResponseBody buildUserReadResponseBodyForTests() {
+        UserReadResponseBody userReadResponseBody = new UserReadResponseBody();
+        userReadResponseBody.setId(USER_ID);
+        userReadResponseBody.setName(USER_NAME);
+        userReadResponseBody.setEmail(USER_EMAIL);
+        userReadResponseBody.setActive(true);
+        return userReadResponseBody;
     }
 
-    public static PersonsReadResponseBody buildPersonsReadResponseBodyForTests() {
-        PersonsReadResponseBody personsReadResponseBody = new PersonsReadResponseBody();
-        personsReadResponseBody.setPersons(new ArrayList<>());
-        return personsReadResponseBody;
+    public static UsersReadResponseBody buildUsersReadResponseBodyForTests() {
+        UsersReadResponseBody usersReadResponseBody = new UsersReadResponseBody();
+        usersReadResponseBody.setUsers(new ArrayList<>());
+        return usersReadResponseBody;
     }
 
     public static GenericsResponseBody buildGenericsResponseBodyForTests(String message) {

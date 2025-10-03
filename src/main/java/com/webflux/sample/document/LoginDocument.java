@@ -14,8 +14,8 @@ import java.util.Set;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Document(collection = "Users")
-public class UsersDocument {
+@Document(collection = "Login")
+public class LoginDocument {
     @Id
     private String id;
     private String username;

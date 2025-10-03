@@ -1,7 +1,7 @@
 package com.webflux.sample.config.security;
 
 import com.webflux.sample.exception.NotFoundExceptionReactor;
-import com.webflux.sample.repository.UserRepository;
+import com.webflux.sample.repository.LoginRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -18,11 +18,11 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class CustomUserDetailsService implements ReactiveUserDetailsService {
 
-    private final UserRepository userRepository;
+    private final LoginRepository loginRepository;
 
     @Override
     public Mono<UserDetails> findByUsername(String username) {
-        return userRepository.findByUsername(username)
+        return loginRepository.findByUsername(username)
                 .doFirst(() -> log.info("Searching username login {}", username))
                 .doOnSuccess(success -> log.info("Everything was fine"))
                 .doOnError(error -> log.error("Something went wrong: {}", String.valueOf(error)))

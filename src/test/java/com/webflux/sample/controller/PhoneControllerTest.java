@@ -2,7 +2,7 @@ package com.webflux.sample.controller;
 
 import com.webflux.sample.exception.InternalErrorExceptionReactor;
 import com.webflux.sample.exception.NotFoundExceptionReactor;
-import com.webflux.sample.repository.UserRepository;
+import com.webflux.sample.repository.LoginRepository;
 import com.webflux.sample.service.PhoneService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -25,32 +25,32 @@ class PhoneControllerTest extends BaseControllerTest {
     private PhoneService phoneService;
 
     @MockBean
-    private UserRepository userRepository;
+    private LoginRepository loginRepository;
 
     @Test
-    @DisplayName("POST /phones/{personId} - Should Create One Phone for One Person")
+    @DisplayName("POST /phones/{userId} - Should Create One Phone for One User")
     @WithMockUser
     void shouldCreateOnePhoneSuccessfully() {
         when(phoneService.create(anyString(), any())).thenReturn(Mono.just(buildPhoneCreatedResponseBodyForTests()));
 
         webTestClient.post()
-                .uri(BASE_URL+API_PREFIX+"/phones/"+PERSON_ID)
+                .uri(BASE_URL+API_PREFIX+"/phones/"+ USER_ID)
                 .contentType(APPLICATION_JSON)
                 .body(fromValue(buildPhoneRequestBodyForTests()))
                 .exchange()
                 .expectStatus().isCreated()
                 .expectBody()
                 .consumeWith(System.out::println)
-                .jsonPath("$.id").isEqualTo(PERSON_ID);
+                .jsonPath("$.id").isEqualTo(USER_ID);
     }
 
     @Test
-    @DisplayName("POST /phones/{personId} - Should NOT Create One Phone")
+    @DisplayName("POST /phones/{userId} - Should NOT Create One Phone")
     void shouldNotCreateOnePhoneSuccessfully() {
         when(phoneService.create(anyString(), any())).thenReturn(Mono.error(new InternalErrorExceptionReactor("Some Error")));
 
         webTestClient.post()
-                .uri(BASE_URL+API_PREFIX+"/phones/"+PERSON_ID)
+                .uri(BASE_URL+API_PREFIX+"/phones/"+ USER_ID)
                 .contentType(APPLICATION_JSON)
                 .body(fromValue(buildPhoneRequestBodyForTests()))
                 .exchange()
@@ -60,13 +60,13 @@ class PhoneControllerTest extends BaseControllerTest {
     }
 
     @Test
-    @DisplayName("GET /phones/{personId} - Should Read All Phone for One Person")
+    @DisplayName("GET /phones/{userId} - Should Read All Phone for One User")
     @WithMockUser
-    void shouldReadAllPhoneForOnePersonSuccessfully() {
+    void shouldReadAllPhoneForOneUserSuccessfully() {
         when(phoneService.find(anyString())).thenReturn(Mono.just(buildPhoneReadResponseBodyForTests()));
 
         webTestClient.get()
-                .uri(BASE_URL+API_PREFIX+"/phones/"+PERSON_ID)
+                .uri(BASE_URL+API_PREFIX+"/phones/"+ USER_ID)
                 .exchange()
                 .expectStatus().isOk()
                 .expectBody()
@@ -74,13 +74,13 @@ class PhoneControllerTest extends BaseControllerTest {
     }
 
     @Test
-    @DisplayName("GET /phones/{personId} - Should NOT Read All Phone for One Person")
+    @DisplayName("GET /phones/{userId} - Should NOT Read All Phone for One User")
     @WithMockUser
-    void shouldNotReadAllPhoneForOnePersonSuccessfully() {
+    void shouldNotReadAllPhoneForOneUserSuccessfully() {
         when(phoneService.find(anyString())).thenReturn(Mono.error(new NotFoundExceptionReactor("Some Error")));
 
         webTestClient.get()
-                .uri(BASE_URL+API_PREFIX+"/phones/"+PERSON_ID)
+                .uri(BASE_URL+API_PREFIX+"/phones/"+ USER_ID)
                 .exchange()
                 .expectStatus().isNotFound()
                 .expectBody()

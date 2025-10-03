@@ -1,7 +1,7 @@
 openapi: 3.0.2
 info:
-  title: OPENAPI-SAMPLE-STRUCTURE-PERSON
-  description: Example OpenAPI document for Person
+  title: USER
+  description: Example OpenAPI document for User
   contact:
     name: WebFlux Sample
     email: webflux.sample@email.com
@@ -17,14 +17,15 @@ servers:
     description: PRODUCTION
 
 tags:
-  - name: Person
+  - name: User
 
 paths:
-  /person:
+  # Create, Read All Users
+  /user:
     post:
       tags:
-        - Person
-      summary: Create one person
+        - User
+      summary: Create one user
       security:
         - BearerAuth: []
         - OauthSecurityUser:
@@ -33,29 +34,29 @@ paths:
       description: |
         
         ## Responsibilities
-        Create person
+        Create user
 
         ---
         ## Requirements
         To access this endpoint, you must have one of the following sets of roles:
         - `AUTH-BASIC` level
 
-      operationId: createPerson
+      operationId: createUser
       requestBody:
-        description: Person to be created
+        description: User to be created
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/PersonRequestBody'
+              $ref: '#/components/schemas/UserRequestBody'
         required: true
       responses:
         201:
-          $ref: '#/components/responses/PersonCreatedResponse'
-      x-codegen-request-body-name: createPersonRequestBody
+          $ref: '#/components/responses/UserCreatedResponse'
+      x-codegen-request-body-name: createUserRequestBody
     get:
       tags:
-        - Person
-      summary: Read all persons
+        - User
+      summary: Read all users
       security:
         - BearerAuth: []
         - OauthSecurityUser:
@@ -64,27 +65,28 @@ paths:
       description: |
         
         ## Responsibilities
-        Retrieves a list of Persons
+        Retrieves a list of Users
 
         ---
         ## Requirements
         To access this endpoint, you must have one of the following sets of roles:
            * `AUTH-BASIC` level
 
-      operationId: readAllPersons
+      operationId: readAllUsers
 #      parameters:
 #        - $ref: '#/components/parameters/QueryLimit'
 #        - $ref: '#/components/parameters/QueryOffset'
 #        - $ref: '#/components/parameters/QuerySort'
       responses:
         200:
-          $ref: '#/components/responses/PersonsReadResponse'
-      x-codegen-request-body-name: readPersonsRequestBody
-  /person/{personId}:
+          $ref: '#/components/responses/UsersReadResponse'
+      x-codegen-request-body-name: readUsersRequestBody
+  # Read, Update, Delete, Patch One User
+  /user/{userId}:
     get:
       tags:
-        - Person
-      summary: Read one person
+        - User
+      summary: Read one user
       security:
         - BearerAuth: []
         - OauthSecurityUser:
@@ -93,29 +95,29 @@ paths:
       description: |
         
         ## Responsibilities
-        Retrieves a list of Persons
+        Retrieves a list of Users
 
         ---
         ## Requirements
         To access this endpoint, you must have one of the following sets of roles:
            * `AUTH-BASIC` level
 
-      operationId: readOnePerson
+      operationId: readOneUser
       parameters:
         - in: path
-          name: personId
+          name: userId
           required: true
           example: "67fe6bac382b9445e80b404e"
           schema:
             type: string
       responses:
         200:
-          $ref: '#/components/responses/PersonReadResponse'
-      x-codegen-request-body-name: readPersonRequestBody
+          $ref: '#/components/responses/UserReadResponse'
+      x-codegen-request-body-name: readUserRequestBody
     put:
       tags:
-        - Person
-      summary: Update one person
+        - User
+      summary: Update one user
       security:
         - BearerAuth: []
         - OauthSecurityUser:
@@ -124,35 +126,35 @@ paths:
       description: |
         
         ## Responsibilities
-        Update one specific person
+        Update one specific user
 
         ---
         ## Requirements
         To access this endpoint, you must have one of the following sets of roles:
            * `AUTH-BASIC` level
 
-      operationId: updatePerson
+      operationId: updateUser
       parameters:
         - in: path
-          name: personId
+          name: userId
           required: true
           example: "67fe6bac382b9445e80b404e"
           schema:
             type: string
       requestBody:
-        description: Person Data
+        description: User Data
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/PersonRequestBody'
+              $ref: '#/components/schemas/UserRequestBody'
       responses:
         202:
-          $ref: '#/components/responses/PersonReadResponse'
-      x-codegen-request-body-name: updatePersonRequestBody
+          $ref: '#/components/responses/UserReadResponse'
+      x-codegen-request-body-name: updateUserRequestBody
     delete:
       tags:
-        - Person
-      summary: Delete one person
+        - User
+      summary: Delete one user
       security:
         - BearerAuth: []
         - OauthSecurityUser:
@@ -161,17 +163,17 @@ paths:
       description: |
         
         ## Responsibilities
-        Delete one specific person
+        Delete one specific user
 
         ---
         ## Requirements
         To access this endpoint, you must have one of the following sets of roles:
            * `AUTH-BASIC` level
 
-      operationId: deletePerson
+      operationId: deleteUser
       parameters:
         - in: path
-          name: personId
+          name: userId
           required: true
           example: "67fe6bac382b9445e80b404e"
           schema:
@@ -179,11 +181,11 @@ paths:
       responses:
         204:
           $ref: '#/components/responses/GenericsResponse'
-      x-codegen-request-body-name: deletePersonRequestBody
+      x-codegen-request-body-name: deleteUserRequestBody
     patch:
       tags:
-        - Person
-      summary: Patch one person
+        - User
+      summary: Patch one user
       security:
         - BearerAuth: []
         - OauthSecurityUser:
@@ -192,36 +194,37 @@ paths:
       description: |
         
         ## Responsibilities
-        Patch one specific detail in one specific person
+        Patch one specific detail in one specific user
 
         ---
         ## Requirements
         To access this endpoint, you must have one of the following sets of roles:
            * `AUTH-BASIC` level
 
-      operationId: patchPerson
+      operationId: patchUser
       parameters:
         - in: path
-          name: personId
+          name: userId
           required: true
           example: "67fe6bac382b9445e80b404e"
           schema:
             type: string
       requestBody:
-        description: Person Data
+        description: User Data
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/PersonPatchRequestBody'
+              $ref: '#/components/schemas/UserPatchRequestBody'
       responses:
         202:
           $ref: '#/components/responses/GenericsResponse'
-      x-codegen-request-body-name: patchPersonRequestBody
-  /person/{personId}/{fieldName}/{fieldValue}:
-    patch:
+      x-codegen-request-body-name: patchUserRequestBody
+  # Read One User - Me
+  /user/me:
+    get:
       tags:
-        - Person
-      summary: Patch one person using path parameters
+        - User
+      summary: Read one user
       security:
         - BearerAuth: []
         - OauthSecurityUser:
@@ -230,17 +233,50 @@ paths:
       description: |
         
         ## Responsibilities
-        Patch one specific detail in one specific person using only path parameters
+        Retrieves a list of Users
 
         ---
         ## Requirements
         To access this endpoint, you must have one of the following sets of roles:
            * `AUTH-BASIC` level
 
-      operationId: patchPersonByPath
+      operationId: readOneUserMe
       parameters:
         - in: path
-          name: personId
+          name: userId
+          required: true
+          example: "67fe6bac382b9445e80b404e"
+          schema:
+            type: string
+      responses:
+        200:
+          $ref: '#/components/responses/UserReadResponse'
+      x-codegen-request-body-name: readUserRequestBody
+  # Patch One User using Path Parameters
+  /user/{userId}/{fieldName}/{fieldValue}:
+    patch:
+      tags:
+        - User
+      summary: Patch one user using path parameters
+      security:
+        - BearerAuth: []
+        - OauthSecurityUser:
+            - write
+            - read
+      description: |
+        
+        ## Responsibilities
+        Patch one specific detail in one specific user using only path parameters
+
+        ---
+        ## Requirements
+        To access this endpoint, you must have one of the following sets of roles:
+           * `AUTH-BASIC` level
+
+      operationId: patchUserByPath
+      parameters:
+        - in: path
+          name: userId
           required: true
           example: "67fe6bac382b9445e80b404e"
           schema:
@@ -260,7 +296,7 @@ paths:
       responses:
         202:
           $ref: '#/components/responses/GenericsResponse'
-      x-codegen-request-body-name: patchPersonByPathRequestBody
+      x-codegen-request-body-name: patchUserByPathRequestBody
 
 components:
   securitySchemes:
@@ -301,7 +337,7 @@ components:
 #      description: Named field to sort results by
   schemas:
     ## Create, Update
-    PersonRequestBody:
+    UserRequestBody:
       required:
         - name
         - email
@@ -318,7 +354,7 @@ components:
           maxLength: 200
           example: john-smith@email.com
     ## Patch
-    PersonPatchRequestBody:
+    UserPatchRequestBody:
       type: object
       properties:
         name:
@@ -332,14 +368,14 @@ components:
           maxLength: 200
           example: john-smith@email.com
     ## Create Response
-    PersonCreatedResponseBody:
+    UserCreatedResponseBody:
       type: object
       properties:
         id:
           type: string
           example: 620eb80e0f9f7c26ba190dfc
     ## Read Response
-    PersonReadResponseBody:
+    UserReadResponseBody:
       type: object
       properties:
         id:
@@ -376,7 +412,7 @@ components:
           items:
             $ref: '#/components/schemas/PhoneResponseBody'
     ## Read Only One Response
-    PersonOnlyReadResponseBody:
+    UserOnlyReadResponseBody:
       type: object
       properties:
         id:
@@ -402,14 +438,14 @@ components:
           type: string
           example: "2025-04-20T21:18:23.524+00:00"
           x-field-extra-annotation: "@JsonInclude(JsonInclude.Include.NON_NULL)"
-    PersonsReadResponseBody:
+    UsersReadResponseBody:
       type: object
       properties:
-        persons:
-          description: List of Persons
+        users:
+          description: List of Users
           type: array
           items:
-            $ref: '#/components/schemas/PersonOnlyReadResponseBody'
+            $ref: '#/components/schemas/UserOnlyReadResponseBody'
     AddressResponseBody:
       type: object
       description: List of Address
@@ -480,24 +516,24 @@ components:
           type: string
           example: "Operation executed successfully"
   responses:
-    PersonCreatedResponse:
-      description: Person Created
+    UserCreatedResponse:
+      description: User Created
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/PersonCreatedResponseBody'
-    PersonReadResponse:
-      description: Person Read
+            $ref: '#/components/schemas/UserCreatedResponseBody'
+    UserReadResponse:
+      description: User Read
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/PersonReadResponseBody'
-    PersonsReadResponse:
-      description: Person Read
+            $ref: '#/components/schemas/UserReadResponseBody'
+    UsersReadResponse:
+      description: User Read
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/PersonsReadResponseBody'
+            $ref: '#/components/schemas/UsersReadResponseBody'
     GenericsResponse:
       description: Generics Response
       content:

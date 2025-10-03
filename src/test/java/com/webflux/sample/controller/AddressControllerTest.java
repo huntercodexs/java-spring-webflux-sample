@@ -2,13 +2,12 @@ package com.webflux.sample.controller;
 
 import com.webflux.sample.exception.InternalErrorExceptionReactor;
 import com.webflux.sample.exception.NotFoundExceptionReactor;
-import com.webflux.sample.repository.UserRepository;
+import com.webflux.sample.repository.LoginRepository;
 import com.webflux.sample.service.AddressService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.security.test.context.support.WithMockUser;
 import reactor.core.publisher.Mono;
 
@@ -26,32 +25,32 @@ class AddressControllerTest extends BaseControllerTest {
     private AddressService addressService;
 
     @MockBean
-    private UserRepository userRepository;
+    private LoginRepository loginRepository;
 
     @Test
-    @DisplayName("POST /addresses/{personId} - Should Create One Address for One Person")
+    @DisplayName("POST /addresses/{userId} - Should Create One Address for One User")
     @WithMockUser
     void shouldCreateOneAddressSuccessfully() {
         when(addressService.create(anyString(), any())).thenReturn(Mono.just(buildAddressCreatedResponseBodyForTests()));
 
         webTestClient.post()
-                .uri(BASE_URL+API_PREFIX+"/addresses/"+PERSON_ID)
+                .uri(BASE_URL+API_PREFIX+"/addresses/"+ USER_ID)
                 .contentType(APPLICATION_JSON)
                 .body(fromValue(buildAddressRequestBodyForTests()))
                 .exchange()
                 .expectStatus().isCreated()
                 .expectBody()
                 .consumeWith(System.out::println)
-                .jsonPath("$.id").isEqualTo(PERSON_ID);
+                .jsonPath("$.id").isEqualTo(USER_ID);
     }
 
     @Test
-    @DisplayName("POST /addresses/{personId} - Should NOT Create One Address")
+    @DisplayName("POST /addresses/{userId} - Should NOT Create One Address")
     void shouldNotCreateOneAddressSuccessfully() {
         when(addressService.create(anyString(), any())).thenReturn(Mono.error(new InternalErrorExceptionReactor("Some Error")));
 
         webTestClient.post()
-                .uri(BASE_URL+API_PREFIX+"/addresses/"+PERSON_ID)
+                .uri(BASE_URL+API_PREFIX+"/addresses/"+ USER_ID)
                 .contentType(APPLICATION_JSON)
                 .body(fromValue(buildAddressRequestBodyForTests()))
                 .exchange()
@@ -61,13 +60,13 @@ class AddressControllerTest extends BaseControllerTest {
     }
 
     @Test
-    @DisplayName("GET /addresses/{personId} - Should Read All Address for One Person")
+    @DisplayName("GET /addresses/{userId} - Should Read All Address for One User")
     @WithMockUser
-    void shouldReadAllAddressForOnePersonSuccessfully() {
+    void shouldReadAllAddressForOneUserSuccessfully() {
         when(addressService.find(anyString())).thenReturn(Mono.just(buildAddressReadResponseBodyForTests()));
 
         webTestClient.get()
-                .uri(BASE_URL+API_PREFIX+"/addresses/"+PERSON_ID)
+                .uri(BASE_URL+API_PREFIX+"/addresses/"+ USER_ID)
                 .exchange()
                 .expectStatus().isOk()
                 .expectBody()
@@ -75,13 +74,13 @@ class AddressControllerTest extends BaseControllerTest {
     }
 
     @Test
-    @DisplayName("GET /addresses/{personId} - Should NOT Read All Address for One Person")
+    @DisplayName("GET /addresses/{userId} - Should NOT Read All Address for One User")
     @WithMockUser
-    void shouldNotReadAllAddressForOnePersonSuccessfully() {
+    void shouldNotReadAllAddressForOneUserSuccessfully() {
         when(addressService.find(anyString())).thenReturn(Mono.error(new NotFoundExceptionReactor("Some Error")));
 
         webTestClient.get()
-                .uri(BASE_URL+API_PREFIX+"/addresses/"+PERSON_ID)
+                .uri(BASE_URL+API_PREFIX+"/addresses/"+ USER_ID)
                 .exchange()
                 .expectStatus().isNotFound()
                 .expectBody()

@@ -1,6 +1,6 @@
 package com.webflux.sample.controller;
 
-import com.webflux.sample.repository.UserRepository;
+import com.webflux.sample.repository.LoginRepository;
 import com.webflux.sample.service.ExceptionService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -18,7 +18,7 @@ class ExceptionControllerTest extends BaseControllerTest {
     private ExceptionService exceptionService;
 
     @MockBean
-    private UserRepository userRepository;
+    private LoginRepository loginRepository;
 
     @Test
     @DisplayName("GET /test/exception/custom - Should Test Exception Custom")

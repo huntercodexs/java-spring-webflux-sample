@@ -1,9 +1,10 @@
 package com.webflux.sample.builder;
 
 import com.webflux.sample.document.AddressDocument;
-import com.webflux.sample.document.PersonsDocument;
-import com.webflux.sample.document.PhonesDocument;
+import com.webflux.sample.document.UserDocument;
+import com.webflux.sample.document.PhoneDocument;
 import com.webflux.sample.model.*;
+import com.webflux.sample.user.model.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -13,10 +14,10 @@ import java.util.Set;
 import static com.webflux.sample.util.WebFluxUtil.datetimeUtil;
 import static java.util.Objects.isNull;
 
-public class PersonBuilder {
+public class UserBuilder {
 
-    public static PersonReadResponseBody buildPersonResponse(PersonsDocument document) {
-        PersonReadResponseBody response = new PersonReadResponseBody();
+    public static UserReadResponseBody buildUserResponse(UserDocument document) {
+        UserReadResponseBody response = new UserReadResponseBody();
         response.setId(document.getId());
         response.setName(document.getName());
         response.setEmail(document.getEmail());
@@ -29,8 +30,8 @@ public class PersonBuilder {
         return response;
     }
 
-    public static PersonOnlyReadResponseBody buildPersonOnlyResponse(PersonsDocument document) {
-        PersonOnlyReadResponseBody response = new PersonOnlyReadResponseBody();
+    public static UserOnlyReadResponseBody buildUesrOnlyResponse(UserDocument document) {
+        UserOnlyReadResponseBody response = new UserOnlyReadResponseBody();
         response.setId(document.getId());
         response.setName(document.getName());
         response.setEmail(document.getEmail());
@@ -63,7 +64,7 @@ public class PersonBuilder {
         return addressResponseBody;
     }
 
-    public static List<PhoneResponseBody> buildPhoneResponse(Set<PhonesDocument> phonesDocs) {
+    public static List<PhoneResponseBody> buildPhoneResponse(Set<PhoneDocument> phonesDocs) {
         if (isNull(phonesDocs) || phonesDocs.isEmpty()) return null;
         List<PhoneResponseBody> phoneResponseBody = new ArrayList<>();
 
@@ -83,17 +84,17 @@ public class PersonBuilder {
         return phoneResponseBody;
     }
 
-    public static PersonsDocument buildToPatch(PersonPatchRequestBody patchRequest, PersonsDocument personsDocument) {
+    public static UserDocument buildToPatch(UserPatchRequestBody patchRequest, UserDocument userDocument) {
         if (patchRequest.getName() != null) {
-            personsDocument.setName(patchRequest.getName());
+            userDocument.setName(patchRequest.getName());
         } else if (patchRequest.getEmail() != null) {
-            personsDocument.setEmail(patchRequest.getEmail());
+            userDocument.setEmail(patchRequest.getEmail());
         }
-        return personsDocument;
+        return userDocument;
     }
 
-    public static PersonsDocument buildAndPatchByPath(PersonsDocument document, String fieldName, Object fieldValue) {
-        Arrays.stream(PersonsDocument.class.getDeclaredFields()).anyMatch(field -> {
+    public static UserDocument buildAndPatchByPath(UserDocument document, String fieldName, Object fieldValue) {
+        Arrays.stream(UserDocument.class.getDeclaredFields()).anyMatch(field -> {
             if (field.getName().equals(fieldName)) {
                 try {
                     document.getClass().getDeclaredField(field.getName()).setAccessible(true);

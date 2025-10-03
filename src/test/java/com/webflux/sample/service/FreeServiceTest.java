@@ -20,9 +20,7 @@ class FreeServiceTest {
     @BeforeAll
     static void setUp() {
         BlockHound.install(
-                builder -> {
-                    builder.allowBlockingCallsInside("java.base/java.lang.Thread", "sleep");
-                }
+                builder -> builder.allowBlockingCallsInside("java.base/java.lang.Thread", "sleep")
         );
     }
 

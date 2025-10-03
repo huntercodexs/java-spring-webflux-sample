@@ -49,10 +49,10 @@ class AddressServiceImplTest {
         when(addressRepository.save(any(AddressDocument.class))).thenReturn(Mono.just(saveResult));
 
         var request = buildAddressRequestBodyForTests();
-        var result = addressService.create(PERSON_ID, Mono.just(request));
+        var result = addressService.create(USER_ID, Mono.just(request));
 
         StepVerifier.create(result)
-                .expectNextMatches(created -> created.getId().equals(PERSON_ID))
+                .expectNextMatches(created -> created.getId().equals(USER_ID))
                 .verifyComplete();
     }
 
@@ -62,7 +62,7 @@ class AddressServiceImplTest {
         when(addressRepository.save(any(AddressDocument.class))).thenReturn(Mono.error(new BadRequestExceptionReactor("Some Bad Request")));
 
         var request = buildAddressRequestBodyForTests();
-        var result = addressService.create(PERSON_ID, Mono.just(request));
+        var result = addressService.create(USER_ID, Mono.just(request));
 
         StepVerifier.create(result)
                 .expectErrorMatches(e -> e instanceof BadRequestExceptionReactor && e.getMessage().equals("Some Bad Request"))
@@ -73,9 +73,9 @@ class AddressServiceImplTest {
     @DisplayName("SERVICE - Should Find Address successfully")
     void shouldFindAddressSuccessfully() {
         var addressDocument = buildAddressDocumentForTests();
-        when(addressRepository.findAllByPersonIdAndActiveTrue(anyString())).thenReturn(Flux.just(addressDocument));
+        when(addressRepository.findAllByUserIdAndActiveTrue(anyString())).thenReturn(Flux.just(addressDocument));
 
-        var result = addressService.find(PERSON_ID);
+        var result = addressService.find(USER_ID);
 
         StepVerifier.create(result)
                 .expectNextMatches(find ->
@@ -88,9 +88,9 @@ class AddressServiceImplTest {
     @Test
     @DisplayName("SERVICE - Should NOT Find Address successfully")
     void shouldNotFindAddressSuccessfully() {
-        when(addressRepository.findAllByPersonIdAndActiveTrue(anyString())).thenReturn(Flux.error(new NotFoundExceptionReactor("Some Not Found")));
+        when(addressRepository.findAllByUserIdAndActiveTrue(anyString())).thenReturn(Flux.error(new NotFoundExceptionReactor("Some Not Found")));
 
-        var result = addressService.find(PERSON_ID);
+        var result = addressService.find(USER_ID);
 
         StepVerifier.create(result)
                 .expectErrorMatches(e -> e instanceof NotFoundExceptionReactor && e.getMessage().equals("Some Not Found"))

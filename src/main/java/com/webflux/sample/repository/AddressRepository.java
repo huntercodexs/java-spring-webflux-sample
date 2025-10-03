@@ -6,5 +6,5 @@ import reactor.core.publisher.Flux;
 
 public interface AddressRepository extends ReactiveMongoRepository<AddressDocument, String> {
     Flux<AddressDocument> findAllById(String id);
-    Flux<AddressDocument> findAllByPersonIdAndActiveTrue(String id);
+    Flux<AddressDocument> findAllByUserIdAndActiveTrue(String id);
 }

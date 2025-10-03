@@ -1,9 +1,9 @@
 package com.webflux.sample.dto;
 
 import com.webflux.sample.document.AddressDocument;
-import com.webflux.sample.document.PersonsDocument;
-import com.webflux.sample.document.PhonesDocument;
-import com.webflux.sample.model.PersonRequestBody;
+import com.webflux.sample.document.UserDocument;
+import com.webflux.sample.document.PhoneDocument;
+import com.webflux.sample.user.model.UserRequestBody;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,23 +16,23 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
-public class PersonDto {
+public class UserDto {
 
     private String id;
     private String name;
     private String email;
 
-    public PersonDto(PersonRequestBody request) {
+    public UserDto(UserRequestBody request) {
         this.name = request.getName();
         this.email = request.getEmail();
     }
 
-    public PersonDto(PersonsDocument personsDocument) {
+    public UserDto(UserDocument userDocument) {
     }
 
-    public Mono<PersonDto> withDetails(
+    public Mono<UserDto> withDetails(
             List<AddressDocument> addressDocumentList,
-            List<PhonesDocument> phonesDocumentList
+            List<PhoneDocument> phoneDocumentList
     ) {
         return Mono
                 .just(this)

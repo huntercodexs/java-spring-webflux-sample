@@ -1,7 +1,7 @@
 openapi: 3.0.2
 info:
-  title: OPENAPI-SAMPLE-STRUCTURE-PERSON-DETAILS
-  description: Example OpenAPI document for Person Details
+  title: USER-CONTACT-DETAILS
+  description: Example OpenAPI document for User Details
   contact:
     name: WebFlux Sample
     email: webflux.sample@email.com
@@ -21,11 +21,12 @@ tags:
   - name: Phones
 
 paths:
-  /addresses/{personId}:
+  # Create and Find Addresses
+  /addresses/{userId}:
     post:
       tags:
         - Addresses
-      summary: Create a new address for one person
+      summary: Create a new address for one user
       security:
         - BearerAuth: []
         - OauthSecurityUser:
@@ -45,7 +46,7 @@ paths:
       operationId: createAddress
       parameters:
         - in: path
-          name: personId
+          name: userId
           required: true
           example: "67fe6bac382b9445e80b404e"
           schema:
@@ -82,7 +83,7 @@ paths:
       operationId: findAddresses
       parameters:
         - in: path
-          name: personId
+          name: userId
           required: true
           example: "67fe6bac382b9445e80b404e"
           schema:
@@ -90,11 +91,12 @@ paths:
       responses:
         200:
           $ref: '#/components/responses/AddressReadResponse'
-  /phones/{personId}:
+  # Create and Find Phones
+  /phones/{userId}:
     post:
       tags:
         - Phone
-      summary: Create a new phone to the person
+      summary: Create a new phone to the user
       security:
         - BearerAuth: []
         - OauthSecurityUser:
@@ -113,7 +115,7 @@ paths:
       operationId: createPhone
       parameters:
         - in: path
-          name: personId
+          name: userId
           required: true
           example: "67fe6bac382b9445e80b404e"
           schema:
@@ -150,7 +152,7 @@ paths:
       operationId: findPhones
       parameters:
         - in: path
-          name: personId
+          name: userId
           required: true
           example: "67fe6bac382b9445e80b404e"
           schema:

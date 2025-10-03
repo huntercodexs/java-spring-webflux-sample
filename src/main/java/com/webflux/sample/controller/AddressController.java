@@ -1,10 +1,10 @@
 package com.webflux.sample.controller;
 
-import com.webflux.sample.model.AddressCreatedResponseBody;
-import com.webflux.sample.model.AddressReadResponseBody;
-import com.webflux.sample.model.AddressRequestBody;
-import com.webflux.sample.person_details.api.AddressesApi;
 import com.webflux.sample.service.AddressService;
+import com.webflux.sample.user_details.api.AddressesApi;
+import com.webflux.sample.user_details.model.AddressCreatedResponseBody;
+import com.webflux.sample.user_details.model.AddressReadResponseBody;
+import com.webflux.sample.user_details.model.AddressRequestBody;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.ResponseEntity;
@@ -23,14 +23,14 @@ public class AddressController implements BaseController, AddressesApi {
 
     @Override
     public Mono<ResponseEntity<AddressCreatedResponseBody>> createAddress(
-            String personId,
+            String userId,
             Mono<AddressRequestBody> addressRequestBody,
             ServerWebExchange exchange
     ) {
         log.info("[MARKER:createAddress] - START");
 
         Mono<ResponseEntity<AddressCreatedResponseBody>> response = addressService
-                .create(personId, addressRequestBody)
+                .create(userId, addressRequestBody)
                 .doFirst(() -> log.info(">>> Create address started"))
                 .doOnTerminate(() -> log.info(">>> Create address finished"))
                 .doOnSuccess(result -> log.info(">>> The createAddress result is {}", result))
@@ -44,12 +44,12 @@ public class AddressController implements BaseController, AddressesApi {
 
     @Override
     public Mono<ResponseEntity<AddressReadResponseBody>> findAddresses(
-            String personId,
+            String userId,
             ServerWebExchange exchange
     ) {
         log.info("[MARKER:findAddresses] - START");
 
-        Mono<ResponseEntity<AddressReadResponseBody>> response = addressService.find(personId)
+        Mono<ResponseEntity<AddressReadResponseBody>> response = addressService.find(userId)
                 .doFirst(() -> log.info(">>> findAddresses started"))
                 .doOnTerminate(() -> log.info(">>> findAddresses finished"))
                 .doOnSuccess(result -> log.info(">>> The findAddresses result is {}", result))

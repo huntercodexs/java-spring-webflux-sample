@@ -355,10 +355,10 @@
 			]
 		},
 		{
-			"name": "Person",
+			"name": "User",
 			"item": [
 				{
-					"name": "Create Person",
+					"name": "Create User",
 					"request": {
 						"auth": {
 							"type": "basic",
@@ -387,7 +387,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8080/webflux-sample/v1/person",
+							"raw": "http://localhost:8080/webflux-sample/v1/user",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -396,7 +396,7 @@
 							"path": [
 								"webflux-sample",
 								"v1",
-								"person"
+								"user"
 							]
 						}
 					},
@@ -465,12 +465,12 @@
 					"response": []
 				},
 				{
-					"name": "Read Persons",
+					"name": "Read Users",
 					"request": {
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/webflux-sample/v1/person",
+							"raw": "http://localhost:8080/webflux-sample/v1/user",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -479,14 +479,14 @@
 							"path": [
 								"webflux-sample",
 								"v1",
-								"person"
+								"user"
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "Read Person",
+					"name": "Read User",
 					"request": {
 						"auth": {
 							"type": "basic",
@@ -506,7 +506,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/webflux-sample/v1/person/68093a2f5f5e40392facb4d3",
+							"raw": "http://localhost:8080/webflux-sample/v1/user/68093a2f5f5e40392facb4d3",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -515,7 +515,7 @@
 							"path": [
 								"webflux-sample",
 								"v1",
-								"person",
+								"user",
 								"68093a2f5f5e40392facb4d3"
 							]
 						}
@@ -567,7 +567,7 @@
 					"response": []
 				},
 				{
-					"name": "Update Person",
+					"name": "Update User",
 					"request": {
 						"method": "PUT",
 						"header": [],
@@ -581,7 +581,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8080/webflux-sample/v1/person/68093a2f5f5e40392facb4d3",
+							"raw": "http://localhost:8080/webflux-sample/v1/user/68093a2f5f5e40392facb4d3",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -590,7 +590,7 @@
 							"path": [
 								"webflux-sample",
 								"v1",
-								"person",
+								"user",
 								"68093a2f5f5e40392facb4d3"
 							]
 						}
@@ -598,12 +598,12 @@
 					"response": []
 				},
 				{
-					"name": "Delete Person",
+					"name": "Delete User",
 					"request": {
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/webflux-sample/v1/person/68093dad44517b4a7f12598b",
+							"raw": "http://localhost:8080/webflux-sample/v1/user/68093dad44517b4a7f12598b",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -612,7 +612,7 @@
 							"path": [
 								"webflux-sample",
 								"v1",
-								"person",
+								"user",
 								"68093dad44517b4a7f12598b"
 							]
 						}
@@ -620,7 +620,7 @@
 					"response": []
 				},
 				{
-					"name": "Patch Person",
+					"name": "Patch User",
 					"request": {
 						"method": "PATCH",
 						"header": [],
@@ -634,7 +634,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8080/webflux-sample/v1/person/68093a2f5f5e40392facb4d3",
+							"raw": "http://localhost:8080/webflux-sample/v1/user/68093a2f5f5e40392facb4d3",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -643,7 +643,7 @@
 							"path": [
 								"webflux-sample",
 								"v1",
-								"person",
+								"user",
 								"68093a2f5f5e40392facb4d3"
 							]
 						}
@@ -651,7 +651,7 @@
 					"response": []
 				},
 				{
-					"name": "Patch Person By Path",
+					"name": "Patch User By Path",
 					"request": {
 						"method": "PATCH",
 						"header": [],
@@ -665,7 +665,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8080/webflux-sample/v1/person/68093a2f5f5e40392facb4d3/email/beatriz@email.com",
+							"raw": "http://localhost:8080/webflux-sample/v1/user/68093a2f5f5e40392facb4d3/email/beatriz@email.com",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -674,7 +674,7 @@
 							"path": [
 								"webflux-sample",
 								"v1",
-								"person",
+								"user",
 								"68093a2f5f5e40392facb4d3",
 								"email",
 								"beatriz@email.com"

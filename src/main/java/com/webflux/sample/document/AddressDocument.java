@@ -18,7 +18,7 @@ public class AddressDocument {
 
     @Id
     private String id;
-    private String personId;
+    private String userId;
     private String street;
     private int number;
     private String zipcode;

@@ -53,7 +53,7 @@ public class SecurityConfig {
                 .authorizeExchange((authorize) ->
                         authorize
                                 .pathMatchers(
-                                        "/webflux-sample/v1/person/**",
+                                        "/webflux-sample/v1/users/**",
                                         "/webflux-sample/v1/addresses/**",
                                         "/webflux-sample/v1/phones/**",
                                         "/webflux-sample/v1/test/webclient/get"

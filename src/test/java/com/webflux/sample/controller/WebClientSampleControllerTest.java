@@ -1,7 +1,7 @@
 package com.webflux.sample.controller;
 
 import com.webflux.sample.exception.BadRequestExceptionReactor;
-import com.webflux.sample.repository.UserRepository;
+import com.webflux.sample.repository.LoginRepository;
 import com.webflux.sample.service.WebClientSampleService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -20,7 +20,7 @@ class WebClientSampleControllerTest extends BaseControllerTest {
     private WebClientSampleService webClientSampleService;
 
     @MockBean
-    private UserRepository userRepository;
+    private LoginRepository loginRepository;
 
     @Test
     @DisplayName("GET /test/webclient/get - Should Execute One HTTP GET Request Successfully")

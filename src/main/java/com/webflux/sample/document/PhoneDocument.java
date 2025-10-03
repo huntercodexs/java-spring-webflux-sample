@@ -13,12 +13,12 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Document(collection = "Phones")
-public class PhonesDocument {
+@Document(collection = "Phone")
+public class PhoneDocument {
 
     @Id
     private String id;
-    private String personId;
+    private String userId;
     private String phoneNumber;
     private String phoneType;
     @Builder.Default

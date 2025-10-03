@@ -62,6 +62,22 @@
             <artifactId>spring-boot-starter-logging</artifactId>
         </dependency>-->
 
+        <!--FEIGN-->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-openfeign</artifactId>
+        </dependency>
+
+        <!--CIRCUIT BREAKER-->
+        <dependency>
+            <groupId>io.github.resilience4j</groupId>
+            <artifactId>resilience4j-spring-boot3</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.github.resilience4j</groupId>
+            <artifactId>resilience4j-metrics</artifactId>
+        </dependency>
+
         <!--SPRING SECURITY-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -213,6 +229,18 @@
 
     </dependencies>
 
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>2023.0.1</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
     <build>
         <resources>
             <resource>
@@ -259,7 +287,7 @@
                 <configuration>
                     <parallel>none</parallel>
                     <argLine>
-                        <!--Java HotSpot(TM) 64-Bit Server VM warning: Sharing is only supported for boot loader classes because bootstrap classpath has been appended-->
+                        <!--Java HotSpot(TM) 64-Bit Server VM warning: Sharing is only supported for bootloader classes because bootstrap classpath has been appended-->
                         -ea
                         -Xshare:off
                         -XX:+EnableDynamicAgentLoading
@@ -299,17 +327,43 @@
                 <groupId>org.openapitools</groupId>
                 <artifactId>openapi-generator-maven-plugin</artifactId>
                 <version>7.10.0</version>
+                <!--Feign Client Generation-->
                 <executions>
                     <execution>
-                        <id>person</id>
+                        <id>user-credentials-integration</id>
                         <goals>
                             <goal>generate</goal>
                         </goals>
                         <configuration>
-                            <inputSpec>src/main/resources/openapi/OPENAPI-SAMPLE-STRUCTURE-PERSON.yaml</inputSpec>
+                            <inputSpec>src/main/resources/feign/openapi/USER-CREDENTIALS-INTEGRATION.yaml</inputSpec>
+                            <modelPackage>com.webflux.sample.user-credentials-integration.model</modelPackage>
+                            <apiPackage>com.webflux.sample.user-credentials-integration.api</apiPackage>
                             <generatorName>spring</generatorName>
-                            <modelPackage>com.webflux.sample.model</modelPackage>
-                            <apiPackage>com.webflux.sample.person.api</apiPackage>
+                            <library>spring-cloud</library>
+                            <templateDirectory>src/main/resources/feign/templates</templateDirectory>
+                            <configHelp/>
+                            <configOptions>
+                                <useJakartaEe>true</useJakartaEe>
+                                <useSpringBoot3>true</useSpringBoot3>
+                                <performBeanValidation>true</performBeanValidation>
+                                <sourceFolder>gen</sourceFolder>
+                                <java8>true</java8>
+                                <useTags>true</useTags>
+                                <title>user-credentials-integration</title> <!-- Used for feign bean name and uri property-->
+                            </configOptions>
+                        </configuration>
+                    </execution>
+                    <!--Openapi-->
+                    <execution>
+                        <id>user</id>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <configuration>
+                            <inputSpec>src/main/resources/openapi/USER.yaml</inputSpec>
+                            <generatorName>spring</generatorName>
+                            <modelPackage>com.webflux.sample.user.model</modelPackage>
+                            <apiPackage>com.webflux.sample.user.api</apiPackage>
                             <configOptions>
                                 <useJakartaEe>true</useJakartaEe>
                                 <useSpringBoot3>true</useSpringBoot3>
@@ -327,15 +381,15 @@
                         </configuration>
                     </execution>
                     <execution>
-                        <id>person_details</id>
+                        <id>user_details</id>
                         <goals>
                             <goal>generate</goal>
                         </goals>
                         <configuration>
-                            <inputSpec>src/main/resources/openapi/OPENAPI-SAMPLE-STRUCTURE-PERSON-DETAILS.yaml</inputSpec>
+                            <inputSpec>src/main/resources/openapi/USER-CONTACT-DETAILS.yaml</inputSpec>
                             <generatorName>spring</generatorName>
-                            <modelPackage>com.webflux.sample.model</modelPackage>
-                            <apiPackage>com.webflux.sample.person-details.api</apiPackage>
+                            <modelPackage>com.webflux.sample.user_details.model</modelPackage>
+                            <apiPackage>com.webflux.sample.user_details.api</apiPackage>
                             <configOptions>
                                 <useJakartaEe>true</useJakartaEe>
                                 <useSpringBoot3>true</useSpringBoot3>

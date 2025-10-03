@@ -1,7 +1,7 @@
 package com.webflux.sample.service.impl;
 
-import com.webflux.sample.model.PersonRequestBody;
 import com.webflux.sample.service.SecurityService;
+import com.webflux.sample.user.model.UserRequestBody;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
@@ -11,7 +11,7 @@ public class SecurityServiceImpl implements SecurityService {
     private SecurityService securityService;
 
     @Override
-    public Mono<PersonRequestBody> fakeAuthentication() {
+    public Mono<UserRequestBody> fakeAuthentication() {
         return Mono.empty();
     }
 

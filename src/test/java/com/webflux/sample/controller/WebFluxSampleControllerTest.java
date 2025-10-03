@@ -1,6 +1,6 @@
 package com.webflux.sample.controller;
 
-import com.webflux.sample.repository.UserRepository;
+import com.webflux.sample.repository.LoginRepository;
 import com.webflux.sample.service.WebFluxSampleService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -19,7 +19,7 @@ class WebFluxSampleControllerTest extends BaseControllerTest {
     private WebFluxSampleService webFluxSampleService;
 
     @MockBean
-    private UserRepository userRepository;
+    private LoginRepository loginRepository;
 
     @Test
     @DisplayName("GET /test/mono - Should Execute WebFlux Sample Mono Successfully")

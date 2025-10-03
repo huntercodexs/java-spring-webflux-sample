@@ -1,12 +1,12 @@
 package com.webflux.sample.service.impl;
 
-import com.webflux.sample.document.PhonesDocument;
-import com.webflux.sample.model.PhoneCreatedResponseBody;
-import com.webflux.sample.model.PhoneReadResponseBody;
-import com.webflux.sample.model.PhoneRequestBody;
-import com.webflux.sample.model.PhonesItemsResponseBody;
-import com.webflux.sample.repository.PhonesRepository;
+import com.webflux.sample.document.PhoneDocument;
+import com.webflux.sample.repository.PhoneRepository;
 import com.webflux.sample.service.PhoneService;
+import com.webflux.sample.user_details.model.PhoneCreatedResponseBody;
+import com.webflux.sample.user_details.model.PhoneReadResponseBody;
+import com.webflux.sample.user_details.model.PhoneRequestBody;
+import com.webflux.sample.user_details.model.PhonesItemsResponseBody;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
@@ -22,17 +22,17 @@ import static com.webflux.sample.util.WebFluxUtil.datetimeUtil;
 @AllArgsConstructor
 public class PhoneServiceImpl implements PhoneService {
 
-    private PhonesRepository phonesRepository;
+    private PhoneRepository phoneRepository;
 
     @Override
-    public Mono<PhoneCreatedResponseBody> create(String personId, Mono<PhoneRequestBody> createPhoneRequest) {
+    public Mono<PhoneCreatedResponseBody> create(String userId, Mono<PhoneRequestBody> createPhoneRequest) {
         return createPhoneRequest.flatMap(phoneRequest -> {
-            PhonesDocument address = new PhonesDocument();
-            address.setPersonId(personId);
+            PhoneDocument address = new PhoneDocument();
+            address.setUserId(userId);
             address.setPhoneNumber(phoneRequest.getPhoneNumber());
             address.setPhoneType(phoneRequest.getPhoneType().getValue());
 
-            return phonesRepository.save(address)
+            return phoneRepository.save(address)
                     .doFirst(() -> log.info(">>> Save started..."))
                     .doOnTerminate(() -> log.info(">>> Save finished..."))
                     .doOnSuccess(success -> log.info("The Save result is {}", success))
@@ -46,8 +46,8 @@ public class PhoneServiceImpl implements PhoneService {
     }
 
     @Override
-    public Mono<PhoneReadResponseBody> find(String personId) {
-        return phonesRepository.findAllByPersonIdAndActiveTrue(personId)
+    public Mono<PhoneReadResponseBody> find(String userId) {
+        return phoneRepository.findAllByUserIdAndActiveTrue(userId)
                 .doFirst(() -> log.info(">>> Find started..."))
                 .doOnTerminate(() -> log.info(">>> Find finished..."))
                 .collectList()
@@ -57,9 +57,9 @@ public class PhoneServiceImpl implements PhoneService {
                 .map(phones -> phones);
     }
 
-    private Mono<PhoneReadResponseBody> buildResponse(List<PhonesDocument> phonesDocumentList) {
+    private Mono<PhoneReadResponseBody> buildResponse(List<PhoneDocument> phoneDocumentList) {
         List<PhonesItemsResponseBody> addressList = new ArrayList<>();
-        phonesDocumentList.forEach(addressDocument -> {
+        phoneDocumentList.forEach(addressDocument -> {
             addressList.add(this.buildPhonesItemsResponse(addressDocument));
         });
         PhoneReadResponseBody phonesRead = new PhoneReadResponseBody();
@@ -67,7 +67,7 @@ public class PhoneServiceImpl implements PhoneService {
         return Mono.just(phonesRead);
     }
 
-    private PhonesItemsResponseBody buildPhonesItemsResponse(PhonesDocument document) {
+    private PhonesItemsResponseBody buildPhonesItemsResponse(PhoneDocument document) {
         PhonesItemsResponseBody response = new PhonesItemsResponseBody();
         response.setPhoneNumber(document.getPhoneNumber());
         response.setPhoneType(document.getPhoneType());
