@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ServerWebExchange;
 
 @Log4j2
 @RestController
@@ -23,8 +24,10 @@ public class FreeController implements BaseController {
     )
     public String returnValuePath(
             @Parameter(name = "testValue", description = "", required = true, in = ParameterIn.PATH)
-            @PathVariable("testValue") String testValue
+            @PathVariable("testValue") String testValue,
+            ServerWebExchange exchange
     ) {
+        freeService.tryConnection(exchange);
         return "The value for tests is: " + testValue;
     }
 

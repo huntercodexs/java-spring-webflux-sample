@@ -8,10 +8,12 @@ import lombok.AllArgsConstructor;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 import org.springframework.data.domain.Page;
-import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
 import org.springframework.data.mongodb.core.aggregation.*;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,10 +35,36 @@ public class UserPurchaseRepositoryCustomImpl implements UserPurchaseRepositoryC
     private final static String ACTIVE_FIELD = "active";
     private final static String EMAIL_FIELD = "email";
 
-    private final MongoTemplate mongoTemplate;
+    private final ReactiveMongoTemplate mongoTemplate;
+
+//    @Override // Old implementation for thread based (non-reactive) MongoTemplate
+//    public Page<UserDocument> findUsersWithPurchases(UserSearch userSearch) {
+//
+//        Criteria criteria = new Criteria();
+//        criteria.andOperator(criteriaListForUser(userSearch));
+//        MatchOperation matchForUser = Aggregation.match(criteria);
+//
+//        LookupOperation lookup = Aggregation.lookup(USER_PURCHASE_COLLECTION, PURCHASE_ID_REF, ID_FIELD, PURCHASES_SUMMARY_ALIAS);
+//
+//        MatchOperation matchForUserPurchases = Aggregation.match(criteriaForUserPurchases(criteria, userSearch));
+//        SkipOperation skip = Aggregation.skip((long) userSearch.getOffset());
+//        LimitOperation limit = Aggregation.limit(userSearch.getLimit());
+//        Aggregation aggregation = Aggregation.newAggregation(matchForUser, lookup, matchForUserPurchases, skip, limit);
+//
+//        List<UserDocument> users = mongoTemplate.aggregate(aggregation, USER_COLLECTION, UserDocument.class).getMappedResults();
+//
+//        Aggregation countAggregation = Aggregation.newAggregation(matchForUser, matchForUserPurchases, Aggregation.count().as("total"));
+//
+//        AggregationResults<Document> countResult = mongoTemplate.aggregate(countAggregation, USER_COLLECTION, Document.class);
+//
+//        long total = Optional.ofNullable(countResult.getUniqueMappedResult())
+//                .map(d -> d.getInteger("total")).orElse(0);
+//
+//        return new CurrentPage<>(users, userSearch.getLimit(), userSearch.getOffset(), total);
+//    }
 
     @Override
-    public Page<UserDocument> findUsersWithPurchases(UserSearch userSearch) {
+    public Mono<Page<UserDocument>> findUsersWithPurchases(UserSearch userSearch) {
 
         Criteria criteria = new Criteria();
         criteria.andOperator(criteriaListForUser(userSearch));
@@ -49,16 +77,19 @@ public class UserPurchaseRepositoryCustomImpl implements UserPurchaseRepositoryC
         LimitOperation limit = Aggregation.limit(userSearch.getLimit());
         Aggregation aggregation = Aggregation.newAggregation(matchForUser, lookup, matchForUserPurchases, skip, limit);
 
-        List<UserDocument> users = mongoTemplate.aggregate(aggregation, USER_COLLECTION, UserDocument.class).getMappedResults();
+        Flux<UserDocument> usersFlux = mongoTemplate.aggregate(aggregation, USER_COLLECTION, UserDocument.class);
 
         Aggregation countAggregation = Aggregation.newAggregation(matchForUser, matchForUserPurchases, Aggregation.count().as("total"));
 
-        AggregationResults<Document> countResult = mongoTemplate.aggregate(countAggregation, USER_COLLECTION, Document.class);
+        Mono<Long> totalMono = mongoTemplate.aggregate(countAggregation, USER_COLLECTION, Document.class)
+                .next()
+                .map(d -> d.getInteger("total", 0))
+                .map(Integer::longValue)
+                .defaultIfEmpty(0L);
 
-        long total = Optional.ofNullable(countResult.getUniqueMappedResult())
-                .map(d -> d.getInteger("total")).orElse(0);
-
-        return new CurrentPage<>(users, userSearch.getLimit(), userSearch.getOffset(), total);
+        return usersFlux.collectList()
+                .zipWith(totalMono)
+                .map(tuple -> new CurrentPage<>(tuple.getT1(), userSearch.getLimit(), userSearch.getOffset(), tuple.getT2()));
     }
 
     private Criteria[] criteriaListForUser(UserSearch userSearch) {

@@ -234,7 +234,7 @@
             <dependency>
                 <groupId>org.springframework.cloud</groupId>
                 <artifactId>spring-cloud-dependencies</artifactId>
-                <version>2023.0.1</version>
+                <version>2023.0.3</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -329,6 +329,34 @@
                 <version>7.10.0</version>
                 <!--Feign Client Generation-->
                 <executions>
+<!--                    <execution>-->
+<!--                        <id>user-credentials-integration</id>-->
+<!--                        <goals>-->
+<!--                            <goal>generate</goal>-->
+<!--                        </goals>-->
+<!--                        <configuration>-->
+<!--                            <inputSpec>src/main/resources/feign/openapi/USER-CREDENTIALS-INTEGRATION.yaml</inputSpec>-->
+<!--                            <modelPackage>com.webflux.sample.user-credentials-integration.model</modelPackage>-->
+<!--                            <apiPackage>com.webflux.sample.user-credentials-integration.api</apiPackage>-->
+<!--                            <generatorName>spring</generatorName>-->
+<!--                            <library>spring-cloud</library>-->
+<!--                            <templateDirectory>src/main/resources/feign/templates</templateDirectory>-->
+<!--                            <configHelp/>-->
+<!--                            <configOptions>-->
+<!--                                <useJakartaEe>true</useJakartaEe>-->
+<!--                                <useSpringBoot3>true</useSpringBoot3>-->
+<!--                                <performBeanValidation>true</performBeanValidation>-->
+<!--                                <sourceFolder>gen</sourceFolder>-->
+<!--                                <java8>true</java8>-->
+<!--                                <useTags>true</useTags>-->
+<!--                                <generatedSupportingFiles>false</generatedSupportingFiles>-->
+<!--                                <interfaceOnly>true</interfaceOnly>-->
+<!--                                <skipDefaultInterface>true</skipDefaultInterface>-->
+<!--                                <title>user-credentials-integration</title> &lt;!&ndash; Used for feign bean name and uri property&ndash;&gt;-->
+<!--                            </configOptions>-->
+<!--                        </configuration>-->
+<!--                    </execution>-->
+                    <!--Feign API Generation-->
                     <execution>
                         <id>user-credentials-integration</id>
                         <goals>
@@ -339,7 +367,7 @@
                             <modelPackage>com.webflux.sample.user-credentials-integration.model</modelPackage>
                             <apiPackage>com.webflux.sample.user-credentials-integration.api</apiPackage>
                             <generatorName>spring</generatorName>
-                            <library>spring-cloud</library>
+<!--                            <library>spring-cloud</library>-->
                             <templateDirectory>src/main/resources/feign/templates</templateDirectory>
                             <configHelp/>
                             <configOptions>
@@ -347,8 +375,11 @@
                                 <useSpringBoot3>true</useSpringBoot3>
                                 <performBeanValidation>true</performBeanValidation>
                                 <sourceFolder>gen</sourceFolder>
-                                <java8>true</java8>
                                 <useTags>true</useTags>
+                                <reactive>true</reactive>
+                                <generatedSupportingFiles>false</generatedSupportingFiles>
+                                <interfaceOnly>true</interfaceOnly>
+                                <skipDefaultInterface>true</skipDefaultInterface>
                                 <title>user-credentials-integration</title> <!-- Used for feign bean name and uri property-->
                             </configOptions>
                         </configuration>

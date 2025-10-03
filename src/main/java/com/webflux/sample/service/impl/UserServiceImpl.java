@@ -8,9 +8,6 @@ import com.webflux.sample.repository.PhoneRepository;
 import com.webflux.sample.repository.UserRepository;
 import com.webflux.sample.service.UserService;
 import com.webflux.sample.user.model.*;
-import com.webflux.sample.user_credentials_integration.api.UserCredentialsApiClient;
-import com.webflux.sample.user_credentials_integration.model.UserCredentialCreateRequest;
-import com.webflux.sample.user_credentials_integration.model.UserCredentialUpdateRequest;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
@@ -31,7 +28,7 @@ public class UserServiceImpl implements UserService {
     private AddressRepository addressRepository;
     private PhoneRepository phoneRepository;
 
-    private final UserCredentialsApiClient userCredentialsApiClient;
+    //private final UserCredentialsApiClient userCredentialsApiClient;
 
     @Override
     public Mono<UserCreatedResponseBody> create(Mono<UserRequestBody> createUserRequest) {
@@ -197,33 +194,33 @@ public class UserServiceImpl implements UserService {
         return Mono.just(userDocument).map(UserBuilder::buildUserResponse);
     }
 
-    private Mono<Void> userCredentialCreateIntegrationClient() {
-        UserCredentialCreateRequest request = new UserCredentialCreateRequest();
-        userCredentialsApiClient.createCredential(request);
-        return null;
-    }
-
-    private Mono<Void> userCredentialGetIntegrationClient() {
-        UserCredentialCreateRequest request = new UserCredentialCreateRequest();
-        userCredentialsApiClient.getCredential("12345");
-        return null;
-    }
-
-    private Mono<Void> userCredentialUpdateIntegrationClient() {
-        UserCredentialUpdateRequest request = new UserCredentialUpdateRequest();
-        userCredentialsApiClient.putCredential("12345", request);
-        return null;
-    }
-
-    private Mono<Void> userCredentialPatchIntegrationClient() {
-        UserCredentialUpdateRequest request = new UserCredentialUpdateRequest();
-        userCredentialsApiClient.patchCredential("12345", request);
-        return null;
-    }
-
-    private Mono<Void> userCredentialDeleteIntegrationClient() {
-        userCredentialsApiClient.removeCredential("12345");
-        return null;
-    }
+//    private Mono<Void> userCredentialCreateIntegrationClient() {
+//        UserCredentialCreateRequest request = new UserCredentialCreateRequest();
+//        userCredentialsApiClient.createCredential(request);
+//        return null;
+//    }
+//
+//    private Mono<Void> userCredentialGetIntegrationClient() {
+//        UserCredentialCreateRequest request = new UserCredentialCreateRequest();
+//        userCredentialsApiClient.getCredential("12345");
+//        return null;
+//    }
+//
+//    private Mono<Void> userCredentialUpdateIntegrationClient() {
+//        UserCredentialUpdateRequest request = new UserCredentialUpdateRequest();
+//        userCredentialsApiClient.putCredential("12345", request);
+//        return null;
+//    }
+//
+//    private Mono<Void> userCredentialPatchIntegrationClient() {
+//        UserCredentialUpdateRequest request = new UserCredentialUpdateRequest();
+//        userCredentialsApiClient.patchCredential("12345", request);
+//        return null;
+//    }
+//
+//    private Mono<Void> userCredentialDeleteIntegrationClient() {
+//        userCredentialsApiClient.removeCredential("12345");
+//        return null;
+//    }
 
 }
