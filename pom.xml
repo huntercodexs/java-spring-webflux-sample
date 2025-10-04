@@ -357,33 +357,33 @@
 <!--                        </configuration>-->
 <!--                    </execution>-->
                     <!--Feign API Generation-->
-                    <execution>
-                        <id>user-credentials-integration</id>
-                        <goals>
-                            <goal>generate</goal>
-                        </goals>
-                        <configuration>
-                            <inputSpec>src/main/resources/feign/openapi/USER-CREDENTIALS-INTEGRATION.yaml</inputSpec>
-                            <modelPackage>com.webflux.sample.user-credentials-integration.model</modelPackage>
-                            <apiPackage>com.webflux.sample.user-credentials-integration.api</apiPackage>
-                            <generatorName>spring</generatorName>
-<!--                            <library>spring-cloud</library>-->
-                            <templateDirectory>src/main/resources/feign/templates</templateDirectory>
-                            <configHelp/>
-                            <configOptions>
-                                <useJakartaEe>true</useJakartaEe>
-                                <useSpringBoot3>true</useSpringBoot3>
-                                <performBeanValidation>true</performBeanValidation>
-                                <sourceFolder>gen</sourceFolder>
-                                <useTags>true</useTags>
-                                <reactive>true</reactive>
-                                <generatedSupportingFiles>false</generatedSupportingFiles>
-                                <interfaceOnly>true</interfaceOnly>
-                                <skipDefaultInterface>true</skipDefaultInterface>
-                                <title>user-credentials-integration</title> <!-- Used for feign bean name and uri property-->
-                            </configOptions>
-                        </configuration>
-                    </execution>
+<!--                    <execution>-->
+<!--                        <id>user-credentials-integration</id>-->
+<!--                        <goals>-->
+<!--                            <goal>generate</goal>-->
+<!--                        </goals>-->
+<!--                        <configuration>-->
+<!--                            <inputSpec>src/main/resources/feign/openapi/USER-CREDENTIALS-INTEGRATION.yaml</inputSpec>-->
+<!--                            <modelPackage>com.webflux.sample.user-credentials-integration.model</modelPackage>-->
+<!--                            <apiPackage>com.webflux.sample.user-credentials-integration.api</apiPackage>-->
+<!--                            <generatorName>spring</generatorName>-->
+<!--&lt;!&ndash;                            <library>spring-cloud</library>&ndash;&gt;-->
+<!--                            <templateDirectory>src/main/resources/feign/templates</templateDirectory>-->
+<!--                            <configHelp/>-->
+<!--                            <configOptions>-->
+<!--                                <useJakartaEe>true</useJakartaEe>-->
+<!--                                <useSpringBoot3>true</useSpringBoot3>-->
+<!--                                <performBeanValidation>true</performBeanValidation>-->
+<!--                                <sourceFolder>gen</sourceFolder>-->
+<!--                                <useTags>true</useTags>-->
+<!--                                <reactive>true</reactive>-->
+<!--                                <generatedSupportingFiles>false</generatedSupportingFiles>-->
+<!--                                <interfaceOnly>true</interfaceOnly>-->
+<!--                                <skipDefaultInterface>true</skipDefaultInterface>-->
+<!--                                <title>user-credentials-integration</title> &lt;!&ndash; Used for feign bean name and uri property&ndash;&gt;-->
+<!--                            </configOptions>-->
+<!--                        </configuration>-->
+<!--                    </execution>-->
                     <!--Openapi-->
                     <execution>
                         <id>user</id>

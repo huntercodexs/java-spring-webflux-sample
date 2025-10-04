@@ -27,7 +27,6 @@ public class FreeController implements BaseController {
             @PathVariable("testValue") String testValue,
             ServerWebExchange exchange
     ) {
-        freeService.tryConnection(exchange);
         return "The value for tests is: " + testValue;
     }
 
