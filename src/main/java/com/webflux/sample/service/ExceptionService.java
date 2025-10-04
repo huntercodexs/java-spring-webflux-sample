@@ -68,7 +68,7 @@ public class ExceptionService {
     public Mono<Object> notFoundException() {
         return Mono.just(new Object())
                 .map(mapper -> {
-                    throw new NotFoundException("NotFoundException");
+                    throw new NotFoundException("NotFoundException-Swagger");
                 });
     }
 

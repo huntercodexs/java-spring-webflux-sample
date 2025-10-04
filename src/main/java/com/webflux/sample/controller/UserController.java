@@ -38,4 +38,17 @@ public class UserController implements BaseController {
                 .map(response -> ResponseEntity.status(OK).body(response));
     }
 
+    @RequestMapping(method = RequestMethod.POST, value = "/generate/user/admin")
+    public Mono<Void> generateAdmin() {
+        UserRequest userRequest = new UserRequest();
+        userRequest.setUsername("admin");
+        userRequest.setPassword("admin");
+
+        Mono<UserRequest> userRequestMono = Mono.just(userRequest);
+
+        return userService.create(userRequestMono)
+                .doFirst(() -> log.info("Admin Create is starting {}", userRequest))
+                .map(body -> ResponseEntity.status(OK).build()).then();
+    }
+
 }

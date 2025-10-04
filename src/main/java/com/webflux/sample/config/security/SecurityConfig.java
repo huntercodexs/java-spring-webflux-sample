@@ -62,6 +62,7 @@ public class SecurityConfig {
                 )
                 .httpBasic(withDefaults())
                 .authenticationManager(authenticationManager);
+                //.oauth2ResourceServer(oauth2 -> oauth2.jwt(withDefaults()));
         return http.build();
     }
 

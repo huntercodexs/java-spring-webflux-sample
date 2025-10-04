@@ -47,7 +47,7 @@ public class ExceptionController implements BaseController {
     @RequestMapping(method = RequestMethod.GET, value = "/test/exception/not-found-reactor1")
     @ResponseBody
     public Mono<ResponseEntity<Object>> testExceptionNotFoundReactor(ServerWebExchange exchange) {
-        throw new NotFoundExceptionReactor("Not Found for Reactor", 123, "8540958349058439085490");
+        throw new NotFoundExceptionReactor("Not Found for Reactor1", 123, "8540958349058439085490");
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/test/exception/internal-exception-reactor")

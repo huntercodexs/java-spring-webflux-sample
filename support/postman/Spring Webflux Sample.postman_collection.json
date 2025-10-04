@@ -16,7 +16,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/webflux-sample/v1/test/value-path/my%20name%20is%20test",
+							"raw": "http://localhost:8080/webflux-sample/v1/test-value-path/my%20name%20is%20test",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -25,8 +25,7 @@
 							"path": [
 								"webflux-sample",
 								"v1",
-								"test",
-								"value-path",
+								"test-value-path",
 								"my%20name%20is%20test"
 							]
 						}
@@ -34,12 +33,35 @@
 					"response": []
 				},
 				{
-					"name": "Test Exception",
+					"name": "Password Generate",
 					"request": {
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/webflux-sample/v1/test/exception",
+							"raw": "http://localhost:8080/webflux-sample/v1/generate/password/huntercodexs",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"webflux-sample",
+								"v1",
+								"generate",
+								"password",
+								"huntercodexs"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Test Exception Custom",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/webflux-sample/v1/test/exception/custom",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -49,19 +71,20 @@
 								"webflux-sample",
 								"v1",
 								"test",
-								"exception"
+								"exception",
+								"custom"
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "Test Exception Reactor",
+					"name": "Test Exception Bad Request",
 					"request": {
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/webflux-sample/v1/test/exception-reactor",
+							"raw": "http://localhost:8080/webflux-sample/v1/test/exception/bad-request",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -71,36 +94,15 @@
 								"webflux-sample",
 								"v1",
 								"test",
-								"exception-reactor"
+								"exception",
+								"bad-request"
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "Test Service Exception Reactor",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "http://localhost:8080/webflux-sample/v1/test/service-exception-reactor",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8080",
-							"path": [
-								"webflux-sample",
-								"v1",
-								"test",
-								"service-exception-reactor"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Test BadRequestExceptionReactor",
+					"name": "Test Exception Bad Request Reactor",
 					"request": {
 						"method": "GET",
 						"header": [],
@@ -123,7 +125,76 @@
 					"response": []
 				},
 				{
-					"name": "Test IllegalArgumentException",
+					"name": "Test Exception Not Found Reactor1",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/webflux-sample/v1/test/exception/not-found-reactor1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"webflux-sample",
+								"v1",
+								"test",
+								"exception",
+								"not-found-reactor1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Test Exception Internal Error Reactor",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/webflux-sample/v1/test/exception/internal-exception-reactor",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"webflux-sample",
+								"v1",
+								"test",
+								"exception",
+								"internal-exception-reactor"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Test Exception Runtime Reactor",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/webflux-sample/v1/test/exception/runtime-exception-reactor",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"webflux-sample",
+								"v1",
+								"test",
+								"exception",
+								"runtime-exception-reactor"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Test Exception Illegal Argument",
 					"request": {
 						"method": "GET",
 						"header": [],
@@ -146,7 +217,7 @@
 					"response": []
 				},
 				{
-					"name": "Test NullPointerException",
+					"name": "Test Exception Null Pointer",
 					"request": {
 						"method": "GET",
 						"header": [],
@@ -169,7 +240,7 @@
 					"response": []
 				},
 				{
-					"name": "Test IllegalAccessException",
+					"name": "Test Exception Illegal Access",
 					"request": {
 						"method": "GET",
 						"header": [],
@@ -192,7 +263,7 @@
 					"response": []
 				},
 				{
-					"name": "Test HttpException",
+					"name": "Test Exception Http",
 					"request": {
 						"method": "GET",
 						"header": [],
@@ -215,7 +286,7 @@
 					"response": []
 				},
 				{
-					"name": "Test IndexOutOfBoundsException",
+					"name": "Test Exception Index Out Of Bounds",
 					"request": {
 						"method": "GET",
 						"header": [],
@@ -238,7 +309,7 @@
 					"response": []
 				},
 				{
-					"name": "Test NotFoundExceptionReactor",
+					"name": "Test Exception Not Found Reactor",
 					"request": {
 						"method": "GET",
 						"header": [],
@@ -261,7 +332,7 @@
 					"response": []
 				},
 				{
-					"name": "Test NotFoundException",
+					"name": "Test Exception Not Found Swagger",
 					"request": {
 						"method": "GET",
 						"header": [],
@@ -284,7 +355,7 @@
 					"response": []
 				},
 				{
-					"name": "Test Error",
+					"name": "Test Exception Error",
 					"request": {
 						"method": "GET",
 						"header": [],
@@ -307,7 +378,7 @@
 					"response": []
 				},
 				{
-					"name": "Test InternalError",
+					"name": "Test Exception Internal Error",
 					"request": {
 						"method": "GET",
 						"header": [],
@@ -330,7 +401,7 @@
 					"response": []
 				},
 				{
-					"name": "Test InternalErrorException",
+					"name": "Test Exception Internal Error Exception",
 					"request": {
 						"method": "GET",
 						"header": [],
@@ -364,12 +435,12 @@
 							"type": "basic",
 							"basic": [
 								{
-									"key": "username",
+									"key": "password",
 									"value": "admin",
 									"type": "string"
 								},
 								{
-									"key": "password",
+									"key": "username",
 									"value": "admin",
 									"type": "string"
 								}
@@ -405,6 +476,21 @@
 				{
 					"name": "Create Address",
 					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "admin",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "admin",
+									"type": "string"
+								}
+							]
+						},
 						"method": "POST",
 						"header": [],
 						"body": {
@@ -417,7 +503,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8080/webflux-sample/v1/addresses/68093a2f5f5e40392facb4d3",
+							"raw": "http://localhost:8080/webflux-sample/v1/addresses/68e1a7335424f30491cced61",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -427,7 +513,7 @@
 								"webflux-sample",
 								"v1",
 								"addresses",
-								"68093a2f5f5e40392facb4d3"
+								"68e1a7335424f30491cced61"
 							]
 						}
 					},
@@ -436,6 +522,21 @@
 				{
 					"name": "Create Phone",
 					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "admin",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "admin",
+									"type": "string"
+								}
+							]
+						},
 						"method": "POST",
 						"header": [],
 						"body": {
@@ -448,7 +549,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8080/webflux-sample/v1/phones/68093a2f5f5e40392facb4d3",
+							"raw": "http://localhost:8080/webflux-sample/v1/phones/68e1a7335424f30491cced61",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -458,7 +559,7 @@
 								"webflux-sample",
 								"v1",
 								"phones",
-								"68093a2f5f5e40392facb4d3"
+								"68e1a7335424f30491cced61"
 							]
 						}
 					},
@@ -467,6 +568,21 @@
 				{
 					"name": "Read Persons",
 					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "admin",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "admin",
+									"type": "string"
+								}
+							]
+						},
 						"method": "GET",
 						"header": [],
 						"url": {
@@ -506,7 +622,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/webflux-sample/v1/person/68093a2f5f5e40392facb4d3",
+							"raw": "http://localhost:8080/webflux-sample/v1/person/68e1a7335424f30491cced61",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -516,7 +632,7 @@
 								"webflux-sample",
 								"v1",
 								"person",
-								"68093a2f5f5e40392facb4d3"
+								"68e1a7335424f30491cced61"
 							]
 						}
 					},
@@ -525,6 +641,21 @@
 				{
 					"name": "Read Addresses",
 					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "admin",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "admin",
+									"type": "string"
+								}
+							]
+						},
 						"method": "GET",
 						"header": [],
 						"url": {
@@ -547,6 +678,21 @@
 				{
 					"name": "Read Phones",
 					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "admin",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "admin",
+									"type": "string"
+								}
+							]
+						},
 						"method": "GET",
 						"header": [],
 						"url": {
@@ -600,6 +746,21 @@
 				{
 					"name": "Delete Person",
 					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "admin",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "admin",
+									"type": "string"
+								}
+							]
+						},
 						"method": "DELETE",
 						"header": [],
 						"url": {
@@ -686,7 +847,7 @@
 			]
 		},
 		{
-			"name": "Samples",
+			"name": "Webflux",
 			"item": [
 				{
 					"name": "Test mono",
@@ -1070,19 +1231,42 @@
 			"name": "User",
 			"item": [
 				{
+					"name": "Admin Generate",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/webflux-sample/v1/generate/user/admin",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"webflux-sample",
+								"v1",
+								"generate",
+								"user",
+								"admin"
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "Create User",
 					"request": {
 						"auth": {
 							"type": "basic",
 							"basic": [
 								{
-									"key": "username",
+									"key": "password",
 									"value": "admin",
 									"type": "string"
 								},
 								{
-									"key": "password",
-									"value": "huntercodexs",
+									"key": "username",
+									"value": "admin",
 									"type": "string"
 								}
 							]
@@ -1091,7 +1275,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"username\": \"jerry\",\n    \"password\": \"jerry\"\n}",
+							"raw": "{\n    \"username\": \"jhony\",\n    \"password\": \"jhony\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1125,7 +1309,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"username\": \"huntercodexs\",\n    \"password\": \"huntercodexs\"\n}",
+							"raw": "{\n    \"username\": \"jhony\",\n    \"password\": \"jhony\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
